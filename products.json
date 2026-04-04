@@ -1,0 +1,5 @@
+[
+  { "id": 1, "name": "Healing Tee", "price": 20, "img": "https://i.imgur.com/yourmockup1.png" },
+  { "id": 2, "name": "Comfort Hoodie", "price": 35, "img": "https://i.imgur.com/yourmockup2.png" },
+  { "id": 3, "name": "Self-Love Mug", "price": 15, "img": "https://i.imgur.com/yourmockup3.png" }
+]
