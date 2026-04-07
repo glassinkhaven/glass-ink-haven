@@ -1136,151 +1136,38 @@
         // To add/edit products, simply modify the array below
         // Each product needs: name, price, category, images array, sizes array, colors array
         
-        const products = [
-            {
-                id: 1,
-                name: "Haven Relaxed Hoodie",
-                price: 68,
-                category: "hoodies",
-                images: ["images/product_hoodie_1.jpg", "images/product_hoodie_2.jpg", "images/product_hoodie_3.jpg", "images/product_hoodie_4.jpg", "images/hoodies_1.jpg"],
-                sizes: ["S", "M", "L", "XL"],
-                colors: [{name: "Blush", hex: "#E8D5D5"}, {name: "Cement", hex: "#D5D5D5"}, {name: "Onyx", hex: "#3A3A3A"}],
-                description: "A midweight fleece hoodie with a dropped shoulder, kangaroo pocket, and a wash that feels already lived-in.",
-                fit: "Relaxed, cropped length",
-                fabric: "80% cotton / 20% polyester"
-            },
-            {
-                id: 2,
-                name: "Embrace Oversized Hoodie",
-                price: 78,
-                category: "hoodies",
-                images: ["images/hoodies_1.jpg", "images/hoodies_2.jpg", "images/hoodies_3.jpg", "images/product_hoodie_1.jpg", "images/product_hoodie_2.jpg"],
-                sizes: ["S", "M", "L", "XL"],
-                colors: [{name: "Cream", hex: "#F5F5F5"}, {name: "Sage", hex: "#D5E8D5"}, {name: "Charcoal", hex: "#4A4A4A"}],
-                description: "Our signature oversized hoodie designed for ultimate comfort and emotional warmth.",
-                fit: "Oversized, extra long",
-                fabric: "100% organic cotton"
-            },
-            {
-                id: 3,
-                name: "Daily Boxy Tee",
-                price: 38,
-                category: "tees",
-                images: ["images/tees_1.jpg", "images/tees_2.jpg", "images/tees_3.jpg", "images/tanks_1.jpg", "images/tanks_2.jpg"],
-                sizes: ["S", "M", "L", "XL"],
-                colors: [{name: "Cloud", hex: "#F5F5F5"}, {name: "Petal", hex: "#E8D5D5"}, {name: "Midnight", hex: "#2A2A2A"}],
-                description: "Soft cotton, honest fit, and a feel that gets better with every wash.",
-                fit: "Boxy, relaxed",
-                fabric: "100% organic cotton"
-            },
-            {
-                id: 4,
-                name: "Expression Graphic Tee",
-                price: 42,
-                category: "tees",
-                images: ["images/tees_2.jpg", "images/tees_1.jpg", "images/tees_3.jpg", "images/tees_2.jpg", "images/tees_1.jpg"],
-                sizes: ["S", "M", "L", "XL"],
-                colors: [{name: "White", hex: "#FFFFFF"}, {name: "Blush", hex: "#E8D5D5"}, {name: "Black", hex: "#1A1A1A"}],
-                description: "Wear your heart on your tee. Features our signature healing-inspired artwork.",
-                fit: "Regular fit",
-                fabric: "100% cotton"
-            },
-            {
-                id: 5,
-                name: "Sunset Tank",
-                price: 32,
-                category: "tanks",
-                images: ["images/tanks_1.jpg", "images/tanks_2.jpg", "images/tanks_3.jpg", "images/tanks_1.jpg", "images/tanks_2.jpg"],
-                sizes: ["S", "M", "L", "XL"],
-                colors: [{name: "Sage", hex: "#D5E8D5"}, {name: "Cream", hex: "#F5F5F5"}, {name: "Dusty Rose", hex: "#E8D5D5"}],
-                description: "Light layers made for sun, sweat, and spontaneous plans.",
-                fit: "Regular, slightly cropped",
-                fabric: "95% cotton / 5% spandex"
-            },
-            {
-                id: 6,
-                name: "Breathe Ribbed Tank",
-                price: 28,
-                category: "tanks",
-                images: ["images/tanks_2.jpg", "images/tanks_1.jpg", "images/tanks_3.jpg", "images/tanks_2.jpg", "images/tanks_1.jpg"],
-                sizes: ["S", "M", "L", "XL"],
-                colors: [{name: "Ivory", hex: "#FFFEF0"}, {name: "Sand", hex: "#E8E0D5"}, {name: "Olive", hex: "#D5D8C5"}],
-                description: "Ultra-soft ribbed tank that moves with you through every breath.",
-                fit: "Fitted",
-                fabric: "92% modal / 8% spandex"
-            },
-            {
-                id: 7,
-                name: "Weekend Wide Pant",
-                price: 74,
-                category: "pants",
-                images: ["images/pants_1.jpg", "images/pants_2.jpg", "images/pants_3.jpg", "images/pants_1.jpg", "images/pants_2.jpg"],
-                sizes: ["S", "M", "L", "XL"],
-                colors: [{name: "Oat", hex: "#E8E0D5"}, {name: "Charcoal", hex: "#4A4A4A"}, {name: "Stone", hex: "#D5D5D5"}],
-                description: "Easy shapes that move with you—no stiffness, no noise.",
-                fit: "Wide leg, high waist",
-                fabric: "100% linen blend"
-            },
-            {
-                id: 8,
-                name: "Comfort Jogger",
-                price: 64,
-                category: "pants",
-                images: ["images/pants_2.jpg", "images/pants_1.jpg", "images/pants_3.jpg", "images/pants_2.jpg", "images/pants_1.jpg"],
-                sizes: ["S", "M", "L", "XL"],
-                colors: [{name: "Blush", hex: "#E8D5D5"}, {name: "Grey", hex: "#B0B0B0"}, {name: "Black", hex: "#2A2A2A"}],
-                description: "The perfect companion for slow mornings and peaceful evenings.",
-                fit: "Relaxed, tapered",
-                fabric: "80% cotton / 20% polyester"
-            },
-            {
-                id: 9,
-                name: "Haven Slip Dress",
-                price: 84,
-                category: "dresses",
-                images: ["images/dresses_1.jpg", "images/dresses_2.jpg", "images/dresses_3.jpg", "images/dresses_1.jpg", "images/dresses_2.jpg"],
-                sizes: ["S", "M", "L", "XL"],
-                colors: [{name: "Pearl", hex: "#F5F5F5"}, {name: "Lavender", hex: "#E8D5E0"}, {name: "Noir", hex: "#2A2A2A"}],
-                description: "One-piece ease with enough detail to feel considered.",
-                fit: "Slip fit, midi length",
-                fabric: "100% silk blend"
-            },
-            {
-                id: 10,
-                name: "Flow Maxi Dress",
-                price: 98,
-                category: "dresses",
-                images: ["images/dresses_2.jpg", "images/dresses_1.jpg", "images/dresses_3.jpg", "images/dresses_2.jpg", "images/dresses_1.jpg"],
-                sizes: ["S", "M", "L", "XL"],
-                colors: [{name: "Sage", hex: "#D5E8D5"}, {name: "Dusty Blue", hex: "#D5D8E8"}, {name: "Terracotta", hex: "#E8D5C5"}],
-                description: "Flowing elegance for moments that matter. Feel beautiful, feel you.",
-                fit: "Flowing, maxi length",
-                fabric: "100% viscose"
-            },
-            {
-                id: 11,
-                name: "Daily Canvas Tote",
-                price: 42,
-                category: "bags",
-                images: ["images/bags_1.jpg", "images/bags_2.jpg", "images/bags_3.jpg", "images/bags_1.jpg", "images/bags_2.jpg"],
-                sizes: ["One Size"],
-                colors: [{name: "Natural", hex: "#E8E0D5"}, {name: "Blush", hex: "#E8D5D5"}, {name: "Black", hex: "#2A2A2A"}],
-                description: "Carry the essentials—and a little bit of personality.",
-                fit: "One size",
-                fabric: "100% organic canvas"
-            },
-            {
-                id: 12,
-                name: "Journey Weekender",
-                price: 68,
-                category: "bags",
-                images: ["images/bags_2.jpg", "images/bags_1.jpg", "images/bags_3.jpg", "images/bags_2.jpg", "images/bags_1.jpg"],
-                sizes: ["One Size"],
-                colors: [{name: "Cream", hex: "#F5F5F5"}, {name: "Tan", hex: "#D5C5B0"}, {name: "Navy", hex: "#2A3A4A"}],
-                description: "For the journeys that heal. Spacious, durable, and beautiful.",
-                fit: "Large weekender",
-                fabric: "Waxed canvas"
-            }
+        <body>
+  <!-- Your HTML structure here -->
+  <div id="products"></div>
+
+  <script>
+    async function loadProducts() {
+      const res = await fetch('/.netlify/functions/printify');
+      const data = await res.json();
+
+      const container = document.getElementById("products");
+      container.innerHTML = "";
+
+      data.data.forEach(product => {
+        const item = document.createElement("div");
+        item.style.margin = "20px";
+
+        item.innerHTML = `
+          <h3>${product.title}</h3>
+          <img src="${product.images[0].src}" width="200"/>
+          <p>₦${product.variants[0].price / 100}</p>
+        `;
+
+        container.appendChild(item);
+      });
+    }
+
+    loadProducts();
+  </script>
+</body>
+                
+                
+    
         ];
 
         // ============================================
