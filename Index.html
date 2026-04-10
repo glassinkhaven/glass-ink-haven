@@ -1,887 +1,888 @@
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glass Ink Haven | Wearable Therapy for the Soul</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        * { box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #ffffff; overflow-x: hidden; }
-        .font-display { font-family: 'Playfair Display', serif; }
-        html { scroll-behavior: smooth; }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0a0a0a; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .glass-dark { background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .gradient-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #667eea 100%); background-size: 400% 400%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: gradientShift 8s ease infinite; }
-        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
-        .float { animation: float 6s ease-in-out infinite; }
-        .product-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .product-card:hover { transform: translateY(-8px); }
-        .product-card:hover .product-image { transform: scale(1.05); }
-        .product-image { transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
-        .magnetic-btn { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .cart-sidebar { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .cart-sidebar.open { transform: translateX(0); }
-        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
-        .shimmer { background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
-        .filter-pill.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-color: transparent; }
-        .gallery-thumb { opacity: 0.6; transition: all 0.3s ease; border: 2px solid transparent; }
-        .gallery-thumb:hover, .gallery-thumb.active { opacity: 1; border-color: #667eea; }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-in { animation: fadeInUp 0.6s ease forwards; }
-        .particle { position: absolute; width: 4px; height: 4px; background: rgba(255, 255, 255, 0.5); border-radius: 50%; pointer-events: none; }
-        .size-option { transition: all 0.2s ease; }
-        .size-option.selected { background: #667eea; border-color: #667eea; color: white; }
-        .toast { transform: translateY(100px); opacity: 0; transition: all 0.3s ease; }
-        .toast.show { transform: translateY(0); opacity: 1; }
-        .modal-overlay { opacity: 0; visibility: hidden; transition: all 0.3s ease; }
-        .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-content { transform: scale(0.9) translateY(20px); transition: all 0.3s ease; }
-        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
-        .info-modal { max-height: 80vh; overflow-y: auto; }
-        .info-modal::-webkit-scrollbar { width: 6px; }
-        .info-modal::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
-    </style>
-</head>
-<body class="antialiased">
-
-    <!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-50 glass-dark">
-        <div class="w-full px-6 lg:px-12 py-4 flex items-center justify-between">
-            <a href="#" class="font-display text-2xl font-bold tracking-tight">Glass Ink<span class="gradient-text">Haven</span></a>
-            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
-                <a href="#shop" class="hover:text-white transition-colors">Shop</a>
-                <a href="#about" class="hover:text-white transition-colors">Our Story</a>
-                <button onclick="openModal('shipping-modal')" class="hover:text-white transition-colors">Support</button>
-                <button onclick="scrollToFooter()" class="hover:text-white transition-colors">Contact</button>
-            </div>
-            <button onclick="toggleCart()" class="relative magnetic-btn p-2 hover:bg-white/5 rounded-full transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-                <span id="cart-count" class="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full text-xs flex items-center justify-center font-semibold">0</span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-        <div class="absolute inset-0">
-            <div class="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-pink-900/20"></div>
-            <div id="particles" class="absolute inset-0"></div>
-            <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl float"></div>
-            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl float" style="animation-delay: -3s;"></div>
-        </div>
-        <div class="relative z-10 w-full px-6 lg:px-12 text-center">
-            <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight">Therapy You<br><span class="gradient-text italic">Can Wear</span></h1>
-            <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 font-light">For the ones who feel deeply. Clothing that carries your healing, your story, your strength.</p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="#shop" class="magnetic-btn px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full font-medium hover:shadow-lg hover:shadow-purple-500/25 transition-all">Find Your Piece</a>
-                <button onclick="scrollToAbout()" class="magnetic-btn px-8 py-4 glass rounded-full font-medium hover:bg-white/10 transition-all">Read Our Story</button>
-            </div>
-        </div>
-        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-            <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
-        </div>
-    </section>
-
-    <!-- Filter Section -->
-    <section class="w-full px-6 lg:px-12 py-8 sticky top-16 z-40 bg-black/80 backdrop-blur-md border-b border-white/5">
-        <div class="flex flex-wrap gap-3 justify-center" id="filter-container">
-            <button class="filter-pill active px-5 py-2 rounded-full border border-white/20 text-sm font-medium transition-all" data-category="all">All</button>
-            <button class="filter-pill px-5 py-2 rounded-full border border-white/20 text-sm font-medium transition-all hover:border-white/40" data-category="Hoodies">Hoodies</button>
-            <button class="filter-pill px-5 py-2 rounded-full border border-white/20 text-sm font-medium transition-all hover:border-white/40" data-category="Tees">Tees</button>
-            <button class="filter-pill px-5 py-2 rounded-full border border-white/20 text-sm font-medium transition-all hover:border-white/40" data-category="Tank Tops">Tank Tops</button>
-            <button class="filter-pill px-5 py-2 rounded-full border border-white/20 text-sm font-medium transition-all hover:border-white/40" data-category="Pants">Pants</button>
-            <button class="filter-pill px-5 py-2 rounded-full border border-white/20 text-sm font-medium transition-all hover:border-white/40" data-category="Dresses">Dresses</button>
-            <button class="filter-pill px-5 py-2 rounded-full border border-white/20 text-sm font-medium transition-all hover:border-white/40" data-category="Tote Bags">Tote Bags</button>
-            <button class="filter-pill px-5 py-2 rounded-full border border-white/20 text-sm font-medium transition-all hover:border-white/40" data-category="Accessories">Accessories</button>
-        </div>
-    </section>
-
-    <!-- Shop Section -->
-    <section id="shop" class="w-full px-6 lg:px-12 py-16">
-        <div class="mb-12 text-center">
-            <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">Wear Your Healing</h2>
-            <p class="text-gray-400">Each piece carries a message of resilience, faith, and growth</p>
-        </div>
-        <div id="loading-state" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <div class="shimmer aspect-[3/4] rounded-2xl"></div>
-            <div class="shimmer aspect-[3/4] rounded-2xl"></div>
-            <div class="shimmer aspect-[3/4] rounded-2xl"></div>
-            <div class="shimmer aspect-[3/4] rounded-2xl"></div>
-        </div>
-        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" style="display: none;"></div>
-        <div id="empty-state" class="hidden text-center py-20">
-            <p class="text-gray-500 text-lg">No products found in this category.</p>
-        </div>
-        <!-- Error State -->
-        <div id="error-state" class="hidden text-center py-20">
-            <p class="text-red-400 text-lg mb-4">Unable to load products.</p>
-            <p class="text-gray-500 text-sm mb-4" id="error-message"></p>
-            <button onclick="fetchProducts()" class="px-6 py-2 border border-white/20 rounded-full hover:bg-white/10 transition-colors">Retry</button>
-        </div>
-    </section>
-
-    <!-- Product Detail Modal -->
-    <div id="product-modal" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeProductModal()"></div>
-        <div class="absolute inset-4 md:inset-12 lg:inset-20 glass-dark rounded-2xl overflow-hidden flex flex-col md:flex-row">
-            <button onclick="closeProductModal()" class="absolute top-4 right-4 z-10 p-2 bg-black/50 rounded-full hover:bg-black/70 transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-            </button>
-            <div class="w-full md:w-1/2 bg-gray-900/50 flex items-center justify-center p-4 md:p-8 relative">
-                <img id="modal-main-image" src="" alt="" class="max-h-full max-w-full object-contain rounded-lg cursor-pointer" onclick="nextImage()">
-                <div id="modal-thumbnails" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 flex-wrap justify-center max-w-full px-4"></div>
-            </div>
-            <div class="w-full md:w-1/2 p-6 md:p-10 overflow-y-auto">
-                <h3 id="modal-title" class="font-display text-3xl font-bold mb-2"></h3>
-                <p id="modal-price" class="text-2xl font-semibold text-purple-400 mb-6"></p>
-                <div class="mb-6">
-                    <p class="text-sm text-gray-400 mb-2">Size</p>
-                    <div id="modal-sizes" class="flex flex-wrap gap-2"></div>
-                </div>
-                <div class="mb-8">
-                    <p class="text-gray-300 leading-relaxed" id="modal-description"></p>
-                </div>
-                <button id="modal-add-to-cart" class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full font-medium hover:shadow-lg hover:shadow-purple-500/25 transition-all flex items-center justify-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-                    Add to Cart
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Cart Sidebar -->
-    <div id="cart-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden" onclick="toggleCart()"></div>
-    <div id="cart-sidebar" class="cart-sidebar fixed top-0 right-0 h-full w-full max-w-md glass-dark z-50 flex flex-col">
-        <div class="p-6 border-b border-white/10 flex items-center justify-between">
-            <h3 class="font-display text-2xl font-bold">Your Cart</h3>
-            <button onclick="toggleCart()" class="p-2 hover:bg-white/5 rounded-full transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-            </button>
-        </div>
-        <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
-            <div id="cart-empty" class="text-center py-12 text-gray-500">
-                <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-                <p>Your cart is empty</p>
-            </div>
-        </div>
-        <div class="p-6 border-t border-white/10 space-y-4">
-            <div class="flex justify-between text-sm"><span class="text-gray-400">Subtotal</span><span id="cart-subtotal" class="font-medium">$0.00</span></div>
-            <div class="flex justify-between text-sm"><span class="text-gray-400">Shipping</span><span id="cart-shipping" class="font-medium">Calculated at checkout</span></div>
-            <div class="flex justify-between text-lg font-semibold pt-4 border-t border-white/10"><span>Total</span><span id="cart-total" class="gradient-text">$0.00</span></div>
-            <button onclick="checkout()" class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full font-medium hover:shadow-lg hover:shadow-purple-500/25 transition-all">Checkout</button>
-        </div>
-    </div>
-
-    <!-- About Section -->
-    <section id="about" class="w-full px-6 lg:px-12 py-24 relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/10 to-transparent"></div>
-        <div class="relative z-10 max-w-4xl mx-auto text-center">
-            <h2 class="font-display text-4xl md:text-5xl font-bold mb-8">Our Story</h2>
-            <p class="text-2xl md:text-3xl font-display italic gradient-text mb-12">Fashion Born from Pain, Transformed into Power</p>
-            
-            <div class="space-y-6 text-left md:text-center max-w-3xl mx-auto">
-                <p class="text-gray-300 leading-relaxed text-lg">Glass Ink Haven was not created in comfort. It was created in the quiet — in the moments no one sees. In the nights where your chest feels heavy for no clear reason. In the silence after heartbreak. In the slow, painful process of becoming someone new after losing who you used to be.</p>
-                
-                <p class="text-gray-300 leading-relaxed text-lg">This brand was not built from trends or aesthetics. It was built from emotion. From healing. From survival.</p>
-                
-                <p class="text-gray-300 leading-relaxed text-lg">We believe clothing is more than fabric. It is a second skin — a form of expression for the feelings you cannot always explain. Every piece you wear should reflect something deeper — your softness, your strength, your scars, your growth.</p>
-                
-                <div class="py-8 my-8 border-y border-white/10">
-                    <p class="font-display text-2xl italic text-purple-400 mb-4">Glass Ink Haven exists for the ones who feel deeply.</p>
-                    <p class="text-gray-400">The overthinkers. The silent fighters. The ones who are rebuilding themselves quietly while the world keeps moving.</p>
-                </div>
-                
-                <p class="text-xl font-display text-white">This is not just fashion.<br><span class="gradient-text">This is therapy you can wear.</span></p>
-                
-                <p class="text-gray-300 leading-relaxed text-lg">Glass Ink Haven was created during a deeply personal season — a time marked by emotional weight, inner battles, and a search for meaning. In that season, one truth became clear: there was no space in fashion for people who were healing. No brand that truly understood what it meant to feel everything… and still keep going.</p>
-                
-                <p class="text-gray-300 leading-relaxed text-lg">So this became that space. A space where emotions are not hidden, but expressed. Where pain is not buried, but transformed into something meaningful. Where vulnerability is not weakness, but strength.</p>
-                
-                <div class="py-6">
-                    <p class="text-lg font-semibold text-white mb-4">Our mission is simple, but deeply intentional:</p>
-                    <ul class="space-y-2 text-gray-400">
-                        <li>To turn pain into something beautiful.</li>
-                        <li>To give people a voice — even when they have no words.</li>
-                        <li>To remind you that healing is not linear… but it is happening.</li>
-                    </ul>
-                </div>
-                
-                <p class="text-gray-300 leading-relaxed text-lg">At the heart of Glass Ink Haven is faith, resilience, and growth. The belief that even in your lowest moments, you are not alone. That God is still present. That even when everything feels uncertain, something within you is still holding on.</p>
-                
-                <p class="text-gray-300 leading-relaxed text-lg">Every hoodie, every tee, every piece you wear carries that message. We are not just a brand. We are a community. A community of people who feel deeply, love deeply, and are learning — day by day — how to heal.</p>
-                
-                <div class="py-8 my-8 bg-white/5 rounded-2xl p-8">
-                    <p class="text-gray-300 leading-relaxed text-lg mb-4">Your story matters here. If you have a story, a feeling, or a moment you want to express, you can share it with us — and we will help you turn it into something meaningful. Something seen. Something that speaks.</p>
-                    <p class="font-display text-2xl text-white">Glass Ink Haven is more than clothing.<br>It is a sanctuary stitched into fabric.</p>
-                </div>
-                
-                <p class="text-xl gradient-text font-display">You are welcome here — exactly as you are. ✨</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer id="footer" class="w-full px-6 lg:px-12 py-16 border-t border-white/10 mt-24 bg-black/50">
-        <div class="max-w-6xl mx-auto grid md:grid-cols-4 gap-12">
-            <!-- Shop -->
-            <div>
-                <h4 class="font-display text-lg font-semibold mb-6 gradient-text">Shop</h4>
-                <ul class="space-y-3 text-sm text-gray-400">
-                    <li><a href="#shop" onclick="filterByCategory('Hoodies')" class="hover:text-white transition-colors">Hoodies</a></li>
-                    <li><a href="#shop" onclick="filterByCategory('Tees')" class="hover:text-white transition-colors">T-Shirts</a></li>
-                    <li><a href="#shop" onclick="filterByCategory('Tank Tops')" class="hover:text-white transition-colors">Tank Tops</a></li>
-                    <li><a href="#shop" onclick="filterByCategory('Accessories')" class="hover:text-white transition-colors">Accessories</a></li>
-                </ul>
-            </div>
-            <!-- Support -->
-            <div>
-                <h4 class="font-display text-lg font-semibold mb-6 gradient-text">Support</h4>
-                <ul class="space-y-3 text-sm text-gray-400">
-                    <li><button onclick="openModal('shipping-modal')" class="hover:text-white transition-colors text-left">Shipping Info</button></li>
-                    <li><button onclick="openModal('returns-modal')" class="hover:text-white transition-colors text-left">Returns & Exchanges</button></li>
-                    <li><button onclick="openModal('sizing-modal')" class="hover:text-white transition-colors text-left">Size Guide</button></li>
-                    <li><button onclick="openModal('faq-modal')" class="hover:text-white transition-colors text-left">FAQ</button></li>
-                </ul>
-            </div>
-            <!-- Company -->
-            <div>
-                <h4 class="font-display text-lg font-semibold mb-6 gradient-text">Company</h4>
-                <ul class="space-y-3 text-sm text-gray-400">
-                    <li><a href="#about" class="hover:text-white transition-colors">Our Story</a></li>
-                    <li><a href="#about" class="hover:text-white transition-colors">Mission</a></li>
-                    <li><button onclick="openModal('careers-modal')" class="hover:text-white transition-colors text-left">Careers</button></li>
-                    <li><button onclick="openModal('press-modal')" class="hover:text-white transition-colors text-left">Press</button></li>
-                </ul>
-            </div>
-            <!-- Connect -->
-            <div>
-                <h4 class="font-display text-lg font-semibold mb-6 gradient-text">Connect</h4>
-                <p class="text-sm text-gray-400 mb-4">Join our community of healers and dreamers.</p>
-                <div class="flex gap-4 mb-6">
-                    <a href="#" class="p-2 glass rounded-full hover:bg-white/10 transition-colors">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                    </a>
-                    <a href="#" class="p-2 glass rounded-full hover:bg-white/10 transition-colors">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.468 2.373c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"/></svg>
-                    </a>
-                    <a href="#" class="p-2 glass rounded-full hover:bg-white/10 transition-colors">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
-                    </a>
-                </div>
-                <p class="text-xs text-gray-500">© 2024 Glass Ink Haven. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Info Modals -->
-    <div id="shipping-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="modal-content glass-dark rounded-2xl max-w-lg w-full p-8 info-modal">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="font-display text-2xl font-bold">Shipping Information</h3>
-                <button onclick="closeModal('shipping-modal')" class="p-2 hover:bg-white/5 rounded-full"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
-            </div>
-            <div class="space-y-4 text-gray-300">
-                <p>We ship worldwide from our fulfillment centers. All orders are processed within 1-2 business days.</p>
-                <ul class="space-y-2">
-                    <li><strong class="text-white">Standard Shipping:</strong> 5-10 business days ($5.99)</li>
-                    <li><strong class="text-white">Express Shipping:</strong> 2-5 business days ($12.99)</li>
-                    <li><strong class="text-white">Free Shipping:</strong> On orders over $75</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div id="returns-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="modal-content glass-dark rounded-2xl max-w-lg w-full p-8 info-modal">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="font-display text-2xl font-bold">Returns & Exchanges</h3>
-                <button onclick="closeModal('returns-modal')" class="p-2 hover:bg-white/5 rounded-full"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
-            </div>
-            <div class="space-y-4 text-gray-300">
-                <p>We want you to love your purchase. If you're not satisfied, we offer hassle-free returns within 30 days.</p>
-                <ul class="space-y-2">
-                    <li>Items must be unworn with original tags</li>
-                    <li>Return shipping is free for exchanges</li>
-                    <li>Refunds processed within 5-7 business days</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div id="sizing-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="modal-content glass-dark rounded-2xl max-w-lg w-full p-8 info-modal">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="font-display text-2xl font-bold">Size Guide</h3>
-                <button onclick="closeModal('sizing-modal')" class="p-2 hover:bg-white/5 rounded-full"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
-            </div>
-            <div class="space-y-4 text-gray-300">
-                <p>Our apparel is designed for a comfortable, true-to-size fit. When in doubt, size up for a relaxed feel.</p>
-                <table class="w-full text-sm mt-4">
-                    <thead><tr class="border-b border-white/10"><th class="text-left py-2">Size</th><th class="text-left py-2">Chest</th><th class="text-left py-2">Length</th></tr></thead>
-                    <tbody>
-                        <tr class="border-b border-white/5"><td class="py-2">S</td><td>34-36"</td><td>27"</td></tr>
-                        <tr class="border-b border-white/5"><td class="py-2">M</td><td>38-40"</td><td>28"</td></tr>
-                        <tr class="border-b border-white/5"><td class="py-2">L</td><td>42-44"</td><td>29"</td></tr>
-                        <tr class="border-b border-white/5"><td class="py-2">XL</td><td>46-48"</td><td>30"</td></tr>
-                        <tr><td class="py-2">2XL</td><td>50-52"</td><td>31"</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <div id="faq-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="modal-content glass-dark rounded-2xl max-w-lg w-full p-8 info-modal">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="font-display text-2xl font-bold">FAQ</h3>
-                <button onclick="closeModal('faq-modal')" class="p-2 hover:bg-white/5 rounded-full"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
-            </div>
-            <div class="space-y-4 text-gray-300">
-                <div><strong class="text-white block mb-1">How long does shipping take?</strong><p>Standard shipping takes 5-10 business days. Express options available.</p></div>
-                <div><strong class="text-white block mb-1">Can I track my order?</strong><p>Yes! You'll receive a tracking number via email once your order ships.</p></div>
-                <div><strong class="text-white block mb-1">What materials do you use?</strong><p>We use premium, soft-touch fabrics that are comfortable and durable.</p></div>
-                <div><strong class="text-white block mb-1">Do you ship internationally?</strong><p>Yes, we ship worldwide. International shipping times vary by location.</p></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="careers-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="modal-content glass-dark rounded-2xl max-w-lg w-full p-8 info-modal">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="font-display text-2xl font-bold">Careers</h3>
-                <button onclick="closeModal('careers-modal')" class="p-2 hover:bg-white/5 rounded-full"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
-            </div>
-            <div class="space-y-4 text-gray-300">
-                <p>Join our mission to create meaningful fashion. We're always looking for passionate individuals who believe in the power of healing through expression.</p>
-                <p class="text-white">Current openings:</p>
-                <ul class="space-y-2">
-                    <li>• Creative Director</li>
-                    <li>• Social Media Manager</li>
-                    <li>• Customer Experience Specialist</li>
-                </ul>
-                <p>Send your resume to careers@glassinkhaven.com</p>
-            </div>
-        </div>
-    </div>
-
-    <div id="press-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="modal-content glass-dark rounded-2xl max-w-lg w-full p-8 info-modal">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="font-display text-2xl font-bold">Press</h3>
-                <button onclick="closeModal('press-modal')" class="p-2 hover:bg-white/5 rounded-full"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
-            </div>
-            <div class="space-y-4 text-gray-300">
-                <p>For press inquiries, media kits, and collaboration requests, please contact:</p>
-                <p class="text-white">press@glassinkhaven.com</p>
-                <p>We love sharing our story and partnering with publications that align with our mission of healing and self-expression.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast Notification -->
-    <div id="toast" class="toast fixed bottom-8 left-1/2 -translate-x-1/2 glass-dark px-6 py-3 rounded-full flex items-center gap-3 z-50">
-        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-        <span id="toast-message">Added to cart!</span>
-    </div>
-
-    <script>
-        // Global state
-        let products = [];
-        let cart = [];
-        let currentProduct = null;
-        let currentImageIndex = 0;
-        let selectedSize = null;
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            initParticles();
-            fetchProducts();
-            setupFilters();
-            loadCart();
-        });
-
-        // Fetch products from Printify endpoint
-        async function fetchProducts() {
-            const loadingState = document.getElementById('loading-state');
-            const productsGrid = document.getElementById('products-grid');
-            const errorState = document.getElementById('error-state');
-            const emptyState = document.getElementById('empty-state');
-
-            // Show loading state
-            loadingState.style.display = 'grid';
-            productsGrid.style.display = 'none';
-            errorState.classList.add('hidden');
-            emptyState.classList.add('hidden');
-
-            try {
-                const res = await fetch('https://glassinkhaven.netlify.app/.netlify/functions/printify');
-                
-                if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
-                }
-                
-                const data = await res.json();
-                
-                // Handle different response structures
-                let productsList = [];
-                if (Array.isArray(data)) {
-                    productsList = data;
-                } else if (data.products && Array.isArray(data.products)) {
-                    productsList = data.products;
-                } else if (data.data && Array.isArray(data.data)) {
-                    productsList = data.data;
-                } else {
-                    // Try to find products in any property
-                    for (const key in data) {
-                        if (Array.isArray(data[key]) && data[key].length > 0 && data[key][0].title) {
-                            productsList = data[key];
-                            break;
-                        }
-                    }
-                }
-
-                console.log('Printify products loaded:', productsList);
-                products = productsList;
-
-                loadingState.style.display = 'none';
-                
-                if (products.length === 0) {
-                    emptyState.classList.remove('hidden');
-                } else {
-                    productsGrid.style.display = 'grid';
-                    renderProducts(products);
-                }
-            } catch (err) {
-                console.error('Error fetching Printify products:', err);
-                loadingState.style.display = 'none';
-                errorState.classList.remove('hidden');
-                document.getElementById('error-message').textContent = err.message;
-            }
-        }
-
-        // Render products dynamically
-        function renderProducts(productsToRender) {
-            const grid = document.getElementById('products-grid');
-            grid.innerHTML = '';
-
-            productsToRender.forEach((product, index) => {
-                // Extract product data with fallbacks
-                const title = product.title || 'Untitled Product';
-                const imgSrc = product.images?.[0]?.src || product.image?.src || product.images?.[0]?.url || product.image || 'https://via.placeholder.com/400x500/1a1a1a/666?text=No+Image';
-                
-                // Get price from variants
-                let price = '0.00';
-                if (product.variants && product.variants.length > 0) {
-                    const variant = product.variants[0];
-                    price = variant.price || variant.cost || '0.00';
-                }
-                
-                // Format price
-                const formattedPrice = typeof price === 'number' ? price.toFixed(2) : parseFloat(price).toFixed(2);
-                
-                // Get product type for filtering
-                const productType = product.product_type || product.type || product.category || 'Other';
-                
-                // Create product card
-                const card = document.createElement('div');
-                card.className = 'product-card glass rounded-2xl overflow-hidden cursor-pointer animate-in';
-                card.style.animationDelay = `${index * 0.05}s`;
-                card.onclick = () => openProductModal(product);
-                
-                card.innerHTML = `
-                    <div class="aspect-[3/4] overflow-hidden bg-gray-900">
-                        <img src="${imgSrc}" alt="${title}" class="product-image w-full h-full object-cover" loading="lazy" onerror="this.src='https://via.placeholder.com/400x500/1a1a1a/666?text=Image+Error'">
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-medium text-white mb-1 line-clamp-2">${title}</h3>
-                        <p class="text-purple-400 font-semibold">$${formattedPrice}</p>
-                        <button class="mt-3 w-full py-2 bg-white/10 hover:bg-white/20 rounded-full text-sm font-medium transition-colors" onclick="event.stopPropagation(); quickAddToCart(${JSON.stringify(product).replace(/"/g, '&quot;')})">
-                            Quick Add
-                        </button>
-                    </div>
-                `;
-                
-                grid.appendChild(card);
-            });
-        }
-
-        // Setup filter buttons
-        function setupFilters() {
-            const filterButtons = document.querySelectorAll('.filter-pill');
-            
-            filterButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    // Update active state
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-                    
-                    const category = button.dataset.category;
-                    filterProducts(category);
-                });
-            });
-        }
-
-        // Filter products by category
-        function filterProducts(category) {
-            const emptyState = document.getElementById('empty-state');
-            const productsGrid = document.getElementById('products-grid');
-            
-            if (category === 'all') {
-                renderProducts(products);
-                emptyState.classList.add('hidden');
-                productsGrid.style.display = 'grid';
-            } else {
-                const filtered = products.filter(p => {
-                    const productType = (p.product_type || p.type || p.category || '').toLowerCase();
-                    return productType === category.toLowerCase() || 
-                           productType.includes(category.toLowerCase());
-                });
-                
-                if (filtered.length === 0) {
-                    productsGrid.style.display = 'none';
-                    emptyState.classList.remove('hidden');
-                } else {
-                    emptyState.classList.add('hidden');
-                    productsGrid.style.display = 'grid';
-                    renderProducts(filtered);
-                }
-            }
-        }
-
-        // Filter by category (for footer links)
-        function filterByCategory(category) {
-            const filterButtons = document.querySelectorAll('.filter-pill');
-            filterButtons.forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.dataset.category === category) {
-                    btn.classList.add('active');
-                }
-            });
-            filterProducts(category);
-        }
-
-        // Open product modal
-        function openProductModal(product) {
-            currentProduct = product;
-            currentImageIndex = 0;
-            selectedSize = null;
-            
-            const modal = document.getElementById('product-modal');
-            const title = document.getElementById('modal-title');
-            const price = document.getElementById('modal-price');
-            const description = document.getElementById('modal-description');
-            const mainImage = document.getElementById('modal-main-image');
-            const thumbnails = document.getElementById('modal-thumbnails');
-            const sizesContainer = document.getElementById('modal-sizes');
-            const addToCartBtn = document.getElementById('modal-add-to-cart');
-            
-            title.textContent = product.title || 'Untitled Product';
-            
-            // Get price
-            let priceValue = '0.00';
-            if (product.variants && product.variants.length > 0) {
-                priceValue = product.variants[0].price || product.variants[0].cost || '0.00';
-            }
-            price.textContent = `$${typeof priceValue === 'number' ? priceValue.toFixed(2) : parseFloat(priceValue).toFixed(2)}`;
-            
-            description.textContent = product.description || 'A meaningful piece from Glass Ink Haven, designed to carry your healing and story.';
-            
-            // Setup images
-            const images = product.images || (product.image ? [product.image] : []);
-            if (images.length > 0) {
-                mainImage.src = images[0].src || images[0].url || images[0] || '';
-                mainImage.alt = product.title;
-                
-                thumbnails.innerHTML = images.map((img, i) => `
-                    <img src="${img.src || img.url || img}" class="gallery-thumb w-12 h-12 object-cover rounded cursor-pointer ${i === 0 ? 'active' : ''}" onclick="setModalImage(${i}, event)">
-                `).join('');
-            } else {
-                mainImage.src = 'https://via.placeholder.com/400x500/1a1a1a/666?text=No+Image';
-                thumbnails.innerHTML = '';
-            }
-            
-            // Setup sizes
-            const sizes = ['XS', 'S', 'M', 'L', 'XL', '2XL'];
-            sizesContainer.innerHTML = sizes.map(size => `
-                <button class="size-option px-4 py-2 border border-white/20 rounded-full text-sm hover:border-purple-500 transition-colors" onclick="selectSize('${size}', this)">${size}</button>
-            `).join('');
-            
-            // Setup add to cart button
-            addToCartBtn.onclick = () => addToCartFromModal();
-            
-            modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        }
-
-        // Close product modal
-        function closeProductModal() {
-            const modal = document.getElementById('product-modal');
-            modal.classList.add('hidden');
-            document.body.style.overflow = '';
-            currentProduct = null;
-        }
-
-        // Set modal image
-        function setModalImage(index, event) {
-            if (event) event.stopPropagation();
-            currentImageIndex = index;
-            const images = currentProduct.images || (currentProduct.image ? [currentProduct.image] : []);
-            if (images[index]) {
-                document.getElementById('modal-main-image').src = images[index].src || images[index].url || images[index];
-            }
-            
-            // Update thumbnail active state
-            document.querySelectorAll('.gallery-thumb').forEach((thumb, i) => {
-                thumb.classList.toggle('active', i === index);
-            });
-        }
-
-        // Next image
-        function nextImage() {
-            const images = currentProduct.images || (currentProduct.image ? [currentProduct.image] : []);
-            if (images.length > 1) {
-                currentImageIndex = (currentImageIndex + 1) % images.length;
-                setModalImage(currentImageIndex);
-            }
-        }
-
-        // Select size
-        function selectSize(size, btn) {
-            selectedSize = size;
-            document.querySelectorAll('.size-option').forEach(b => b.classList.remove('selected'));
-            btn.classList.add('selected');
-        }
-
-        // Add to cart from modal
-        function addToCartFromModal() {
-            if (!currentProduct) return;
-            
-            const cartItem = {
-                id: currentProduct.id || Date.now(),
-                title: currentProduct.title,
-                price: currentProduct.variants?.[0]?.price || currentProduct.variants?.[0]?.cost || '0.00',
-                image: currentProduct.images?.[0]?.src || currentProduct.image?.src || currentProduct.images?.[0]?.url || currentProduct.image || '',
-                size: selectedSize || 'M',
-                quantity: 1
-            };
-            
-            addItemToCart(cartItem);
-            closeProductModal();
-        }
-
-        // Quick add to cart (from product card)
-        function quickAddToCart(product) {
-            const cartItem = {
-                id: product.id || Date.now(),
-                title: product.title,
-                price: product.variants?.[0]?.price || product.variants?.[0]?.cost || '0.00',
-                image: product.images?.[0]?.src || product.image?.src || product.images?.[0]?.url || product.image || '',
-                size: 'M',
-                quantity: 1
-            };
-            
-            addItemToCart(cartItem);
-        }
-
-        // Add item to cart
-        function addItemToCart(item) {
-            const existingItem = cart.find(i => i.id === item.id && i.size === item.size);
-            
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cart.push(item);
-            }
-            
-            saveCart();
-            updateCartUI();
-            showToast('Added to cart!');
-        }
-
-        // Remove from cart
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            saveCart();
-            updateCartUI();
-        }
-
-        // Update quantity
-        function updateQuantity(index, delta) {
-            cart[index].quantity += delta;
-            if (cart[index].quantity <= 0) {
-                removeFromCart(index);
-            } else {
-                saveCart();
-                updateCartUI();
-            }
-        }
-
-        // Save cart to localStorage
-        function saveCart() {
-            localStorage.setItem('glassInkCart', JSON.stringify(cart));
-        }
-
-        // Load cart from localStorage
-        function loadCart() {
-            const saved = localStorage.getItem('glassInkCart');
-            if (saved) {
-                cart = JSON.parse(saved);
-                updateCartUI();
-            }
-        }
-
-        // Update cart UI
-        function updateCartUI() {
-            const cartItems = document.getElementById('cart-items');
-            const cartEmpty = document.getElementById('cart-empty');
-            const cartCount = document.getElementById('cart-count');
-            const cartSubtotal = document.getElementById('cart-subtotal');
-            const cartTotal = document.getElementById('cart-total');
-            
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            cartCount.textContent = totalItems;
-            
-            if (cart.length === 0) {
-                cartItems.innerHTML = '';
-                cartItems.appendChild(cartEmpty);
-                cartEmpty.style.display = 'block';
-            } else {
-                cartEmpty.style.display = 'none';
-                cartItems.innerHTML = cart.map((item, index) => `
-                    <div class="flex gap-4 p-4 glass rounded-xl">
-                        <img src="${item.image}" alt="${item.title}" class="w-20 h-20 object-cover rounded-lg" onerror="this.src='https://via.placeholder.com/80/1a1a1a/666?text=No+Image'">
-                        <div class="flex-1">
-                            <h4 class="font-medium text-sm mb-1 line-clamp-2">${item.title}</h4>
-                            <p class="text-gray-400 text-xs mb-2">Size: ${item.size}</p>
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-2">
-                                    <button onclick="updateQuantity(${index}, -1)" class="w-6 h-6 flex items-center justify-center bg-white/10 rounded hover:bg-white/20 transition-colors">-</button>
-                                    <span class="text-sm">${item.quantity}</span>
-                                    <button onclick="updateQuantity(${index}, 1)" class="w-6 h-6 flex items-center justify-center bg-white/10 rounded hover:bg-white/20 transition-colors">+</button>
-                                </div>
-                                <p class="text-purple-400 font-medium">$${(parseFloat(item.price) * item.quantity).toFixed(2)}</p>
-                            </div>
-                        </div>
-                        <button onclick="removeFromCart(${index})" class="text-gray-500 hover:text-white transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                        </button>
-                    </div>
-                `).join('');
-            }
-            
-            const subtotal = cart.reduce((sum, item) => sum + (parseFloat(item.price) * item.quantity), 0);
-            cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
-            cartTotal.textContent = `$${subtotal.toFixed(2)}`;
-        }
-
-        // Toggle cart sidebar
-        function toggleCart() {
-            const sidebar = document.getElementById('cart-sidebar');
-            const overlay = document.getElementById('cart-overlay');
-            
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('hidden');
-            document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
-        }
-
-        // Checkout
-        function checkout() {
-            if (cart.length === 0) {
-                showToast('Your cart is empty!');
-                return;
-            }
-            
-            // Here you would integrate with your payment processor
-            showToast('Redirecting to checkout...');
-            
-            // For now, just clear cart as demo
-            setTimeout(() => {
-                cart = [];
-                saveCart();
-                updateCartUI();
-                toggleCart();
-                showToast('Order placed successfully! ✨');
-            }, 1500);
-        }
-
-        // Show toast
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toast-message');
-            toastMessage.textContent = message;
-            toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        // Open modal
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-        }
-
-        // Close modal
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        }
-
-        // Scroll to about
-        function scrollToAbout() {
-            document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Scroll to footer
-        function scrollToFooter() {
-            document.getElementById('footer').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Initialize particles
-        function initParticles() {
-            const container = document.getElementById('particles');
-            if (!container) return;
-            
-            const particleCount = 25;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 5 + 's';
-                particle.style.opacity = Math.random() * 0.5 + 0.1;
-                container.appendChild(particle);
-            }
-        }
-
-        // Close modals on escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeProductModal();
-                document.querySelectorAll('.modal-overlay.active').forEach(modal => {
-                    modal.classList.remove('active');
-                });
-                const sidebar = document.getElementById('cart-sidebar');
-                if (sidebar.classList.contains('open')) {
-                    toggleCart();
-                }
-            }
-        });
-    </script>
-</body>
-</html>
+     1	<!DOCTYPE html>
+     2	<html lang="en" class="scroll-smooth">
+     3	<head>
+     4	    <meta charset="UTF-8">
+     5	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     6	    <title>Glass Ink Haven | Wearable Therapy for the Soul</title>
+     7	    <script src="https://cdn.tailwindcss.com"></script>
+     8	    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+     9	    <style>
+    10	        * { box-sizing: border-box; }
+    11	        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #ffffff; overflow-x: hidden; }
+    12	        .font-display { font-family: 'Playfair Display', serif; }
+    13	        html { scroll-behavior: smooth; }
+    14	        ::-webkit-scrollbar { width: 8px; }
+    15	        ::-webkit-scrollbar-track { background: #0a0a0a; }
+    16	        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+    17	        ::-webkit-scrollbar-thumb:hover { background: #555; }
+    18	        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    19	        .glass-dark { background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
+    20	        .gradient-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #667eea 100%); background-size: 400% 400%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: gradientShift 8s ease infinite; }
+    21	        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    22	        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+    23	        .float { animation: float 6s ease-in-out infinite; }
+    24	        .product-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    25	        .product-card:hover { transform: translateY(-8px); }
+    26	        .product-card:hover .product-image { transform: scale(1.05); }
+    27	        .product-image { transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+    28	        .magnetic-btn { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    29	        .cart-sidebar { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    30	        .cart-sidebar.open { transform: translateX(0); }
+    31	        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    32	        .shimmer { background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+    33	        .filter-pill.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-color: transparent; }
+    34	        .gallery-thumb { opacity: 0.6; transition: all 0.3s ease; border: 2px solid transparent; }
+    35	        .gallery-thumb:hover, .gallery-thumb.active { opacity: 1; border-color: #667eea; }
+    36	        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    37	        .animate-in { animation: fadeInUp 0.6s ease forwards; }
+    38	        .particle { position: absolute; width: 4px; height: 4px; background: rgba(255, 255, 255, 0.5); border-radius: 50%; pointer-events: none; }
+    39	        .size-option { transition: all 0.2s ease; }
+    40	        .size-option.selected { background: #667eea; border-color: #667eea; color: white; }
+    41	        .toast { transform: translateY(100px); opacity: 0; transition: all 0.3s ease; }
+    42	        .toast.show { transform: translateY(0); opacity: 1; }
+    43	        .modal-overlay { opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+    44	        .modal-overlay.active { opacity: 1; visibility: visible; }
+    45	        .modal-content { transform: scale(0.9) translateY(20px); transition: all 0.3s ease; }
+    46	        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
+    47	        .info-modal { max-height: 80vh; overflow-y: auto; }
+    48	        .info-modal::-webkit-scrollbar { width: 6px; }
+    49	        .info-modal::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+    50	    </style>
+    51	</head>
+    52	<body class="antialiased">
+    53	
+    54	    <!-- Navigation -->
+    55	    <nav class="fixed top-0 left-0 right-0 z-50 glass-dark">
+    56	        <div class="w-full px-6 lg:px-12 py-4 flex items-center justify-between">
+    57	            <a href="#" class="font-display text-2xl font-bold tracking-tight">Glass Ink<span class="gradient-text">Haven</span></a>
+    58	            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
+    59	                <a href="#shop" class="hover:text-white transition-colors">Shop</a>
+    60	                <a href="#about" class="hover:text-white transition-colors">Our Story</a>
+    61	                <button onclick="openModal('shipping-modal')" class="hover:text-white transition-colors">Support</button>
+    62	                <button onclick="scrollToFooter()" class="hover:text-white transition-colors">Contact</button>
+    63	            </div>
+    64	            <button onclick="toggleCart()" class="relative magnetic-btn p-2 hover:bg-white/5 rounded-full transition-colors">
+    65	                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+    66	                <span id="cart-count" class="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full text-xs flex items-center justify-center font-semibold">0</span>
+    67	            </button>
+    68	        </div>
+    69	    </nav>
+    70	
+    71	    <!-- Hero Section -->
+    72	    <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+    73	        <div class="absolute inset-0">
+    74	            <div class="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-pink-900/20"></div>
+    75	            <div id="particles" class="absolute inset-0"></div>
+    76	            <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl float"></div>
+    77	            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl float" style="animation-delay: -3s;"></div>
+    78	        </div>
+    79	        <div class="relative z-10 w-full px-6 lg:px-12 text-center">
+    80	            <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight">Therapy You<br><span class="gradient-text italic">Can Wear</span></h1>
+    81	            <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 font-light">For the ones who feel deeply. Clothing that carries your healing, your story, your strength.</p>
+    82	            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+    83	                <a href="#shop" class="magnetic-btn px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full font-medium hover:shadow-lg hover:shadow-purple-500/25 transition-all">Find Your Piece</a>
+    84	                <button onclick="scrollToAbout()" class="magnetic-btn px-8 py-4 glass rounded-full font-medium hover:bg-white/10 transition-all">Read Our Story</button>
+    85	            </div>
+    86	        </div>
+    87	        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+    88	            <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+    89	        </div>
+    90	    </section>
+    91	
+    92	    <!-- Filter Section -->
+    93	    <section class="w-full px-6 lg:px-12 py-8 sticky top-16 z-40 bg-black/80 backdrop-blur-md border-b border-white/5">
+    94	        <div class="flex flex-wrap gap-3 justify-center" id="filter-container">
+    95	            <button class="filter-pill active px-5 py-2 rounded-full border border-white/20 text-sm font-medium transition-all" data-category="all">All</button>
+    96	            <button class="filter-pill px-5 py-2 rounded-full border border-white/20 text-sm font-medium transition-all hover:border-white/40" data-category="Hoodies">Hoodies</button>
+    97	            <button class="filter-pill px-5 py-2 rounded-full border border-white/20 text-sm font-medium transition-all hover:border-white/40" data-category="Tees">Tees</button>
+    98	            <button class="filter-pill px-5 py-2 rounded-full border border-white/20 text-sm font-medium transition-all hover:border-white/40" data-category="Tank Tops">Tank Tops</button>
+    99	            <button class="filter-pill px-5 py-2 rounded-full border border-white/20 text-sm font-medium transition-all hover:border-white/40" data-category="Pants">Pants</button>
+   100	            <button class="filter-pill px-5 py-2 rounded-full border border-white/20 text-sm font-medium transition-all hover:border-white/40" data-category="Dresses">Dresses</button>
+   101	            <button class="filter-pill px-5 py-2 rounded-full border border-white/20 text-sm font-medium transition-all hover:border-white/40" data-category="Tote Bags">Tote Bags</button>
+   102	            <button class="filter-pill px-5 py-2 rounded-full border border-white/20 text-sm font-medium transition-all hover:border-white/40" data-category="Accessories">Accessories</button>
+   103	        </div>
+   104	    </section>
+   105	
+   106	    <!-- Shop Section -->
+   107	    <section id="shop" class="w-full px-6 lg:px-12 py-16">
+   108	        <div class="mb-12 text-center">
+   109	            <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">Wear Your Healing</h2>
+   110	            <p class="text-gray-400">Each piece carries a message of resilience, faith, and growth</p>
+   111	        </div>
+   112	        <div id="loading-state" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+   113	            <div class="shimmer aspect-[3/4] rounded-2xl"></div>
+   114	            <div class="shimmer aspect-[3/4] rounded-2xl"></div>
+   115	            <div class="shimmer aspect-[3/4] rounded-2xl"></div>
+   116	            <div class="shimmer aspect-[3/4] rounded-2xl"></div>
+   117	        </div>
+   118	        <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" style="display: none;"></div>
+   119	        <div id="empty-state" class="hidden text-center py-20">
+   120	            <p class="text-gray-500 text-lg">No products found in this category.</p>
+   121	        </div>
+   122	        <!-- Error State -->
+   123	        <div id="error-state" class="hidden text-center py-20">
+   124	            <p class="text-red-400 text-lg mb-4">Unable to load products.</p>
+   125	            <p class="text-gray-500 text-sm mb-4" id="error-message"></p>
+   126	            <button onclick="fetchProducts()" class="px-6 py-2 border border-white/20 rounded-full hover:bg-white/10 transition-colors">Retry</button>
+   127	        </div>
+   128	    </section>
+   129	
+   130	    <!-- Product Detail Modal -->
+   131	    <div id="product-modal" class="fixed inset-0 z-50 hidden">
+   132	        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeProductModal()"></div>
+   133	        <div class="absolute inset-4 md:inset-12 lg:inset-20 glass-dark rounded-2xl overflow-hidden flex flex-col md:flex-row">
+   134	            <button onclick="closeProductModal()" class="absolute top-4 right-4 z-10 p-2 bg-black/50 rounded-full hover:bg-black/70 transition-colors">
+   135	                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+   136	            </button>
+   137	            <div class="w-full md:w-1/2 bg-gray-900/50 flex items-center justify-center p-4 md:p-8 relative">
+   138	                <img id="modal-main-image" src="" alt="" class="max-h-full max-w-full object-contain rounded-lg cursor-pointer" onclick="nextImage()">
+   139	                <div id="modal-thumbnails" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 flex-wrap justify-center max-w-full px-4"></div>
+   140	            </div>
+   141	            <div class="w-full md:w-1/2 p-6 md:p-10 overflow-y-auto">
+   142	                <h3 id="modal-title" class="font-display text-3xl font-bold mb-2"></h3>
+   143	                <p id="modal-price" class="text-2xl font-semibold text-purple-400 mb-6"></p>
+   144	                <div class="mb-6">
+   145	                    <p class="text-sm text-gray-400 mb-2">Size</p>
+   146	                    <div id="modal-sizes" class="flex flex-wrap gap-2"></div>
+   147	                </div>
+   148	                <div class="mb-8">
+   149	                    <p class="text-gray-300 leading-relaxed" id="modal-description"></p>
+   150	                </div>
+   151	                <button id="modal-add-to-cart" class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full font-medium hover:shadow-lg hover:shadow-purple-500/25 transition-all flex items-center justify-center gap-2">
+   152	                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+   153	                    Add to Cart
+   154	                </button>
+   155	            </div>
+   156	        </div>
+   157	    </div>
+   158	
+   159	    <!-- Cart Sidebar -->
+   160	    <div id="cart-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden" onclick="toggleCart()"></div>
+   161	    <div id="cart-sidebar" class="cart-sidebar fixed top-0 right-0 h-full w-full max-w-md glass-dark z-50 flex flex-col">
+   162	        <div class="p-6 border-b border-white/10 flex items-center justify-between">
+   163	            <h3 class="font-display text-2xl font-bold">Your Cart</h3>
+   164	            <button onclick="toggleCart()" class="p-2 hover:bg-white/5 rounded-full transition-colors">
+   165	                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+   166	            </button>
+   167	        </div>
+   168	        <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
+   169	            <div id="cart-empty" class="text-center py-12 text-gray-500">
+   170	                <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+   171	                <p>Your cart is empty</p>
+   172	            </div>
+   173	        </div>
+   174	        <div class="p-6 border-t border-white/10 space-y-4">
+   175	            <div class="flex justify-between text-sm"><span class="text-gray-400">Subtotal</span><span id="cart-subtotal" class="font-medium">$0.00</span></div>
+   176	            <div class="flex justify-between text-sm"><span class="text-gray-400">Shipping</span><span id="cart-shipping" class="font-medium">Calculated at checkout</span></div>
+   177	            <div class="flex justify-between text-lg font-semibold pt-4 border-t border-white/10"><span>Total</span><span id="cart-total" class="gradient-text">$0.00</span></div>
+   178	            <button onclick="checkout()" class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full font-medium hover:shadow-lg hover:shadow-purple-500/25 transition-all">Checkout</button>
+   179	        </div>
+   180	    </div>
+   181	
+   182	    <!-- About Section -->
+   183	    <section id="about" class="w-full px-6 lg:px-12 py-24 relative overflow-hidden">
+   184	        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/10 to-transparent"></div>
+   185	        <div class="relative z-10 max-w-4xl mx-auto text-center">
+   186	            <h2 class="font-display text-4xl md:text-5xl font-bold mb-8">Our Story</h2>
+   187	            <p class="text-2xl md:text-3xl font-display italic gradient-text mb-12">Fashion Born from Pain, Transformed into Power</p>
+   188	            
+   189	            <div class="space-y-6 text-left md:text-center max-w-3xl mx-auto">
+   190	                <p class="text-gray-300 leading-relaxed text-lg">Glass Ink Haven was not created in comfort. It was created in the quiet — in the moments no one sees. In the nights where your chest feels heavy for no clear reason. In the silence after heartbreak. In the slow, painful process of becoming someone new after losing who you used to be.</p>
+   191	                
+   192	                <p class="text-gray-300 leading-relaxed text-lg">This brand was not built from trends or aesthetics. It was built from emotion. From healing. From survival.</p>
+   193	                
+   194	                <p class="text-gray-300 leading-relaxed text-lg">We believe clothing is more than fabric. It is a second skin — a form of expression for the feelings you cannot always explain. Every piece you wear should reflect something deeper — your softness, your strength, your scars, your growth.</p>
+   195	                
+   196	                <div class="py-8 my-8 border-y border-white/10">
+   197	                    <p class="font-display text-2xl italic text-purple-400 mb-4">Glass Ink Haven exists for the ones who feel deeply.</p>
+   198	                    <p class="text-gray-400">The overthinkers. The silent fighters. The ones who are rebuilding themselves quietly while the world keeps moving.</p>
+   199	                </div>
+   200	                
+   201	                <p class="text-xl font-display text-white">This is not just fashion.<br><span class="gradient-text">This is therapy you can wear.</span></p>
+   202	                
+   203	                <p class="text-gray-300 leading-relaxed text-lg">Glass Ink Haven was created during a deeply personal season — a time marked by emotional weight, inner battles, and a search for meaning. In that season, one truth became clear: there was no space in fashion for people who were healing. No brand that truly understood what it meant to feel everything… and still keep going.</p>
+   204	                
+   205	                <p class="text-gray-300 leading-relaxed text-lg">So this became that space. A space where emotions are not hidden, but expressed. Where pain is not buried, but transformed into something meaningful. Where vulnerability is not weakness, but strength.</p>
+   206	                
+   207	                <div class="py-6">
+   208	                    <p class="text-lg font-semibold text-white mb-4">Our mission is simple, but deeply intentional:</p>
+   209	                    <ul class="space-y-2 text-gray-400">
+   210	                        <li>To turn pain into something beautiful.</li>
+   211	                        <li>To give people a voice — even when they have no words.</li>
+   212	                        <li>To remind you that healing is not linear… but it is happening.</li>
+   213	                    </ul>
+   214	                </div>
+   215	                
+   216	                <p class="text-gray-300 leading-relaxed text-lg">At the heart of Glass Ink Haven is faith, resilience, and growth. The belief that even in your lowest moments, you are not alone. That God is still present. That even when everything feels uncertain, something within you is still holding on.</p>
+   217	                
+   218	                <p class="text-gray-300 leading-relaxed text-lg">Every hoodie, every tee, every piece you wear carries that message. We are not just a brand. We are a community. A community of people who feel deeply, love deeply, and are learning — day by day — how to heal.</p>
+   219	                
+   220	                <div class="py-8 my-8 bg-white/5 rounded-2xl p-8">
+   221	                    <p class="text-gray-300 leading-relaxed text-lg mb-4">Your story matters here. If you have a story, a feeling, or a moment you want to express, you can share it with us — and we will help you turn it into something meaningful. Something seen. Something that speaks.</p>
+   222	                    <p class="font-display text-2xl text-white">Glass Ink Haven is more than clothing.<br>It is a sanctuary stitched into fabric.</p>
+   223	                </div>
+   224	                
+   225	                <p class="text-xl gradient-text font-display">You are welcome here — exactly as you are. ✨</p>
+   226	            </div>
+   227	        </div>
+   228	    </section>
+   229	
+   230	    <!-- Footer -->
+   231	    <footer id="footer" class="w-full px-6 lg:px-12 py-16 border-t border-white/10 mt-24 bg-black/50">
+   232	        <div class="max-w-6xl mx-auto grid md:grid-cols-4 gap-12">
+   233	            <!-- Shop -->
+   234	            <div>
+   235	                <h4 class="font-display text-lg font-semibold mb-6 gradient-text">Shop</h4>
+   236	                <ul class="space-y-3 text-sm text-gray-400">
+   237	                    <li><a href="#shop" onclick="filterByCategory('Hoodies')" class="hover:text-white transition-colors">Hoodies</a></li>
+   238	                    <li><a href="#shop" onclick="filterByCategory('Tees')" class="hover:text-white transition-colors">T-Shirts</a></li>
+   239	                    <li><a href="#shop" onclick="filterByCategory('Tank Tops')" class="hover:text-white transition-colors">Tank Tops</a></li>
+   240	                    <li><a href="#shop" onclick="filterByCategory('Accessories')" class="hover:text-white transition-colors">Accessories</a></li>
+   241	                </ul>
+   242	            </div>
+   243	            <!-- Support -->
+   244	            <div>
+   245	                <h4 class="font-display text-lg font-semibold mb-6 gradient-text">Support</h4>
+   246	                <ul class="space-y-3 text-sm text-gray-400">
+   247	                    <li><button onclick="openModal('shipping-modal')" class="hover:text-white transition-colors text-left">Shipping Info</button></li>
+   248	                    <li><button onclick="openModal('returns-modal')" class="hover:text-white transition-colors text-left">Returns & Exchanges</button></li>
+   249	                    <li><button onclick="openModal('sizing-modal')" class="hover:text-white transition-colors text-left">Size Guide</button></li>
+   250	                    <li><button onclick="openModal('faq-modal')" class="hover:text-white transition-colors text-left">FAQ</button></li>
+   251	                </ul>
+   252	            </div>
+   253	            <!-- Company -->
+   254	            <div>
+   255	                <h4 class="font-display text-lg font-semibold mb-6 gradient-text">Company</h4>
+   256	                <ul class="space-y-3 text-sm text-gray-400">
+   257	                    <li><a href="#about" class="hover:text-white transition-colors">Our Story</a></li>
+   258	                    <li><a href="#about" class="hover:text-white transition-colors">Mission</a></li>
+   259	                    <li><button onclick="openModal('careers-modal')" class="hover:text-white transition-colors text-left">Careers</button></li>
+   260	                    <li><button onclick="openModal('press-modal')" class="hover:text-white transition-colors text-left">Press</button></li>
+   261	                </ul>
+   262	            </div>
+   263	            <!-- Connect -->
+   264	            <div>
+   265	                <h4 class="font-display text-lg font-semibold mb-6 gradient-text">Connect</h4>
+   266	                <p class="text-sm text-gray-400 mb-4">Join our community of healers and dreamers.</p>
+   267	                <div class="flex gap-4 mb-6">
+   268	                    <a href="#" class="p-2 glass rounded-full hover:bg-white/10 transition-colors">
+   269	                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+   270	                    </a>
+   271	                    <a href="#" class="p-2 glass rounded-full hover:bg-white/10 transition-colors">
+   272	                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.468 2.373c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"/></svg>
+   273	                    </a>
+   274	                    <a href="#" class="p-2 glass rounded-full hover:bg-white/10 transition-colors">
+   275	                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+   276	                    </a>
+   277	                </div>
+   278	                <p class="text-xs text-gray-500">© 2024 Glass Ink Haven. All rights reserved.</p>
+   279	            </div>
+   280	        </div>
+   281	    </footer>
+   282	
+   283	    <!-- Info Modals -->
+   284	    <div id="shipping-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
+   285	        <div class="modal-content glass-dark rounded-2xl max-w-lg w-full p-8 info-modal">
+   286	            <div class="flex justify-between items-center mb-6">
+   287	                <h3 class="font-display text-2xl font-bold">Shipping Information</h3>
+   288	                <button onclick="closeModal('shipping-modal')" class="p-2 hover:bg-white/5 rounded-full"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+   289	            </div>
+   290	            <div class="space-y-4 text-gray-300">
+   291	                <p>We ship worldwide from our fulfillment centers. All orders are processed within 1-2 business days.</p>
+   292	                <ul class="space-y-2">
+   293	                    <li><strong class="text-white">Standard Shipping:</strong> 5-10 business days ($5.99)</li>
+   294	                    <li><strong class="text-white">Express Shipping:</strong> 2-5 business days ($12.99)</li>
+   295	                    <li><strong class="text-white">Free Shipping:</strong> On orders over $75</li>
+   296	                </ul>
+   297	            </div>
+   298	        </div>
+   299	    </div>
+   300	
+   301	    <div id="returns-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
+   302	        <div class="modal-content glass-dark rounded-2xl max-w-lg w-full p-8 info-modal">
+   303	            <div class="flex justify-between items-center mb-6">
+   304	                <h3 class="font-display text-2xl font-bold">Returns & Exchanges</h3>
+   305	                <button onclick="closeModal('returns-modal')" class="p-2 hover:bg-white/5 rounded-full"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+   306	            </div>
+   307	            <div class="space-y-4 text-gray-300">
+   308	                <p>We want you to love your purchase. If you're not satisfied, we offer hassle-free returns within 30 days.</p>
+   309	                <ul class="space-y-2">
+   310	                    <li>Items must be unworn with original tags</li>
+   311	                    <li>Return shipping is free for exchanges</li>
+   312	                    <li>Refunds processed within 5-7 business days</li>
+   313	                </ul>
+   314	            </div>
+   315	        </div>
+   316	    </div>
+   317	
+   318	    <div id="sizing-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
+   319	        <div class="modal-content glass-dark rounded-2xl max-w-lg w-full p-8 info-modal">
+   320	            <div class="flex justify-between items-center mb-6">
+   321	                <h3 class="font-display text-2xl font-bold">Size Guide</h3>
+   322	                <button onclick="closeModal('sizing-modal')" class="p-2 hover:bg-white/5 rounded-full"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+   323	            </div>
+   324	            <div class="space-y-4 text-gray-300">
+   325	                <p>Our apparel is designed for a comfortable, true-to-size fit. When in doubt, size up for a relaxed feel.</p>
+   326	                <table class="w-full text-sm mt-4">
+   327	                    <thead><tr class="border-b border-white/10"><th class="text-left py-2">Size</th><th class="text-left py-2">Chest</th><th class="text-left py-2">Length</th></tr></thead>
+   328	                    <tbody>
+   329	                        <tr class="border-b border-white/5"><td class="py-2">S</td><td>34-36"</td><td>27"</td></tr>
+   330	                        <tr class="border-b border-white/5"><td class="py-2">M</td><td>38-40"</td><td>28"</td></tr>
+   331	                        <tr class="border-b border-white/5"><td class="py-2">L</td><td>42-44"</td><td>29"</td></tr>
+   332	                        <tr class="border-b border-white/5"><td class="py-2">XL</td><td>46-48"</td><td>30"</td></tr>
+   333	                        <tr><td class="py-2">2XL</td><td>50-52"</td><td>31"</td></tr>
+   334	                    </tbody>
+   335	                </table>
+   336	            </div>
+   337	        </div>
+   338	    </div>
+   339	
+   340	    <div id="faq-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
+   341	        <div class="modal-content glass-dark rounded-2xl max-w-lg w-full p-8 info-modal">
+   342	            <div class="flex justify-between items-center mb-6">
+   343	                <h3 class="font-display text-2xl font-bold">FAQ</h3>
+   344	                <button onclick="closeModal('faq-modal')" class="p-2 hover:bg-white/5 rounded-full"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+   345	            </div>
+   346	            <div class="space-y-4 text-gray-300">
+   347	                <div><strong class="text-white block mb-1">How long does shipping take?</strong><p>Standard shipping takes 5-10 business days. Express options available.</p></div>
+   348	                <div><strong class="text-white block mb-1">Can I track my order?</strong><p>Yes! You'll receive a tracking number via email once your order ships.</p></div>
+   349	                <div><strong class="text-white block mb-1">What materials do you use?</strong><p>We use premium, soft-touch fabrics that are comfortable and durable.</p></div>
+   350	                <div><strong class="text-white block mb-1">Do you ship internationally?</strong><p>Yes, we ship worldwide. International shipping times vary by location.</p></div>
+   351	            </div>
+   352	        </div>
+   353	    </div>
+   354	
+   355	    <div id="careers-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
+   356	        <div class="modal-content glass-dark rounded-2xl max-w-lg w-full p-8 info-modal">
+   357	            <div class="flex justify-between items-center mb-6">
+   358	                <h3 class="font-display text-2xl font-bold">Careers</h3>
+   359	                <button onclick="closeModal('careers-modal')" class="p-2 hover:bg-white/5 rounded-full"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+   360	            </div>
+   361	            <div class="space-y-4 text-gray-300">
+   362	                <p>Join our mission to create meaningful fashion. We're always looking for passionate individuals who believe in the power of healing through expression.</p>
+   363	                <p class="text-white">Current openings:</p>
+   364	                <ul class="space-y-2">
+   365	                    <li>• Creative Director</li>
+   366	                    <li>• Social Media Manager</li>
+   367	                    <li>• Customer Experience Specialist</li>
+   368	                </ul>
+   369	                <p>Send your resume to careers@glassinkhaven.com</p>
+   370	            </div>
+   371	        </div>
+   372	    </div>
+   373	
+   374	    <div id="press-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4">
+   375	        <div class="modal-content glass-dark rounded-2xl max-w-lg w-full p-8 info-modal">
+   376	            <div class="flex justify-between items-center mb-6">
+   377	                <h3 class="font-display text-2xl font-bold">Press</h3>
+   378	                <button onclick="closeModal('press-modal')" class="p-2 hover:bg-white/5 rounded-full"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
+   379	            </div>
+   380	            <div class="space-y-4 text-gray-300">
+   381	                <p>For press inquiries, media kits, and collaboration requests, please contact:</p>
+   382	                <p class="text-white">press@glassinkhaven.com</p>
+   383	                <p>We love sharing our story and partnering with publications that align with our mission of healing and self-expression.</p>
+   384	            </div>
+   385	        </div>
+   386	    </div>
+   387	
+   388	    <!-- Toast Notification -->
+   389	    <div id="toast" class="toast fixed bottom-8 left-1/2 -translate-x-1/2 glass-dark px-6 py-3 rounded-full flex items-center gap-3 z-50">
+   390	        <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+   391	        <span id="toast-message">Added to cart!</span>
+   392	    </div>
+   393	
+   394	    <script>
+   395	        // Global state
+   396	        let products = [];
+   397	        let cart = [];
+   398	        let currentProduct = null;
+   399	        let currentImageIndex = 0;
+   400	        let selectedSize = null;
+   401	
+   402	        // Initialize
+   403	        document.addEventListener('DOMContentLoaded', () => {
+   404	            initParticles();
+   405	            fetchProducts();
+   406	            setupFilters();
+   407	            loadCart();
+   408	        });
+   409	
+   410	        // Fetch products from Printify endpoint
+   411	        async function fetchProducts() {
+   412	            const loadingState = document.getElementById('loading-state');
+   413	            const productsGrid = document.getElementById('products-grid');
+   414	            const errorState = document.getElementById('error-state');
+   415	            const emptyState = document.getElementById('empty-state');
+   416	
+   417	            // Show loading state
+   418	            loadingState.style.display = 'grid';
+   419	            productsGrid.style.display = 'none';
+   420	            errorState.classList.add('hidden');
+   421	            emptyState.classList.add('hidden');
+   422	
+   423	            try {
+   424	                const res = await fetch('https://glassinkhaven.netlify.app/.netlify/functions/printify');
+   425	                
+   426	                if (!res.ok) {
+   427	                    throw new Error(`HTTP error! status: ${res.status}`);
+   428	                }
+   429	                
+   430	                const data = await res.json();
+   431	                
+   432	                // Handle different response structures
+   433	                let productsList = [];
+   434	                if (Array.isArray(data)) {
+   435	                    productsList = data;
+   436	                } else if (data.products && Array.isArray(data.products)) {
+   437	                    productsList = data.products;
+   438	                } else if (data.data && Array.isArray(data.data)) {
+   439	                    productsList = data.data;
+   440	                } else {
+   441	                    // Try to find products in any property
+   442	                    for (const key in data) {
+   443	                        if (Array.isArray(data[key]) && data[key].length > 0 && data[key][0].title) {
+   444	                            productsList = data[key];
+   445	                            break;
+   446	                        }
+   447	                    }
+   448	                }
+   449	
+   450	                console.log('Printify products loaded:', productsList);
+   451	                products = productsList;
+   452	
+   453	                loadingState.style.display = 'none';
+   454	                
+   455	                if (products.length === 0) {
+   456	                    emptyState.classList.remove('hidden');
+   457	                } else {
+   458	                    productsGrid.style.display = 'grid';
+   459	                    renderProducts(products);
+   460	                }
+   461	            } catch (err) {
+   462	                console.error('Error fetching Printify products:', err);
+   463	                loadingState.style.display = 'none';
+   464	                errorState.classList.remove('hidden');
+   465	                document.getElementById('error-message').textContent = err.message;
+   466	            }
+   467	        }
+   468	
+   469	        // Render products dynamically
+   470	        function renderProducts(productsToRender) {
+   471	            const grid = document.getElementById('products-grid');
+   472	            grid.innerHTML = '';
+   473	
+   474	            productsToRender.forEach((product, index) => {
+   475	                // Extract product data with fallbacks
+   476	                const title = product.title || 'Untitled Product';
+   477	                const imgSrc = product.images?.[0]?.src || product.image?.src || product.images?.[0]?.url || product.image || 'https://via.placeholder.com/400x500/1a1a1a/666?text=No+Image';
+   478	                
+   479	                // Get price from variants
+   480	                let price = '0.00';
+   481	                if (product.variants && product.variants.length > 0) {
+   482	                    const variant = product.variants[0];
+   483	                    price = variant.price || variant.cost || '0.00';
+   484	                }
+   485	                
+   486	                // Format price
+   487	                const formattedPrice = typeof price === 'number' ? price.toFixed(2) : parseFloat(price).toFixed(2);
+   488	                
+   489	                // Get product type for filtering
+   490	                const productType = product.product_type || product.type || product.category || 'Other';
+   491	                
+   492	                // Create product card
+   493	                const card = document.createElement('div');
+   494	                card.className = 'product-card glass rounded-2xl overflow-hidden cursor-pointer animate-in';
+   495	                card.style.animationDelay = `${index * 0.05}s`;
+   496	                card.onclick = () => openProductModal(product);
+   497	                
+   498	                card.innerHTML = `
+   499	                    <div class="aspect-[3/4] overflow-hidden bg-gray-900">
+   500	                        <img src="${imgSrc}" alt="${title}" class="product-image w-full h-full object-cover" loading="lazy" onerror="this.src='https://via.placeholder.com/400x500/1a1a1a/666?text=Image+Error'">
+   501	                    </div>
+   502	                    <div class="p-4">
+   503	                        <h3 class="font-medium text-white mb-1 line-clamp-2">${title}</h3>
+   504	                        <p class="text-purple-400 font-semibold">$${formattedPrice}</p>
+   505	                        <button class="mt-3 w-full py-2 bg-white/10 hover:bg-white/20 rounded-full text-sm font-medium transition-colors" onclick="event.stopPropagation(); quickAddToCart(${JSON.stringify(product).replace(/"/g, '&quot;')})">
+   506	                            Quick Add
+   507	                        </button>
+   508	                    </div>
+   509	                `;
+   510	                
+   511	                grid.appendChild(card);
+   512	            });
+   513	        }
+   514	
+   515	        // Setup filter buttons
+   516	        function setupFilters() {
+   517	            const filterButtons = document.querySelectorAll('.filter-pill');
+   518	            
+   519	            filterButtons.forEach(button => {
+   520	                button.addEventListener('click', () => {
+   521	                    // Update active state
+   522	                    filterButtons.forEach(btn => btn.classList.remove('active'));
+   523	                    button.classList.add('active');
+   524	                    
+   525	                    const category = button.dataset.category;
+   526	                    filterProducts(category);
+   527	                });
+   528	            });
+   529	        }
+   530	
+   531	        // Filter products by category
+   532	        function filterProducts(category) {
+   533	            const emptyState = document.getElementById('empty-state');
+   534	            const productsGrid = document.getElementById('products-grid');
+   535	            
+   536	            if (category === 'all') {
+   537	                renderProducts(products);
+   538	                emptyState.classList.add('hidden');
+   539	                productsGrid.style.display = 'grid';
+   540	            } else {
+   541	                const filtered = products.filter(p => {
+   542	                    const productType = (p.product_type || p.type || p.category || '').toLowerCase();
+   543	                    return productType === category.toLowerCase() || 
+   544	                           productType.includes(category.toLowerCase());
+   545	                });
+   546	                
+   547	                if (filtered.length === 0) {
+   548	                    productsGrid.style.display = 'none';
+   549	                    emptyState.classList.remove('hidden');
+   550	                } else {
+   551	                    emptyState.classList.add('hidden');
+   552	                    productsGrid.style.display = 'grid';
+   553	                    renderProducts(filtered);
+   554	                }
+   555	            }
+   556	        }
+   557	
+   558	        // Filter by category (for footer links)
+   559	        function filterByCategory(category) {
+   560	            const filterButtons = document.querySelectorAll('.filter-pill');
+   561	            filterButtons.forEach(btn => {
+   562	                btn.classList.remove('active');
+   563	                if (btn.dataset.category === category) {
+   564	                    btn.classList.add('active');
+   565	                }
+   566	            });
+   567	            filterProducts(category);
+   568	        }
+   569	
+   570	        // Open product modal
+   571	        function openProductModal(product) {
+   572	            currentProduct = product;
+   573	            currentImageIndex = 0;
+   574	            selectedSize = null;
+   575	            
+   576	            const modal = document.getElementById('product-modal');
+   577	            const title = document.getElementById('modal-title');
+   578	            const price = document.getElementById('modal-price');
+   579	            const description = document.getElementById('modal-description');
+   580	            const mainImage = document.getElementById('modal-main-image');
+   581	            const thumbnails = document.getElementById('modal-thumbnails');
+   582	            const sizesContainer = document.getElementById('modal-sizes');
+   583	            const addToCartBtn = document.getElementById('modal-add-to-cart');
+   584	            
+   585	            title.textContent = product.title || 'Untitled Product';
+   586	            
+   587	            // Get price
+   588	            let priceValue = '0.00';
+   589	            if (product.variants && product.variants.length > 0) {
+   590	                priceValue = product.variants[0].price || product.variants[0].cost || '0.00';
+   591	            }
+   592	            price.textContent = `$${typeof priceValue === 'number' ? priceValue.toFixed(2) : parseFloat(priceValue).toFixed(2)}`;
+   593	            
+   594	            description.textContent = product.description || 'A meaningful piece from Glass Ink Haven, designed to carry your healing and story.';
+   595	            
+   596	            // Setup images
+   597	            const images = product.images || (product.image ? [product.image] : []);
+   598	            if (images.length > 0) {
+   599	                mainImage.src = images[0].src || images[0].url || images[0] || '';
+   600	                mainImage.alt = product.title;
+   601	                
+   602	                thumbnails.innerHTML = images.map((img, i) => `
+   603	                    <img src="${img.src || img.url || img}" class="gallery-thumb w-12 h-12 object-cover rounded cursor-pointer ${i === 0 ? 'active' : ''}" onclick="setModalImage(${i}, event)">
+   604	                `).join('');
+   605	            } else {
+   606	                mainImage.src = 'https://via.placeholder.com/400x500/1a1a1a/666?text=No+Image';
+   607	                thumbnails.innerHTML = '';
+   608	            }
+   609	            
+   610	            // Setup sizes
+   611	            const sizes = ['XS', 'S', 'M', 'L', 'XL', '2XL'];
+   612	            sizesContainer.innerHTML = sizes.map(size => `
+   613	                <button class="size-option px-4 py-2 border border-white/20 rounded-full text-sm hover:border-purple-500 transition-colors" onclick="selectSize('${size}', this)">${size}</button>
+   614	            `).join('');
+   615	            
+   616	            // Setup add to cart button
+   617	            addToCartBtn.onclick = () => addToCartFromModal();
+   618	            
+   619	            modal.classList.remove('hidden');
+   620	            document.body.style.overflow = 'hidden';
+   621	        }
+   622	
+   623	        // Close product modal
+   624	        function closeProductModal() {
+   625	            const modal = document.getElementById('product-modal');
+   626	            modal.classList.add('hidden');
+   627	            document.body.style.overflow = '';
+   628	            currentProduct = null;
+   629	        }
+   630	
+   631	        // Set modal image
+   632	        function setModalImage(index, event) {
+   633	            if (event) event.stopPropagation();
+   634	            currentImageIndex = index;
+   635	            const images = currentProduct.images || (currentProduct.image ? [currentProduct.image] : []);
+   636	            if (images[index]) {
+   637	                document.getElementById('modal-main-image').src = images[index].src || images[index].url || images[index];
+   638	            }
+   639	            
+   640	            // Update thumbnail active state
+   641	            document.querySelectorAll('.gallery-thumb').forEach((thumb, i) => {
+   642	                thumb.classList.toggle('active', i === index);
+   643	            });
+   644	        }
+   645	
+   646	        // Next image
+   647	        function nextImage() {
+   648	            const images = currentProduct.images || (currentProduct.image ? [currentProduct.image] : []);
+   649	            if (images.length > 1) {
+   650	                currentImageIndex = (currentImageIndex + 1) % images.length;
+   651	                setModalImage(currentImageIndex);
+   652	            }
+   653	        }
+   654	
+   655	        // Select size
+   656	        function selectSize(size, btn) {
+   657	            selectedSize = size;
+   658	            document.querySelectorAll('.size-option').forEach(b => b.classList.remove('selected'));
+   659	            btn.classList.add('selected');
+   660	        }
+   661	
+   662	        // Add to cart from modal
+   663	        function addToCartFromModal() {
+   664	            if (!currentProduct) return;
+   665	            
+   666	            const cartItem = {
+   667	                id: currentProduct.id || Date.now(),
+   668	                title: currentProduct.title,
+   669	                price: currentProduct.variants?.[0]?.price || currentProduct.variants?.[0]?.cost || '0.00',
+   670	                image: currentProduct.images?.[0]?.src || currentProduct.image?.src || currentProduct.images?.[0]?.url || currentProduct.image || '',
+   671	                size: selectedSize || 'M',
+   672	                quantity: 1
+   673	            };
+   674	            
+   675	            addItemToCart(cartItem);
+   676	            closeProductModal();
+   677	        }
+   678	
+   679	        // Quick add to cart (from product card)
+   680	        function quickAddToCart(product) {
+   681	            const cartItem = {
+   682	                id: product.id || Date.now(),
+   683	                title: product.title,
+   684	                price: product.variants?.[0]?.price || product.variants?.[0]?.cost || '0.00',
+   685	                image: product.images?.[0]?.src || product.image?.src || product.images?.[0]?.url || product.image || '',
+   686	                size: 'M',
+   687	                quantity: 1
+   688	            };
+   689	            
+   690	            addItemToCart(cartItem);
+   691	        }
+   692	
+   693	        // Add item to cart
+   694	        function addItemToCart(item) {
+   695	            const existingItem = cart.find(i => i.id === item.id && i.size === item.size);
+   696	            
+   697	            if (existingItem) {
+   698	                existingItem.quantity += 1;
+   699	            } else {
+   700	                cart.push(item);
+   701	            }
+   702	            
+   703	            saveCart();
+   704	            updateCartUI();
+   705	            showToast('Added to cart!');
+   706	        }
+   707	
+   708	        // Remove from cart
+   709	        function removeFromCart(index) {
+   710	            cart.splice(index, 1);
+   711	            saveCart();
+   712	            updateCartUI();
+   713	        }
+   714	
+   715	        // Update quantity
+   716	        function updateQuantity(index, delta) {
+   717	            cart[index].quantity += delta;
+   718	            if (cart[index].quantity <= 0) {
+   719	                removeFromCart(index);
+   720	            } else {
+   721	                saveCart();
+   722	                updateCartUI();
+   723	            }
+   724	        }
+   725	
+   726	        // Save cart to localStorage
+   727	        function saveCart() {
+   728	            localStorage.setItem('glassInkCart', JSON.stringify(cart));
+   729	        }
+   730	
+   731	        // Load cart from localStorage
+   732	        function loadCart() {
+   733	            const saved = localStorage.getItem('glassInkCart');
+   734	            if (saved) {
+   735	                cart = JSON.parse(saved);
+   736	                updateCartUI();
+   737	            }
+   738	        }
+   739	
+   740	        // Update cart UI
+   741	        function updateCartUI() {
+   742	            const cartItems = document.getElementById('cart-items');
+   743	            const cartEmpty = document.getElementById('cart-empty');
+   744	            const cartCount = document.getElementById('cart-count');
+   745	            const cartSubtotal = document.getElementById('cart-subtotal');
+   746	            const cartTotal = document.getElementById('cart-total');
+   747	            
+   748	            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+   749	            cartCount.textContent = totalItems;
+   750	            
+   751	            if (cart.length === 0) {
+   752	                cartItems.innerHTML = '';
+   753	                cartItems.appendChild(cartEmpty);
+   754	                cartEmpty.style.display = 'block';
+   755	            } else {
+   756	                cartEmpty.style.display = 'none';
+   757	                cartItems.innerHTML = cart.map((item, index) => `
+   758	                    <div class="flex gap-4 p-4 glass rounded-xl">
+   759	                        <img src="${item.image}" alt="${item.title}" class="w-20 h-20 object-cover rounded-lg" onerror="this.src='https://via.placeholder.com/80/1a1a1a/666?text=No+Image'">
+   760	                        <div class="flex-1">
+   761	                            <h4 class="font-medium text-sm mb-1 line-clamp-2">${item.title}</h4>
+   762	                            <p class="text-gray-400 text-xs mb-2">Size: ${item.size}</p>
+   763	                            <div class="flex items-center justify-between">
+   764	                                <div class="flex items-center gap-2">
+   765	                                    <button onclick="updateQuantity(${index}, -1)" class="w-6 h-6 flex items-center justify-center bg-white/10 rounded hover:bg-white/20 transition-colors">-</button>
+   766	                                    <span class="text-sm">${item.quantity}</span>
+   767	                                    <button onclick="updateQuantity(${index}, 1)" class="w-6 h-6 flex items-center justify-center bg-white/10 rounded hover:bg-white/20 transition-colors">+</button>
+   768	                                </div>
+   769	                                <p class="text-purple-400 font-medium">$${(parseFloat(item.price) * item.quantity).toFixed(2)}</p>
+   770	                            </div>
+   771	                        </div>
+   772	                        <button onclick="removeFromCart(${index})" class="text-gray-500 hover:text-white transition-colors">
+   773	                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+   774	                        </button>
+   775	                    </div>
+   776	                `).join('');
+   777	            }
+   778	            
+   779	            const subtotal = cart.reduce((sum, item) => sum + (parseFloat(item.price) * item.quantity), 0);
+   780	            cartSubtotal.textContent = `$${subtotal.toFixed(2)}`;
+   781	            cartTotal.textContent = `$${subtotal.toFixed(2)}`;
+   782	        }
+   783	
+   784	        // Toggle cart sidebar
+   785	        function toggleCart() {
+   786	            const sidebar = document.getElementById('cart-sidebar');
+   787	            const overlay = document.getElementById('cart-overlay');
+   788	            
+   789	            sidebar.classList.toggle('open');
+   790	            overlay.classList.toggle('hidden');
+   791	            document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+   792	        }
+   793	
+   794	        // Checkout
+   795	        function checkout() {
+   796	            if (cart.length === 0) {
+   797	                showToast('Your cart is empty!');
+   798	                return;
+   799	            }
+   800	            
+   801	            // Here you would integrate with your payment processor
+   802	            showToast('Redirecting to checkout...');
+   803	            
+   804	            // For now, just clear cart as demo
+   805	            setTimeout(() => {
+   806	                cart = [];
+   807	                saveCart();
+   808	                updateCartUI();
+   809	                toggleCart();
+   810	                showToast('Order placed successfully! ✨');
+   811	            }, 1500);
+   812	        }
+   813	
+   814	        // Show toast
+   815	        function showToast(message) {
+   816	            const toast = document.getElementById('toast');
+   817	            const toastMessage = document.getElementById('toast-message');
+   818	            toastMessage.textContent = message;
+   819	            toast.classList.add('show');
+   820	            
+   821	            setTimeout(() => {
+   822	                toast.classList.remove('show');
+   823	            }, 3000);
+   824	        }
+   825	
+   826	        // Open modal
+   827	        function openModal(modalId) {
+   828	            const modal = document.getElementById(modalId);
+   829	            if (modal) {
+   830	                modal.classList.add('active');
+   831	                document.body.style.overflow = 'hidden';
+   832	            }
+   833	        }
+   834	
+   835	        // Close modal
+   836	        function closeModal(modalId) {
+   837	            const modal = document.getElementById(modalId);
+   838	            if (modal) {
+   839	                modal.classList.remove('active');
+   840	                document.body.style.overflow = '';
+   841	            }
+   842	        }
+   843	
+   844	        // Scroll to about
+   845	        function scrollToAbout() {
+   846	            document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
+   847	        }
+   848	
+   849	        // Scroll to footer
+   850	        function scrollToFooter() {
+   851	            document.getElementById('footer').scrollIntoView({ behavior: 'smooth' });
+   852	        }
+   853	
+   854	        // Initialize particles
+   855	        function initParticles() {
+   856	            const container = document.getElementById('particles');
+   857	            if (!container) return;
+   858	            
+   859	            const particleCount = 25;
+   860	            
+   861	            for (let i = 0; i < particleCount; i++) {
+   862	                const particle = document.createElement('div');
+   863	                particle.className = 'particle';
+   864	                particle.style.left = Math.random() * 100 + '%';
+   865	                particle.style.top = Math.random() * 100 + '%';
+   866	                particle.style.animationDelay = Math.random() * 5 + 's';
+   867	                particle.style.opacity = Math.random() * 0.5 + 0.1;
+   868	                container.appendChild(particle);
+   869	            }
+   870	        }
+   871	
+   872	        // Close modals on escape key
+   873	        document.addEventListener('keydown', (e) => {
+   874	            if (e.key === 'Escape') {
+   875	                closeProductModal();
+   876	                document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+   877	                    modal.classList.remove('active');
+   878	                });
+   879	                const sidebar = document.getElementById('cart-sidebar');
+   880	                if (sidebar.classList.contains('open')) {
+   881	                    toggleCart();
+   882	                }
+   883	            }
+   884	        });
+   885	    </script>
+   886	</body>
+   887	</html>
+   888	
