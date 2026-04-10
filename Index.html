@@ -5,20 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Glass Ink Haven | Wearable Therapy for the Soul</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://checkout.flutterwave.com/v3.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #ffffff; overflow-x: hidden; }
         .font-display { font-family: 'Playfair Display', serif; }
         .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .glass-dark { background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .glass-dark { background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
         .gradient-text { background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #667eea 100%); background-size: 400% 400%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: gradientShift 8s ease infinite; }
         @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .product-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+        .product-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .product-card:hover { transform: translateY(-8px); }
-        .filter-btn { transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.1); white-space: nowrap; }
-        .filter-btn.active { background: #667eea; border-color: #667eea; color: white; transform: scale(1.05); }
-        .cart-sidebar { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .filter-btn.active { background: #667eea; border-color: #667eea; color: white; }
+        .cart-sidebar { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; }
         .cart-sidebar.open { transform: translateX(0); }
         .modal-overlay { opacity: 0; visibility: hidden; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; z-index: 100; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
@@ -32,12 +32,11 @@
     <nav class="fixed top-0 left-0 right-0 z-50 glass-dark">
         <div class="w-full px-6 lg:px-12 py-4 flex items-center justify-between">
             <a href="#" class="font-display text-2xl font-bold tracking-tight">Glass Ink<span class="gradient-text">Haven</span></a>
-            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
-                <a href="#shop" class="hover:text-white transition-colors">Shop</a>
-                <a href="#about" class="hover:text-white transition-colors">Our Story</a>
-                <button onclick="toggleCart()" class="relative p-2 hover:bg-white/5 rounded-full transition-colors">
+            <div class="flex items-center gap-6 text-sm font-medium">
+                <a href="#shop" class="hidden md:block hover:text-white transition-colors">Shop</a>
+                <button onclick="toggleCart()" class="relative p-2 hover:bg-white/5 rounded-full">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-                    <span id="cart-count" class="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full text-xs flex items-center justify-center">0</span>
+                    <span id="cart-count" class="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full text-[10px] flex items-center justify-center">0</span>
                 </button>
             </div>
         </div>
@@ -55,9 +54,7 @@
     <section id="shop" class="w-full px-6 lg:px-12 py-24">
         <div class="text-center mb-10">
             <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">Wear Your Healing</h2>
-            <p class="text-gray-400 mb-12">Soft but powerful pieces for your journey.</p>
-            
-            <div class="filters flex flex-wrap justify-center gap-3 mb-16 overflow-x-auto pb-4">
+            <div class="filters flex flex-wrap justify-center gap-3 mt-8 overflow-x-auto pb-4">
                 <button onclick="filterCategory('all')" class="filter-btn active px-6 py-2 rounded-full text-sm glass hover:bg-white/10">All</button>
                 <button onclick="filterCategory('hoodie')" class="filter-btn px-6 py-2 rounded-full text-sm glass hover:bg-white/10">Hoodies</button>
                 <button onclick="filterCategory('tee')" class="filter-btn px-6 py-2 rounded-full text-sm glass hover:bg-white/10">Tees</button>
@@ -82,33 +79,13 @@
         <div class="max-w-4xl mx-auto">
             <h2 class="font-display text-4xl md:text-5xl font-bold mb-4 text-center">Our Story</h2>
             <p class="text-xl md:text-2xl font-display italic gradient-text mb-12 text-center">Fashion Born from Pain, Transformed into Power</p>
-            
             <div class="space-y-6 text-gray-300 text-lg leading-relaxed">
                 <p>Glass Ink Haven was not created in comfort. It was created in the quiet — in the moments no one sees. In the nights where your chest feels heavy for no clear reason. In the silence after heartbreak. In the slow, painful process of becoming someone new after losing who you used to be.</p>
                 <p>This brand was not built from trends or aesthetics. It was built from emotion. From healing. From survival.</p>
                 <p>We believe clothing is more than fabric. It is a second skin — a form of expression for the feelings you cannot always explain. Every piece you wear should reflect something deeper — your softness, your strength, your scars, your growth.</p>
-                
                 <p class="font-display text-2xl text-purple-400 text-center py-6">Glass Ink Haven exists for the ones who feel deeply.</p>
-                
-                <p>The overthinkers. The silent fighters. The ones who are rebuilding themselves quietly while the world keeps moving. This is not just fashion. This is therapy you can wear.</p>
-                <p>Glass Ink Haven was created during a deeply personal season — a time marked by emotional weight, inner battles, and a search for meaning. In that season, one truth became clear: there was no space in fashion for people who were healing. No brand that truly understood what it meant to feel everything… and still keep going.</p>
-                
-                <p>So this became that space. A space where emotions are not hidden, but expressed. Where pain is not buried, but transformed into something meaningful. Where vulnerability is not weakness, but strength.</p>
-                
-                <p class="font-bold text-white mt-8 uppercase tracking-widest">Our mission is simple, but deeply intentional:</p>
-                <ul class="list-disc pl-5 space-y-2 text-gray-400">
-                    <li>To turn pain into something beautiful.</li>
-                    <li>To give people a voice — even when they have no words.</li>
-                    <li>To remind you that healing is not linear… but it is happening.</li>
-                </ul>
-
                 <p>At the heart of Glass Ink Haven is faith, resilience, and growth. The belief that even in your lowest moments, you are not alone. That God is still present. That even when everything feels uncertain, something within you is still holding on.</p>
-                <p>Every hoodie, every tee, every piece you wear carries that message. We are not just a brand. We are a community. A community of people who feel deeply, love deeply, and are learning — day by day — how to heal.</p>
-                
-                <p class="bg-white/5 p-6 rounded-xl italic border border-white/5">Your story matters here. If you have a story, a feeling, or a moment you want to express, you can share it with us — and we will help you turn it into something meaningful. Something seen. Something that speaks.</p>
-                
                 <p class="text-xl font-display text-center text-white mt-10">Glass Ink Haven is more than clothing. It is a sanctuary stitched into fabric.</p>
-                <p class="text-center text-2xl gradient-text mt-4">You are welcome here — exactly as you are. ✨</p>
             </div>
         </div>
     </section>
@@ -118,149 +95,189 @@
             <div>
                 <h4 class="font-display text-lg font-bold mb-6 gradient-text">SHOP</h4>
                 <ul class="space-y-3 text-sm text-gray-400">
-                    <li><button onclick="filterCategory('hoodie'); document.getElementById('shop').scrollIntoView();" class="hover:text-white transition">Hoodies</button></li>
-                    <li><button onclick="filterCategory('tee'); document.getElementById('shop').scrollIntoView();" class="hover:text-white transition">Tees</button></li>
-                    <li><button onclick="filterCategory('tank'); document.getElementById('shop').scrollIntoView();" class="hover:text-white transition">Tank Tops</button></li>
-                    <li><button onclick="filterCategory('dress'); document.getElementById('shop').scrollIntoView();" class="hover:text-white transition">Dresses</button></li>
-                    <li><button onclick="filterCategory('pants'); document.getElementById('shop').scrollIntoView();" class="hover:text-white transition">Pants</button></li>
-                    <li><button onclick="filterCategory('tote'); document.getElementById('shop').scrollIntoView();" class="hover:text-white transition">Tote Bags</button></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-display text-lg font-bold mb-6 gradient-text">COMPANY</h4>
-                <ul class="space-y-3 text-sm text-gray-400">
-                    <li><a href="#about" class="hover:text-white transition">About Us</a></li>
+                    <li><button onclick="filterCategory('hoodie'); window.scrollTo(0, document.getElementById('shop').offsetTop)" class="hover:text-white transition">Hoodies</button></li>
+                    <li><button onclick="filterCategory('tee'); window.scrollTo(0, document.getElementById('shop').offsetTop)" class="hover:text-white transition">Tees</button></li>
+                    <li><button onclick="filterCategory('others'); window.scrollTo(0, document.getElementById('shop').offsetTop)" class="hover:text-white transition">Accessories</button></li>
                 </ul>
             </div>
             <div>
                 <h4 class="font-display text-lg font-bold mb-6 gradient-text">SUPPORT</h4>
-                <ul class="space-y-3 text-sm text-gray-400 text-left">
-                    <li><button onclick="openModal('shipping')" class="hover:text-white transition">Shipping & Returns</button></li>
-                    <li><button onclick="openModal('size')" class="hover:text-white transition">Size Guide</button></li>
-                    <li><button onclick="openModal('care')" class="hover:text-white transition">Care Instructions</button></li>
-                    <li><button onclick="openModal('faq')" class="hover:text-white transition">FAQ</button></li>
+                <ul class="space-y-3 text-sm text-gray-400">
+                    <li><button onclick="openSupportModal('shipping')" class="hover:text-white transition">Shipping</button></li>
+                    <li><button onclick="openSupportModal('faq')" class="hover:text-white transition">FAQ</button></li>
                 </ul>
             </div>
             <div>
                 <h4 class="font-display text-lg font-bold mb-6 gradient-text">CONNECT</h4>
-                <ul class="space-y-3 text-sm text-gray-400">
-                    <li><a href="https://instagram.com/glassinkhaven_" target="_blank" class="hover:text-white transition">Instagram</a></li>
-                    <li><a href="https://pinterest.com/glassinkhaven" target="_blank" class="hover:text-white transition">Pinterest</a></li>
-                    <li><a href="#" class="hover:text-white transition">Facebook</a></li>
-                    <li><a href="mailto:glassinkhaven@gmail.com" class="hover:text-white transition">Email Us</a></li>
-                </ul>
+                <p class="text-sm text-gray-400">glassinkhaven@gmail.com</p>
             </div>
         </div>
     </footer>
 
-    <div id="support-modal" class="modal-overlay fixed inset-0">
-        <div class="absolute inset-0 bg-black/95 backdrop-blur-md" onclick="closeModal()"></div>
-        <div class="relative glass-dark p-8 md:p-12 rounded-3xl max-w-2xl w-full max-h-[80vh] overflow-y-auto z-10 border border-white/10">
-            <button onclick="closeModal()" class="absolute top-6 right-6 text-gray-400 hover:text-white">✕</button>
-            <div id="modal-content" class="text-gray-300 space-y-4 leading-relaxed"></div>
+    <div id="productModal" class="modal-overlay fixed inset-0">
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-md" onclick="closeProduct()"></div>
+        <div class="relative glass-dark p-6 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-hidden z-[200] flex flex-col">
+            <button onclick="closeProduct()" class="absolute top-6 right-6 text-white text-2xl z-50">✕</button>
+            <div id="modalImages" class="flex-1 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-4 p-4"></div>
+        </div>
+    </div>
+
+    <div id="cartSidebar" class="cart-sidebar fixed top-0 right-0 h-full w-full max-w-md glass-dark flex flex-col shadow-2xl overflow-y-auto">
+        <div class="p-8 border-b border-white/10 flex justify-between items-center">
+            <h3 class="font-display text-2xl font-bold">Your Sanctuary</h3>
+            <button onclick="toggleCart()" class="text-2xl">✕</button>
+        </div>
+        <div id="cartItems" class="p-6 space-y-4"></div>
+        
+        <div class="p-8 space-y-4">
+            <h4 class="font-bold text-lg border-b border-white/10 pb-2">Checkout Details</h4>
+            <input id="name" type="text" placeholder="Full Name" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl">
+            <input id="email" type="email" placeholder="Email Address" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl">
+            <input id="phone" type="text" placeholder="Phone Number" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl">
+            <input id="country" type="text" placeholder="Country" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl">
+            <div class="grid grid-cols-2 gap-2">
+                <input id="state" type="text" placeholder="State" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl">
+                <input id="city" type="text" placeholder="City" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl">
+            </div>
+            <input id="zip" type="text" placeholder="Zip Code" class="w-full bg-white/5 border border-white/10 p-3 rounded-xl">
+            
+            <div class="flex justify-between text-xl font-bold mt-6">
+                <span>Total:</span>
+                <span>$<span id="total">0.00</span></span>
+            </div>
+            <button onclick="payNow()" class="w-full py-4 bg-white text-black rounded-full font-bold uppercase tracking-widest hover:bg-gray-200 transition-all">Complete Checkout</button>
+        </div>
+    </div>
+
+    <div id="successModal" class="modal-overlay fixed inset-0">
+        <div class="absolute inset-0 bg-black/95 backdrop-blur-xl"></div>
+        <div class="relative glass-dark p-12 rounded-3xl text-center max-w-md z-[300]">
+            <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <h2 class="text-2xl font-bold mb-2">Order Received</h2>
+            <p class="text-gray-400">Payment successful. Your healing is on the way.</p>
+            <button onclick="location.reload()" class="mt-8 text-sm uppercase tracking-widest border-b border-white">Back to Shop</button>
         </div>
     </div>
 
     <script>
         let products = [];
+        let cart = [];
 
         window.onload = async function() {
-            const grid = document.getElementById('products-grid');
-            const loading = document.getElementById('loading-state');
             try {
                 const res = await fetch('https://glassinkhaven1.netlify.app/.netlify/functions/printify');
                 const result = await res.json();
                 products = result.data || [];
                 renderProducts(products);
-                loading.classList.add('hidden');
-                grid.classList.remove('hidden');
-            } catch (e) {
-                console.error("Printify fetch error:", e);
-            }
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('products-grid').classList.remove('hidden');
+            } catch (e) { console.error(e); }
         };
 
         function renderProducts(items) {
             const grid = document.getElementById('products-grid');
-            grid.innerHTML = items.map(p => `
-                <div class="product-card glass p-4 rounded-2xl">
-                    <img src="${p.images[0].src}" class="w-full aspect-[3/4] object-cover rounded-xl mb-4">
-                    <h3 class="font-bold text-lg mb-1">${p.title}</h3>
-                    <p class="text-purple-400">$${(p.variants[0].price / 100).toFixed(2)}</p>
+            grid.innerHTML = items.map(p => {
+                const price = ((p.variants?.[0]?.price || 0) / 100).toFixed(2);
+                const pString = JSON.stringify(p).replace(/'/g, "&apos;");
+                return `
+                    <div class="product-card glass p-4 rounded-2xl flex flex-col">
+                        <img onclick='openProduct(${pString})' src="${p.images[0].src}" class="w-full aspect-[3/4] object-cover rounded-xl mb-4 cursor-pointer">
+                        <h3 class="font-bold text-lg mb-1">${p.title}</h3>
+                        <p class="text-purple-400 mb-4">$${price}</p>
+                        <button onclick='addToCart(${pString})' class="mt-auto py-3 bg-white/10 hover:bg-white/20 rounded-xl text-sm font-bold transition-all">Add to Cart</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterCategory(cat) {
+            document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
+            if(event) event.target.classList.add('active');
+
+            if (cat === 'all') { renderProducts(products); return; }
+
+            const filtered = products.filter(p => {
+                const type = p.product_type?.toLowerCase() || '';
+                if (cat === 'others') {
+                    return !['hoodie','tee','tank','dress','pants','tote'].some(t => type.includes(t));
+                }
+                return type.includes(cat);
+            });
+            renderProducts(filtered);
+        }
+
+        function openProduct(p) {
+            const modal = document.getElementById('productModal');
+            const container = document.getElementById('modalImages');
+            container.innerHTML = p.images.map(img => `<img src="${img.src}" class="w-full rounded-2xl border border-white/10">`).join('');
+            modal.classList.add('active');
+        }
+
+        function closeProduct() { document.getElementById('productModal').classList.remove('active'); }
+
+        function addToCart(p) {
+            const price = (p.variants?.[0]?.price || 0) / 100;
+            cart.push({ title: p.title, price: price, image: p.images[0].src });
+            updateCart();
+            toggleCart(true);
+        }
+
+        function updateCart() {
+            document.getElementById('cart-count').innerText = cart.length;
+            const container = document.getElementById('cartItems');
+            container.innerHTML = cart.map((item, i) => `
+                <div class="flex gap-4 items-center glass p-3 rounded-xl">
+                    <img src="${item.image}" class="w-16 h-16 object-cover rounded-lg">
+                    <div class="flex-1 text-sm font-bold">${item.title}</div>
+                    <div class="text-purple-400">$${item.price.toFixed(2)}</div>
                 </div>
             `).join('');
+            const total = cart.reduce((s, i) => s + i.price, 0);
+            document.getElementById('total').innerText = total.toFixed(2);
         }
 
-        // ✅ IMPROVED FILTERING LOGIC
-        function filterCategory(cat) {
-            // Update Active Button State
-            document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
-            // Use event to highlight button
-            if(window.event) {
-                const btn = window.event.target;
-                if(btn.tagName === "BUTTON") btn.classList.add('active');
+        function toggleCart(forceOpen = false) {
+            const sidebar = document.getElementById('cartSidebar');
+            if(forceOpen) sidebar.classList.add('open');
+            else sidebar.classList.toggle('open');
+        }
+
+        function payNow() {
+            const total = parseFloat(document.getElementById('total').innerText);
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const country = document.getElementById('country').value;
+            const state = document.getElementById('state').value;
+            const city = document.getElementById('city').value;
+            const zip = document.getElementById('zip').value;
+
+            if (!name || !email || !phone || !country || !state || !city || !zip) {
+                alert('Please fill all sanctuary delivery fields');
+                return;
             }
+            if (total <= 0) return alert('Your cart is empty');
 
-            if (cat === 'all') {
-                renderProducts(products);
-            } else {
-                renderProducts(products.filter(p => {
-                    const type = p.product_type?.toLowerCase() || 'other';
-                    if (cat === 'others') {
-                        return !['hoodie','tee','tank','dress','pants','tote'].some(k => type.includes(k));
-                    }
-                    return type.includes(cat);
-                }));
-            }
+            FlutterwaveCheckout({
+                public_key: 'FLWPUBK-e5b0b3984de5cd1a81b4f591a0bf4481-X',
+                tx_ref: 'GIH_' + Date.now(),
+                amount: total,
+                currency: 'USD',
+                payment_options: 'card,banktransfer,ussd',
+                customer: { email, phone_number: phone, name },
+                customizations: {
+                    title: 'Glass Ink Haven',
+                    description: 'Fashion with healing',
+                    logo: 'https://res.cloudinary.com/djkyc8wfa/image/upload/v1775477079/file_00000000123061f4946cfa5970bfdb99_kce5cr.png'
+                },
+                callback: function(response) {
+                    toggleCart(false);
+                    document.getElementById('successModal').classList.add('active');
+                }
+            });
         }
-
-        function openModal(type) {
-            const content = document.getElementById('modal-content');
-            const data = {
-                shipping: `
-                    <h2 class="text-2xl font-display font-bold text-white mb-4 uppercase tracking-widest">Shipping & Returns</h2>
-                    <ul class="space-y-3">
-                        <li>• All items are made-to-order</li>
-                        <li>• No returns for wrong size/color/change of mind</li>
-                        <li>• Damaged item → contact within 30 days with photo</li>
-                        <li>• Free replacement or refund</li>
-                        <li>• No need to return item</li>
-                        <li>• Delivery failure → reprint (extra cost) or partial refund</li>
-                        <li>• Minor print differences are normal</li>
-                    </ul>`,
-                size: `
-                    <h2 class="text-2xl font-display font-bold text-white mb-4 uppercase tracking-widest">Size Guide</h2>
-                    <p class="text-purple-400 italic mb-4">Unisex fit. No size-based returns.</p>
-                    <div class="grid grid-cols-2 gap-4 border border-white/10 p-6 rounded-xl bg-white/5">
-                        <div>S: 34–36</div><div>M: 38–40</div>
-                        <div>L: 42–44</div><div>XL: 46–48</div>
-                    </div>`,
-                care: `
-                    <h2 class="text-2xl font-display font-bold text-white mb-4 uppercase tracking-widest">Care Instructions</h2>
-                    <ul class="space-y-3">
-                        <li>• Wash inside-out</li>
-                        <li>• Cold water</li>
-                        <li>• No bleach</li>
-                        <li>• Do not iron on print</li>
-                        <li>• Air dry recommended</li>
-                    </ul>`,
-                faq: `
-                    <h2 class="text-2xl font-display font-bold text-white mb-6 uppercase tracking-widest">FAQ</h2>
-                    <div class="space-y-6">
-                        <div><p class="font-bold text-white">How long does shipping take?</p><p class="text-sm">Production: 2–5 business days. Shipping: 5–10 business days.</p></div>
-                        <div><p class="font-bold text-white">How is shipping calculated?</p><p class="text-sm">Based on country and number of items.</p></div>
-                        <div><p class="font-bold text-white">Do you ship worldwide?</p><p class="text-sm">Yes.</p></div>
-                        <div><p class="font-bold text-white">Can I return my item?</p><p class="text-sm">No returns for size or preference issues.</p></div>
-                        <div><p class="font-bold text-white">What if my item is damaged?</p><p class="text-sm">Contact within 30 days with photo.</p></div>
-                        <div><p class="font-bold text-white">Can I customize a product?</p><p class="text-sm">Yes — contact glassinkhaven@gmail.com.</p></div>
-                        <div><p class="font-bold text-white">How can I track my order?</p><p class="text-sm">Tracking link sent after shipping.</p></div>
-                    </div>`
-            };
-            content.innerHTML = data[type];
-            document.getElementById('support-modal').classList.add('active');
-        }
-
-        function closeModal() { document.getElementById('support-modal').classList.remove('active'); }
-        function toggleCart() { /* Existing Cart Logic */ }
     </script>
 </body>
 </html>
