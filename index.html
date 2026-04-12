@@ -569,7 +569,9 @@ async function fetchProducts() {
             const searchStr = title + ' ' + desc + ' ' + tags;
             
             // Check if product matches allowed categories
-            const isTshirt = searchStr.includes('t-shirt') || searchStr.includes('tee') || searchStr.includes('shirt');
+            // FIXED: Use word boundary checks to prevent "hoodie" matching "tee" in "hoodie"
+            const isTshirt = /\b(t-shirt|tee|tshirt)\b/.test(searchStr) || 
+                            (searchStr.includes('shirt') && !searchStr.includes('hoodie') && !searchStr.includes('hood'));
             const isHoodie = searchStr.includes('hoodie') || searchStr.includes('hood');
             const isBag = searchStr.includes('tote') || searchStr.includes('bag');
             
@@ -631,7 +633,7 @@ function renderProducts(productsToRender) {
 }
 
 // ==========================================
-// FILTER CATEGORY (ONLY 3 CATEGORIES)
+// FILTER CATEGORY (ONLY 3 CATEGORIES - FIXED)
 // ==========================================
 function filterCategory(category, btn) {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -647,10 +649,17 @@ function filterCategory(category, btn) {
             const searchStr = title + ' ' + desc + ' ' + tags;
             
             switch(category) {
-                // T-shirts includes both "t-shirt" and "tee"
-                case 'shirt': return searchStr.includes('t-shirt') || searchStr.includes('tee') || searchStr.includes('shirt');
-                case 'hoodie': return searchStr.includes('hoodie') || searchStr.includes('hood');
-                case 'bag': return searchStr.includes('tote') || searchStr.includes('bag');
+                // FIXED: T-shirts - use word boundaries and check for standalone "tee" or "t-shirt"
+                case 'shirt': 
+                    // Match t-shirt, tee, tshirt but NOT if it's a hoodie
+                    return (/\b(t-shirt|tee|tshirt)\b/.test(searchStr) || 
+                           (searchStr.includes('shirt') && !searchStr.includes('hoodie') && !searchStr.includes('hood')));
+                case 'hoodie': 
+                    // Hoodies - must contain hoodie or hood, and NOT be a t-shirt/tee
+                    return (searchStr.includes('hoodie') || searchStr.includes('hood')) && 
+                           !/\b(t-shirt|tee|tshirt)\b/.test(searchStr);
+                case 'bag': 
+                    return searchStr.includes('tote') || searchStr.includes('bag');
                 default: return true;
             }
         });
