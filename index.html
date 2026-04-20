@@ -536,7 +536,7 @@
                 <div class="form-group" style="margin-top:20px;">
                     <label class="form-label">Ambassador / Discount Code</label>
                     <div class="discount-row">
-                        <input id="discountCode" type="text" placeholder="Enter code (e.g. ALWAYS10)" class="form-input" style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()">
+                        <input id="discountCode" type="text" placeholder="Enter ambassador code" class="form-input" style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()">
                         <button class="discount-apply-btn" onclick="applyDiscountCode()">Apply</button>
                     </div>
                     <p id="discountStatus" class="discount-status"></p>
@@ -605,7 +605,7 @@ let currentSelections = {};
 const ambassadorCodes = {
     "ALWAYS10": true
 };
-const DISCOUNT_PERCENT = 5; // 5% off product subtotal only
+const DISCOUNT_PERCENT = 10; // 10% off product subtotal only
 let appliedDiscountCode = null;
 
 // ==========================================
