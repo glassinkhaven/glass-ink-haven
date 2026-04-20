@@ -815,8 +815,25 @@ function openProduct(productId) {
         }).join('')}</div>`
         : '<div class="text-gray-500 text-center py-10">No images available</div>';
 
-    const sizes = [...new Set((product.variants || []).map(v => v.title?.split(" / ")[0]))].filter(Boolean);
-    const colors = [...new Set((product.variants || []).map(v => v.title?.split(" / ")[1]))].filter(Boolean);
+    // Use Printify options metadata to correctly identify size vs color
+    const _opts = product.options || [];
+    const _sizeOptIdx = _opts.findIndex(o => /size/i.test(o.type || o.name || ''));
+    const _colorOptIdx = _opts.findIndex(o => /colou?r/i.test(o.type || o.name || ''));
+    const _sizePattern = /^(XS|S|M|L|XL|2XL|3XL|4XL|XXL|XXXL|\d+XL)$/i;
+    const _part0 = [...new Set((product.variants || []).map(v => v.title?.split(" / ")[0]))].filter(Boolean);
+    const _part1 = [...new Set((product.variants || []).map(v => v.title?.split(" / ")[1]))].filter(Boolean);
+
+    let sizes = [], colors = [];
+    if (_sizeOptIdx !== -1 || _colorOptIdx !== -1) {
+        sizes = _sizeOptIdx !== -1 ? [...new Set((product.variants || []).map(v => v.title?.split(" / ")[_sizeOptIdx]))].filter(Boolean) : [];
+        colors = _colorOptIdx !== -1 ? [...new Set((product.variants || []).map(v => v.title?.split(" / ")[_colorOptIdx]))].filter(Boolean) : [];
+    } else {
+        const p0IsSize = _part0.length > 0 && _part0.every(v => _sizePattern.test(v.trim()));
+        const p1IsSize = _part1.length > 0 && _part1.every(v => _sizePattern.test(v.trim()));
+        if (p0IsSize) { sizes = _part0; colors = _part1; }
+        else if (p1IsSize) { sizes = _part1; colors = _part0; }
+        else { sizes = _part0; colors = _part1; }
+    }
 
     const sizeOptions = sizes.map(s => `<option value="${s}">${s}</option>`).join('');
     const colorOptions = colors.map(c => `<option value="${c}">${c}</option>`).join('');
@@ -889,8 +906,24 @@ function closeProduct() {
 function addToCartFromModal() {
     if (!currentProduct) return;
 
-    const sizes = [...new Set((currentProduct.variants || []).map(v => v.title?.split(" / ")[0]))].filter(Boolean);
-    const colors = [...new Set((currentProduct.variants || []).map(v => v.title?.split(" / ")[1]))].filter(Boolean);
+    // Use same smart size/color detection as openProduct
+    const _aopts = currentProduct.options || [];
+    const _aSizeIdx = _aopts.findIndex(o => /size/i.test(o.type || o.name || ''));
+    const _aColorIdx = _aopts.findIndex(o => /colou?r/i.test(o.type || o.name || ''));
+    const _aSizePat = /^(XS|S|M|L|XL|2XL|3XL|4XL|XXL|XXXL|\d+XL)$/i;
+    const _ap0 = [...new Set((currentProduct.variants || []).map(v => v.title?.split(" / ")[0]))].filter(Boolean);
+    const _ap1 = [...new Set((currentProduct.variants || []).map(v => v.title?.split(" / ")[1]))].filter(Boolean);
+    let sizes = [], colors = [];
+    if (_aSizeIdx !== -1 || _aColorIdx !== -1) {
+        sizes = _aSizeIdx !== -1 ? [...new Set((currentProduct.variants || []).map(v => v.title?.split(" / ")[_aSizeIdx]))].filter(Boolean) : [];
+        colors = _aColorIdx !== -1 ? [...new Set((currentProduct.variants || []).map(v => v.title?.split(" / ")[_aColorIdx]))].filter(Boolean) : [];
+    } else {
+        const p0s = _ap0.every(v => _aSizePat.test(v.trim()));
+        const p1s = _ap1.every(v => _aSizePat.test(v.trim()));
+        if (p0s) { sizes = _ap0; colors = _ap1; }
+        else if (p1s) { sizes = _ap1; colors = _ap0; }
+        else { sizes = _ap0; colors = _ap1; }
+    }
     
     if (sizes.length > 0 && !currentSelections.size) {
         document.getElementById('variantError').classList.add('show');
