@@ -1,1187 +1,2045 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glass Ink Haven | Wearable Therapy</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Glass Ink Haven | Wear Your Healing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
     <script src="https://checkout.flutterwave.com/v3.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background: #0a0a0a; color: #ffffff; overflow-x: hidden; margin: 0; padding: 0; }
-        .font-display { font-family: 'Playfair Display', serif; }
-        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .glass-dark { background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        
-        /* PREMIUM GRADIENT TEXT ANIMATION */
-        .gradient-text { 
-            background: linear-gradient(135deg, #ec4899, #8b5cf6, #ef4444, #ec4899); 
-            background-size: 300% 300%;
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            animation: gradientFlow 6s ease infinite;
-            filter: drop-shadow(0 0 8px rgba(236, 72, 153, 0.3));
+        :root {
+            --bg-primary: #F6F2EE;
+            --bg-secondary: #111111;
+            --accent: #D13B3B;
+            --text-primary: #111111;
+            --text-secondary: #6E6E6E;
+            --text-light: #FFFFFF;
+            --border: rgba(17, 17, 17, 0.08);
+            --shadow: 0 18px 50px rgba(0, 0, 0, 0.10);
+            --radius-lg: 28px;
+            --radius-md: 18px;
+            --radius-sm: 14px;
         }
-        @keyframes gradientFlow { 
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
-        
-        /* ENHANCED VISIBLE PARTICLES - MORE AND BRIGHTER */
-        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
-        .particle { 
-            position: absolute; 
-            width: 4px; 
-            height: 4px; 
-            background: rgba(236, 72, 153, 0.9); 
-            border-radius: 50%; 
-            box-shadow: 0 0 15px rgba(236, 72, 153, 1), 0 0 30px rgba(139, 92, 246, 0.8), 0 0 45px rgba(236, 72, 153, 0.6); 
-            animation: float 20s infinite ease-in-out; 
+        .grain-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
         }
-        .particle:nth-child(3n) {
-            background: rgba(139, 92, 246, 0.9);
-            box-shadow: 0 0 15px rgba(139, 92, 246, 1), 0 0 30px rgba(236, 72, 153, 0.8), 0 0 45px rgba(139, 92, 246, 0.6);
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; font-weight: 600; }
+        .display-heading {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(48px, 8vw, 120px);
+            font-weight: 600;
+            line-height: 1;
+            letter-spacing: -0.03em;
         }
-        .particle:nth-child(5n) {
-            background: rgba(239, 68, 68, 0.9);
-            box-shadow: 0 0 15px rgba(239, 68, 68, 1), 0 0 30px rgba(236, 72, 153, 0.8);
+        .section-heading {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(36px, 5vw, 72px);
+            font-weight: 600;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
         }
-        .particle:nth-child(7n) {
-            background: rgba(167, 139, 250, 0.9);
-            box-shadow: 0 0 15px rgba(167, 139, 250, 1), 0 0 30px rgba(236, 72, 153, 0.8);
+        .micro-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--text-secondary);
         }
-        @keyframes float { 
-            0%, 100% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; } 
-            10% { opacity: 1; } 
-            90% { opacity: 1; } 
-            100% { transform: translateY(-100vh) translateX(100px) rotate(720deg); opacity: 0; } 
-        }
-
-        .cart-sidebar { transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; }
-        .cart-sidebar.open { transform: translateX(0); }
-        .filter-btn.active { background: #667eea; color: white; border-color: #667eea; }
-        .modal-overlay { opacity: 0; visibility: hidden; transition: 0.3s; display: flex; align-items: center; justify-content: center; z-index: 1100; }
-        .modal-overlay.active { opacity: 1; visibility: visible; }
-
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        .product-card { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; }
-        .product-card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px rgba(102, 126, 234, 0.2); transition: all 0.4s ease; }
-        .product-card img { transition: transform 0.5s ease, opacity 0.3s ease; }
-        .product-card:hover img { transform: scale(1.03); }
-
-        .sparkle { position: absolute; width: 3px; height: 3px; background: white; border-radius: 50%; animation: sparkle 2s infinite ease-in-out; box-shadow: 0 0 10px white; }
-        @keyframes sparkle { 0%, 100% { opacity: 0; transform: scale(0); } 50% { opacity: 1; transform: scale(1); } }
-
-        .variant-btn { transition: all 0.2s ease; }
-        .variant-btn:hover { background: rgba(102, 126, 234, 0.3); border-color: #667eea; transform: scale(1.05); }
-        .variant-btn.selected { background: #667eea; border-color: #667eea; color: white; box-shadow: 0 0 15px rgba(102, 126, 234, 0.5); }
-
-        button[class*="bg-white"]:hover { box-shadow: 0 0 25px rgba(255, 255, 255, 0.4); transform: scale(1.02); }
-
-        .glow-text { animation: textGlow 3s ease-in-out infinite alternate; }
-        @keyframes textGlow { from { text-shadow: 0 0 10px rgba(102, 126, 234, 0.5); } to { text-shadow: 0 0 20px rgba(139, 92, 246, 0.8), 0 0 30px rgba(139, 92, 246, 0.4); } }
-
-        .shipping-breakdown { font-size: 0.75rem; color: #9ca3af; margin-top: 0.5rem; }
-        .shipping-breakdown div { display: flex; justify-content: space-between; margin-bottom: 0.25rem; }
-        
-        .image-gallery { display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; }
-        .image-gallery img { min-width: 200px; height: 250px; object-fit: cover; border-radius: 8px; }
-        
-        .provider-badge { 
-            display: inline-block; 
-            padding: 4px 12px; 
-            background: rgba(102, 126, 234, 0.2); 
-            border: 1px solid rgba(102, 126, 234, 0.5); 
-            border-radius: 20px; 
-            font-size: 0.75rem; 
-            color: #a5b4fc; 
-            margin-bottom: 1rem;
-        }
-        
-        .error-message { 
-            background: rgba(239, 68, 68, 0.1); 
-            border: 1px solid rgba(239, 68, 68, 0.5); 
-            color: #fca5a5; 
-            padding: 1rem; 
-            border-radius: 8px; 
-            margin: 1rem 0; 
-        }
-        
-        .variant-required { 
-            color: #f87171; 
-            font-size: 0.75rem; 
-            margin-top: 0.5rem; 
-            display: none; 
-        }
-        .variant-required.show { display: block; }
-
-        /* FORM STYLING */
-        .form-input {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 12px 16px;
-            border-radius: 8px;
-            color: white;
-            font-size: 0.9rem;
+        .nav {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            padding: 20px 6vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
             transition: all 0.3s ease;
         }
-        .form-input:focus {
-            outline: none;
-            border-color: rgba(139, 92, 246, 0.5);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        .nav.scrolled {
+            background: rgba(246, 242, 238, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
         }
-        .form-input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
         }
-        .form-group {
-            margin-bottom: 16px;
+        .nav-logo img {
+            height: 50px;
+            width: auto;
         }
-        .form-label {
-            display: block;
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 6px;
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-link {
+            font-size: 14px;
             font-weight: 500;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: color 0.3s ease;
+            position: relative;
+            cursor: pointer;
         }
-
-        /* SUCCESS MODAL */
-        .success-modal {
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px; left: 0;
+            width: 0; height: 1px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after { width: 100%; }
+        .cart-btn {
+            position: relative;
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+        .cart-btn:hover { transform: scale(1.05); }
+        .cart-count {
+            position: absolute;
+            top: -4px; right: -4px;
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 6vw 80px;
+            overflow: hidden;
+        }
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            z-index: 10;
+        }
+        .hero-label { margin-bottom: 24px; opacity: 0; animation: fadeInUp 0.8s ease forwards 0.2s; }
+        .hero-title { margin-bottom: 24px; opacity: 0; animation: fadeInUp 0.8s ease forwards 0.4s; }
+        .hero-title span { display: block; font-style: italic; color: var(--accent); }
+        .hero-subtitle {
+            font-size: clamp(16px, 2vw, 20px);
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards 0.6s;
+        }
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 32px;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards 0.8s;
+        }
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(209, 59, 59, 0.3);
+        }
+        .hero-images {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .hero-img {
+            position: absolute;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        .hero-img img { width: 100%; height: 100%; object-fit: cover; }
+        .hero-img-1 { left: 6vw; top: 14vh; width: 28vw; height: 36vh; opacity: 0; animation: slideInLeft 1s ease forwards 0.3s; }
+        .hero-img-2 { right: 6vw; top: 18vh; width: 22vw; height: 28vh; opacity: 0; animation: slideInRight 1s ease forwards 0.5s; }
+        .hero-img-3 { left: 10vw; bottom: 10vh; width: 24vw; height: 22vh; opacity: 0; animation: slideInUp 1s ease forwards 0.7s; }
+        section { padding: 100px 6vw; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header h2 { margin-bottom: 16px; }
+        .section-header p { color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
+        .category-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .category-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .category-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .category-img {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        .category-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .category-img:hover img { transform: scale(1.05); }
+        .category-img-main { grid-row: span 2; height: 400px; }
+        .category-img-small { height: 190px; }
+        .category-text { padding: 40px; }
+        .category-text h2 { margin-bottom: 20px; }
+        .category-text p { color: var(--text-secondary); margin-bottom: 30px; line-height: 1.8; }
+        .category-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .category-cta:hover { background: var(--accent); transform: translateY(-2px); }
+        .shop-section { background: white; }
+        .filter-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 12px 24px;
+            border: 1px solid var(--border);
+            background: transparent;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .filter-btn:hover { border-color: var(--text-primary); }
+        .filter-btn.active { background: var(--text-primary); color: var(--bg-primary); border-color: var(--text-primary); }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .product-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .product-card:hover { transform: translateY(-8px); box-shadow: var(--shadow); }
+        .product-image { position: relative; height: 350px; overflow: hidden; }
+        .product-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .product-card:hover .product-image img { transform: scale(1.05); }
+        .product-info { padding: 24px; }
+        .product-info h3 { font-size: 18px; margin-bottom: 8px; }
+        .product-info .price { font-size: 20px; font-weight: 700; color: var(--accent); margin-bottom: 12px; }
+        .product-info .category-tag {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            background: rgba(0,0,0,0.05);
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .add-to-cart {
+            width: 100%;
+            padding: 14px;
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .add-to-cart:hover { background: var(--accent); }
+        .modal-overlay {
             position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.9);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
             display: none;
             align-items: center;
             justify-content: center;
-            z-index: 2000;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            padding: 20px;
+            overflow-y: auto;
         }
-        .success-modal.active {
-            display: flex;
-            opacity: 1;
+        .modal-overlay.active { display: flex; }
+        .product-modal {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            max-width: 1100px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            position: relative;
         }
-        .success-content {
+        .page-modal {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            padding: 50px;
+        }
+        .success-modal {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            padding: 50px;
             text-align: center;
-            padding: 3rem;
-            max-width: 400px;
         }
-        .success-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #10b981, #059669);
+        .success-modal .success-icon {
+            width: 80px; height: 80px;
+            background: #4CAF50;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1.5rem;
-            animation: scaleIn 0.5s ease;
+            margin: 0 auto 24px;
+            color: white;
+            font-size: 40px;
         }
-        @keyframes scaleIn {
-            from { transform: scale(0); }
-            to { transform: scale(1); }
+        .success-modal h2 { margin-bottom: 16px; }
+        .success-modal p { color: var(--text-secondary); margin-bottom: 30px; }
+        .page-modal h2 { margin-bottom: 30px; }
+        .page-modal h3 { margin: 30px 0 15px; font-size: 22px; }
+        .page-modal p { margin-bottom: 15px; line-height: 1.8; color: var(--text-secondary); }
+        .page-modal ul { margin-left: 20px; margin-bottom: 20px; }
+        .page-modal li { margin-bottom: 10px; color: var(--text-secondary); line-height: 1.7; }
+        .page-modal strong { color: var(--text-primary); }
+        .size-chart {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
         }
+        .size-chart th, .size-chart td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .size-chart th {
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            font-weight: 600;
+        }
+        .faq-item { margin-bottom: 25px; }
+        .faq-item h4 { font-size: 18px; margin-bottom: 10px; color: var(--text-primary); }
+        .modal-close {
+            position: absolute;
+            top: 20px; right: 20px;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        .modal-close:hover { background: var(--accent); color: white; }
+        .modal-images { padding: 40px; background: white; }
+        .modal-main-image { width: 100%; height: 450px; border-radius: var(--radius-md); overflow: hidden; margin-bottom: 20px; }
+        .modal-main-image img { width: 100%; height: 100%; object-fit: cover; }
+        .modal-thumbnails { display: flex; gap: 12px; flex-wrap: wrap; }
+        .modal-thumb { width: 80px; height: 80px; border-radius: var(--radius-sm); overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: all 0.2s ease; }
+        .modal-thumb:hover, .modal-thumb.active { border-color: var(--text-primary); }
+        .modal-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .modal-details { padding: 40px; }
+        .modal-details h2 { font-size: 32px; margin-bottom: 12px; }
+        .modal-price { font-size: 28px; font-weight: 700; color: var(--accent); margin-bottom: 20px; }
+        .modal-description { color: var(--text-secondary); line-height: 1.8; margin-bottom: 30px; }
+        .option-group { margin-bottom: 24px; }
+        .option-group label { display: block; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+        .size-options { display: flex; gap: 10px; flex-wrap: wrap; }
+        .size-btn { width: 48px; height: 48px; border: 1px solid var(--border); background: white; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
+        .size-btn:hover { border-color: var(--text-primary); }
+        .size-btn.active { background: var(--text-primary); color: var(--bg-primary); border-color: var(--text-primary); }
+        .color-options { display: flex; gap: 12px; flex-wrap: wrap; }
+        .color-btn { width: 40px; height: 40px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: all 0.2s ease; position: relative; }
+        .color-btn:hover { transform: scale(1.1); }
+        .color-btn.active { border-color: var(--text-primary); }
+        .color-btn.active::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; background: white; border-radius: 50%; }
+        .modal-actions { display: flex; gap: 16px; margin-top: 30px; }
+        .modal-add-cart { flex: 1; padding: 16px 32px; background: var(--accent); color: white; border: none; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .modal-add-cart:hover { background: #b83232; transform: translateY(-2px); }
+        .modal-save { padding: 16px 24px; background: transparent; border: 1px solid var(--border); border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .modal-save:hover { border-color: var(--text-primary); }
+        .product-specs { margin-top: 30px; padding-top: 30px; border-top: 1px solid var(--border); }
+        .spec-item { display: flex; gap: 12px; margin-bottom: 12px; font-size: 14px; }
+        .spec-label { font-weight: 600; min-width: 80px; }
+        .spec-value { color: var(--text-secondary); }
 
-        /* CART ITEMS SPACING FIX - ENHANCED */
-        .cart-item-card {
-            margin-bottom: 24px;
-            padding: 20px;
-            border-radius: 12px;
-        }
-        .cart-item-card:last-child {
-            margin-bottom: 32px;
-        }
-        
-        /* CART ITEM TEXT SPACING */
-        .cart-item-details {
+        /* ===== CART SIDEBAR - DESKTOP ===== */
+        .cart-sidebar {
+            position: fixed;
+            top: 0; right: -450px;
+            width: 450px; max-width: 100%; height: 100%;
+            background: var(--bg-primary);
+            z-index: 3000;
+            transition: right 0.4s ease;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
         }
-        .cart-item-title {
-            font-size: 0.95rem;
-            font-weight: 600;
-            line-height: 1.3;
-            margin-bottom: 4px;
+        .cart-sidebar.active { right: 0; }
+        .cart-header { padding: 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .cart-header h3 { font-size: 20px; }
+        .cart-close { width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+        .cart-close:hover { background: var(--accent); color: white; }
+        .cart-items { flex: 1; overflow-y: auto; padding: 24px; }
+        .cart-empty { text-align: center; padding: 60px 20px; color: var(--text-secondary); }
+        .cart-empty svg { width: 64px; height: 64px; margin-bottom: 16px; opacity: 0.5; }
+        .cart-item {
+            display: flex;
+            gap: 16px;
+            padding: 20px;
+            background: white;
+            border-radius: var(--radius-md);
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
-        .cart-item-provider {
-            font-size: 0.8rem;
-            color: #9ca3af;
-            margin-bottom: 2px;
-        }
-        .cart-item-variant {
-            font-size: 0.8rem;
-            color: #a78bfa;
-            margin-bottom: 2px;
-        }
-        .cart-item-price {
-            font-size: 0.9rem;
-            font-weight: 700;
-            margin-top: 4px;
-        }
+        .cart-item-image { width: 80px; height: 80px; border-radius: var(--radius-sm); overflow: hidden; flex-shrink: 0; }
+        .cart-item-image img { width: 100%; height: 100%; object-fit: cover; }
+        .cart-item-details { flex: 1; }
+        .cart-item-details h4 { font-size: 15px; margin-bottom: 6px; }
+        .cart-item-details .variant { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
+        .cart-item-details .price { font-weight: 700; color: var(--accent); font-size: 15px; }
+        .cart-item-actions { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
+        .qty-btn { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600; transition: all 0.2s ease; }
+        .qty-btn:hover { border-color: var(--text-primary); background: var(--text-primary); color: white; }
+        .remove-item { margin-left: auto; font-size: 13px; color: var(--text-secondary); cursor: pointer; transition: color 0.2s ease; padding: 4px 8px; border-radius: 6px; }
+        .remove-item:hover { color: var(--accent); background: rgba(209,59,59,0.08); }
+        .cart-footer { padding: 24px; border-top: 2px solid var(--border); background: white; }
+        .cart-summary { margin-bottom: 20px; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; }
+        .summary-row.total { font-size: 20px; font-weight: 700; padding-top: 12px; border-top: 2px solid var(--border); color: var(--text-primary); }
+        .summary-row.discount { color: var(--accent); }
+        .checkout-btn { width: 100%; padding: 18px; background: var(--accent); color: white; border: none; border-radius: 50px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .checkout-btn:hover { background: #b83232; transform: translateY(-1px); }
+        .continue-shopping { display: block; text-align: center; margin-top: 16px; font-size: 14px; color: var(--text-secondary); text-decoration: none; transition: color 0.3s ease; }
+        .continue-shopping:hover { color: var(--text-primary); }
 
-        /* FOOTER LINKS STYLING */
-        .footer-link {
-            display: block;
-            color: #9ca3af;
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: color 0.2s ease;
-            text-decoration: none;
-            background: none;
-            border: none;
-            padding: 0;
-            font-size: inherit;
-            text-align: left;
-        }
-        .footer-link:hover {
-            color: white;
-        }
-
-        /* PAGE CENTERING FIX */
-        .page-container {
-            max-width: 100%;
-            margin: 0 auto;
+        /* ===== CHECKOUT MODAL ===== */
+        .checkout-modal {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
             position: relative;
         }
-        
-        /* PRODUCT MODAL SPACING FIX */
-        .modal-product-info {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+        .checkout-header { padding: 30px; border-bottom: 1px solid var(--border); }
+        .checkout-header h2 { font-size: 28px; margin-bottom: 8px; }
+        .checkout-header p { color: var(--text-secondary); }
+        .checkout-form { padding: 30px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+        .form-group label .required { color: var(--accent); }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: white;
+            font-family: 'Inter', sans-serif;
         }
-        .modal-product-info h2 {
-            margin-bottom: 8px;
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--text-primary); }
+        .form-group input.error, .form-group select.error { border-color: var(--accent); background: rgba(209,59,59,0.05); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .form-row.three-col { grid-template-columns: 1fr 1fr 1fr; }
+        .discount-section {
+            background: white;
+            padding: 20px;
+            border-radius: var(--radius-md);
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
         }
-        .modal-product-info .provider-badge {
-            margin-bottom: 12px;
-        }
-        .variant-section {
-            margin-top: 20px;
-        }
-        .variant-section label {
-            display: block;
-            margin-bottom: 10px;
+        .discount-section label { display: block; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+        .discount-input-row { display: flex; gap: 10px; }
+        .discount-input-row input { flex: 1; padding: 12px 16px; border: 1px solid var(--border); border-radius: 12px; font-size: 14px; }
+        .discount-input-row input:focus { outline: none; border-color: var(--text-primary); }
+        .discount-input-row button {
+            padding: 12px 20px;
+            background: var(--text-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 13px;
             font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
-        .variant-buttons {
+        .discount-input-row button:hover { background: var(--accent); }
+        .discount-msg { margin-top: 10px; font-size: 13px; font-weight: 500; }
+        .discount-msg.success { color: #4CAF50; }
+        .discount-msg.error { color: var(--accent); }
+        .shipping-info { background: white; padding: 20px; border-radius: var(--radius-md); margin-bottom: 24px; border: 1px solid var(--border); }
+        .shipping-info h4 { font-size: 16px; margin-bottom: 12px; }
+        .shipping-info p { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+        .pay-btn { width: 100%; padding: 18px; background: var(--accent); color: white; border: none; border-radius: 50px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .pay-btn:hover { background: #b83232; }
+        .pay-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .contact-note { text-align: center; margin-top: 16px; font-size: 13px; color: var(--text-secondary); }
+        .contact-note a { color: var(--accent); text-decoration: none; }
+
+        /* ===== ABOUT ===== */
+        .about-section { background: white; position: relative; overflow: hidden; }
+        .about-content { max-width: 1000px; margin: 0 auto; text-align: center; }
+        .about-content h2 { margin-bottom: 40px; }
+        .about-story { font-size: 18px; line-height: 2; color: var(--text-secondary); margin-bottom: 40px; text-align: left; }
+        .about-story p { margin-bottom: 24px; }
+        .about-story strong { color: var(--text-primary); }
+        .about-values { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-top: 60px; }
+        .value-item { text-align: center; }
+        .value-icon { width: 64px; height: 64px; margin: 0 auto 20px; background: var(--bg-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+        .value-item h4 { font-size: 18px; margin-bottom: 12px; }
+        .value-item p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+        /* ===== CONTACT ===== */
+        .contact-section { background: var(--bg-secondary); color: var(--text-light); text-align: center; }
+        .contact-section .section-header h2, .contact-section .section-header p { color: var(--text-light); }
+        .contact-section .section-header p { opacity: 0.7; }
+        .contact-email {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            font-size: 18px;
+            text-decoration: none;
+            color: var(--text-light);
+            margin-bottom: 40px;
+            transition: all 0.3s ease;
+        }
+        .contact-email:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-2px); }
+        .contact-note-box { max-width: 600px; margin: 0 auto; padding: 24px; background: rgba(255, 255, 255, 0.05); border-radius: var(--radius-md); font-size: 14px; line-height: 1.8; opacity: 0.8; }
+
+        /* ===== FOOTER ===== */
+        .footer { background: var(--bg-secondary); color: var(--text-light); padding: 60px 6vw 30px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto 40px; }
+        .footer-col h4 { font-size: 16px; margin-bottom: 20px; font-family: 'Inter', sans-serif; font-weight: 600; }
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 12px; }
+        .footer-col a { color: rgba(255, 255, 255, 0.6); text-decoration: none; font-size: 14px; transition: color 0.3s ease; cursor: pointer; }
+        .footer-col a:hover { color: var(--text-light); }
+        .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 13px; color: rgba(255, 255, 255, 0.4); }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 30px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 4000;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-60px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideInUp { from { opacity: 0; transform: translateY(60px); } to { opacity: 1; transform: translateY(0); } }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* ===== LOADING SPINNER ===== */
+        .loading-spinner {
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 16px;
+            justify-content: center;
+            align-items: center;
+            padding: 80px;
+        }
+        .loading-spinner div {
+            width: 50px; height: 50px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .category-content { grid-template-columns: 1fr; }
+            .category-images { order: -1; }
+            .product-modal { grid-template-columns: 1fr; }
+            .modal-images { padding: 20px; }
+            .modal-main-image { height: 300px; }
+            .hero-img { display: none; }
+        }
+
+        /* ===== MOBILE CART FIXES ===== */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .display-heading { font-size: 42px; }
+            .products-grid { grid-template-columns: 1fr; }
+            .cart-sidebar { width: 100%; right: -100%; }
+            .form-row { grid-template-columns: 1fr; }
+            .form-row.three-col { grid-template-columns: 1fr; }
+            .modal-actions { flex-direction: column; }
+            .filter-tabs { gap: 8px; }
+            .filter-btn { padding: 10px 16px; font-size: 13px; }
+            .page-modal { padding: 30px 20px; }
+
+            /* MOBILE CART ITEM FIX */
+            .cart-item {
+                flex-direction: column;
+                padding: 16px;
+                gap: 12px;
+                margin-bottom: 12px;
+            }
+            .cart-item-image {
+                width: 100%;
+                height: 150px;
+                border-radius: var(--radius-sm);
+            }
+            .cart-item-details h4 {
+                font-size: 16px;
+            }
+            .cart-item-details .variant {
+                font-size: 14px;
+            }
+            .cart-item-details .price {
+                font-size: 16px;
+            }
+            .cart-item-actions {
+                margin-top: 10px;
+                padding-top: 10px;
+                border-top: 1px solid var(--border);
+            }
+            .qty-btn {
+                width: 36px;
+                height: 36px;
+            }
+            .cart-items {
+                padding: 16px;
+            }
+            .cart-footer {
+                padding: 20px 16px;
+            }
+            .summary-row.total {
+                font-size: 18px;
+            }
+
+            /* Checkout modal mobile */
+            .checkout-modal {
+                border-radius: 0;
+                max-height: 100vh;
+            }
+            .checkout-form {
+                padding: 20px;
+            }
+            .discount-input-row {
+                flex-direction: column;
+            }
+            .discount-input-row button {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cart-item-image {
+                height: 120px;
+            }
+            .cart-item-details h4 {
+                font-size: 15px;
+            }
         }
     </style>
 </head>
-<body class="antialiased">
-<div class="page-container">
-    <div class="particles" id="particles"></div>
+<body>
+    <div class="grain-overlay"></div>
 
-    <nav class="fixed top-0 w-full z-50 glass-dark px-6 py-4 flex justify-between items-center">
-        <a href="#" class="font-display text-2xl font-bold glow-text">Glass Ink<span class="gradient-text">Haven</span></a>
-        <button onclick="toggleCart()" class="relative p-2 hover:scale-110 transition">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-            <span id="cart-count" class="absolute top-0 right-0 bg-purple-600 text-[10px] w-5 h-5 rounded-full flex items-center justify-center">0</span>
-        </button>
+    <!-- NAVIGATION -->
+    <nav class="nav" id="nav">
+        <a href="#" class="nav-logo">
+            <img src="https://res.cloudinary.com/djkyc8wfa/image/upload/v1775477079/file_00000000123061f4946cfa5970bfdb99_kce5cr.png" alt="Glass Ink Haven">
+        </a>
+        <div class="nav-links">
+            <a href="#shop" class="nav-link">Shop</a>
+            <a href="#about" class="nav-link">Our Story</a>
+            <a href="#contact" class="nav-link">Contact</a>
+            <button class="cart-btn" onclick="toggleCart()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 6h15l-1.5 9h-12z"></path>
+                    <circle cx="9" cy="20" r="1"></circle>
+                    <circle cx="18" cy="20" r="1"></circle>
+                    <path d="M6 6L5 3H2"></path>
+                </svg>
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+        </div>
     </nav>
 
-    <section class="min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20 relative z-10">
-        <h1 class="font-display text-6xl md:text-8xl font-bold mb-4">Therapy You<br><span class="gradient-text italic">Can Wear</span></h1>
-        <p class="text-gray-400 max-w-xl mb-8">Clothing for the ones who feel deeply. Wear your strength, your scars, and your growth.</p>
-        <a href="#shop" class="px-8 py-4 bg-white text-black rounded-full font-bold hover:scale-105 transition shadow-lg">Shop The Collection</a>
-    </section>
-
-    <section id="shop" class="px-6 lg:px-12 py-20 relative z-10">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-12">
-                <h2 class="font-display text-4xl font-bold mb-6">Wear Your Healing</h2>
-                <!-- ONLY 3 CATEGORIES: T-shirts, Hoodies, Tote bags -->
-                <div class="filters flex flex-wrap justify-center gap-2">
-                    <button onclick="filterCategory('all', this)" class="filter-btn active px-5 py-2 rounded-full glass text-sm hover:scale-105 transition">All</button>
-                    <button onclick="filterCategory('shirt', this)" class="filter-btn px-5 py-2 rounded-full glass text-sm hover:scale-105 transition">T-shirts</button>
-                    <button onclick="filterCategory('hoodie', this)" class="filter-btn px-5 py-2 rounded-full glass text-sm hover:scale-105 transition">Hoodies</button>
-                    <button onclick="filterCategory('bag', this)" class="filter-btn px-5 py-2 rounded-full glass text-sm hover:scale-105 transition">Tote Bags</button>
-                </div>
-            </div>
-
-            <div id="loading-state" class="text-center text-gray-500 py-20">Loading sanctuary items...</div>
-            <div id="error-state" class="error-message hidden text-center">Failed to load products. Please refresh or check your connection.</div>
-            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"></div>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-images">
+            <div class="hero-img hero-img-1"><img src="images/hero_main.jpg" alt="Glass Ink Haven"></div>
+            <div class="hero-img hero-img-2"><img src="images/hero_right.jpg" alt="Fashion Editorial"></div>
+            <div class="hero-img hero-img-3"><img src="images/hero_bottom.jpg" alt="Accessories"></div>
+        </div>
+        <div class="hero-content">
+            <p class="micro-label hero-label">GLASS INK HAVEN — LOOKBOOK 2026</p>
+            <h1 class="display-heading hero-title">Wear Your<span>Healing</span></h1>
+            <p class="hero-subtitle">A collection of everyday pieces designed to hold meaning—soft fabrics, honest fits, and details that feel like memories. Express your emotions through fashion.</p>
+            <a href="#shop" class="hero-cta">Explore the Collection<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></a>
         </div>
     </section>
 
-    <section id="about" class="bg-white/5 py-24 px-6 relative z-10">
-        <div class="max-w-4xl mx-auto text-center">
-            <h2 class="font-display text-4xl font-bold mb-8">Our Story</h2>
-            <p class="text-gray-300 leading-relaxed text-lg mb-6">Glass Ink Haven was not created in comfort. It was created in the quiet — in the moments no one sees. In the nights where your chest feels heavy for no clear reason. This is not just fashion. This is therapy you can wear.</p>
-            <p class="text-gray-300 leading-relaxed text-lg mb-6">We believe that clothing should be more than fabric. It should be a form of expression, a way to communicate what words cannot. Every piece in our collection is designed with intention — to help you carry your emotions, to remind you of your strength, and to connect you with others who understand.</p>
-            <p class="text-gray-300 leading-relaxed text-lg mb-6">Our designs are inspired by the raw, unfiltered experience of being human. The anxiety, the hope, the pain, and the growth. We create for the overthinkers, the feelers, the ones who process the world deeply. For those who have been through things they don't talk about, and for those still finding their way through.</p>
-            <p class="text-gray-300 leading-relaxed text-lg mb-6">Glass Ink Haven is more than a brand. It is a community of people who understand that healing is not linear, that growth is messy, and that showing up as your authentic self is an act of courage.</p>
-            <p class="text-purple-400 italic font-display text-2xl">You are welcome here — exactly as you are. ✨</p>
+    <!-- CATEGORY SECTIONS -->
+    <section class="category-section" id="hoodies">
+        <div class="category-content">
+            <div class="category-images">
+                <div class="category-img category-img-main"><img src="images/hoodies_1.jpg" alt="Hoodies"></div>
+                <div class="category-img category-img-small"><img src="images/hoodies_2.jpg" alt="Hoodie Detail"></div>
+                <div class="category-img category-img-small"><img src="images/hoodies_3.jpg" alt="Hoodie Collection"></div>
+            </div>
+            <div class="category-text">
+                <p class="micro-label">CATEGORY</p>
+                <h2 class="section-heading">Hoodies & Sweats</h2>
+                <p>Relaxed layers for slow mornings, long walks, and everything in between. Our hoodies are designed to wrap you in comfort while expressing your unique style.</p>
+                <a href="#shop" class="category-cta" onclick="filterProducts('hoodie')">Shop Hoodies</a>
+            </div>
         </div>
     </section>
 
-    <footer class="py-20 px-6 border-t border-white/10 relative z-10">
-        <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-12">
-            <div>
-                <h4 class="font-bold mb-4">Shop</h4>
-                <!-- ONLY 3 CATEGORIES IN FOOTER -->
-                <button onclick="scrollToCategory('shirt')" class="footer-link">T-shirts</button>
-                <button onclick="scrollToCategory('hoodie')" class="footer-link">Hoodies</button>
-                <button onclick="scrollToCategory('bag')" class="footer-link">Tote Bags</button>
+    <section class="category-section" id="tees">
+        <div class="category-content">
+            <div class="category-text">
+                <p class="micro-label">CATEGORY</p>
+                <h2 class="section-heading">Tees & T-Shirts</h2>
+                <p>Soft cotton, honest fits, and prints that feel like inside jokes. Our tees are crafted for everyday wear with a touch of emotional expression.</p>
+                <a href="#shop" class="category-cta" onclick="filterProducts('tshirt')">Shop Tees</a>
             </div>
-            <div>
-                <h4 class="font-bold mb-4">Company</h4>
-                <a href="#about" class="footer-link">About Us</a>
-                <p class="text-gray-400 mt-2 text-sm">Glass Ink Haven is a wearable therapy brand focused on emotional expression and healing.</p>
-            </div>
-            <div>
-                <h4 class="font-bold mb-4">Support</h4>
-                <button onclick="openSupport('shipping')" class="footer-link mb-1">Shipping & Delivery</button>
-                <button onclick="openSupport('returns')" class="footer-link mb-1">Returns & Refunds</button>
-                <button onclick="openSupport('size')" class="footer-link mb-1">Size Guide</button>
-                <button onclick="openSupport('care')" class="footer-link mb-1">Care Instructions</button>
-                <button onclick="openSupport('faq')" class="footer-link">FAQ</button>
-            </div>
-            <div>
-                <h4 class="font-bold mb-4">Connect</h4>
-                <a href="https://instagram.com/glassinkhaven_" target="_blank" class="footer-link">Instagram</a>
-                <a href="https://facebook.com" target="_blank" class="footer-link">Facebook</a>
-                <a href="https://pinterest.com" target="_blank" class="footer-link">Pinterest</a>
-                <p class="text-gray-400 mt-2">glassinkhaven@gmail.com</p>
+            <div class="category-images">
+                <div class="category-img category-img-main"><img src="images/tees_1.jpg" alt="Tees"></div>
+                <div class="category-img category-img-small"><img src="images/tees_2.jpg" alt="Tee Detail"></div>
+                <div class="category-img category-img-small"><img src="images/tees_3.jpg" alt="Tee Collection"></div>
             </div>
         </div>
+    </section>
+
+    <section class="category-section" id="bags">
+        <div class="category-content">
+            <div class="category-images">
+                <div class="category-img category-img-main"><img src="images/bags_1.jpg" alt="Tote Bags"></div>
+                <div class="category-img category-img-small"><img src="images/bags_2.jpg" alt="Tote Detail"></div>
+                <div class="category-img category-img-small"><img src="images/bags_3.jpg" alt="Tote Collection"></div>
+            </div>
+            <div class="category-text">
+                <p class="micro-label">CATEGORY</p>
+                <h2 class="section-heading">Tote Bags</h2>
+                <p>Carry the essentials—and a little bit of personality. Our totes are designed to be your everyday companion.</p>
+                <a href="#shop" class="category-cta" onclick="filterProducts('tote')">Shop Bags</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SHOP SECTION -->
+    <section class="shop-section" id="shop">
+        <div class="section-header reveal">
+            <p class="micro-label">SHOP ALL</p>
+            <h2 class="section-heading">The Collection</h2>
+            <p>Explore our full range of expressive fashion pieces designed to help you wear your healing.</p>
+        </div>
+        <div class="filter-tabs reveal">
+            <button class="filter-btn active" onclick="filterProducts('all')">All</button>
+            <button class="filter-btn" onclick="filterProducts('hoodie')">Hoodies</button>
+            <button class="filter-btn" onclick="filterProducts('tshirt')">T-Shirts</button>
+            <button class="filter-btn" onclick="filterProducts('tote')">Tote Bags</button>
+        </div>
+        <div class="products-grid" id="productsGrid">
+            <div class="loading-spinner"><div></div></div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about-section" id="about">
+        <div class="about-content">
+            <p class="micro-label reveal">OUR STORY</p>
+            <h2 class="section-heading reveal">Fashion Born from Pain, Transformed into Power</h2>
+            <div class="about-story reveal">
+                <p><strong>Glass Ink Haven was not born in a boardroom.</strong> It was born in the quiet moments — in the grief that sits heavy on your chest at 3 a.m., in the tears that fall without warning, in the long exhale after a storm you thought would break you.</p>
+                <p>We believe that <strong>clothing is never just fabric.</strong> It is a second skin — and what you choose to wear is an act of profound self-expression. When you put on a Glass Ink Haven piece, you are not just getting dressed. You are declaring something: <em>I am still here. I am healing. I am becoming.</em></p>
+                <p>Our founder created this brand after a season of deep personal loss — the kind that reshapes you from the inside out. She searched for fashion that felt like it understood her, that held space for her complexity, her softness, her strength. She could not find it, <strong>so she built it.</strong></p>
+                <p>Every hoodie, every tee, every tote in our collection is an <strong>artifact of emotional courage.</strong> We design for those who feel deeply and live loudly — for the overthinkers, the dreamers, the ones who are quietly rebuilding themselves one day at a time.</p>
+                <p><strong>Glass Ink Haven is more than a brand — it is a sanctuary stitched into fabric.</strong> A community of souls who understand that healing is not linear, that pain can be transformed into beauty, and that wearing your truth is the most powerful statement you can make.</p>
+                <p>You are welcome here, exactly as you are — in all your complexity, your vulnerability, your strength. <strong>This is your haven.</strong></p>
+                <p style="margin-top: 30px; padding: 20px; background: var(--bg-primary); border-radius: var(--radius-md); text-align: center;"><strong>Share Your Story With Us</strong><br>Have a story of healing, growth, or transformation? We would love to hear it. Email us at <a href="mailto:glassinkhaven@gmail.com" style="color: var(--accent);">glassinkhaven@gmail.com</a> and we may feature your journey to inspire others in our community.</p>
+            </div>
+            <div class="about-values">
+                <div class="value-item reveal"><div class="value-icon">&#10084;</div><h4>Healing</h4><p>Every piece is designed with intention to support your emotional journey.</p></div>
+                <div class="value-item reveal"><div class="value-icon">&#9997;</div><h4>Expression</h4><p>Wear your emotions boldly. Your story deserves to be seen.</p></div>
+                <div class="value-item reveal"><div class="value-icon">&#127793;</div><h4>Growth</h4><p>Like you, our pieces evolve—designed to grow with you.</p></div>
+                <div class="value-item reveal"><div class="value-icon">&#10024;</div><h4>Beauty</h4><p>Turning pain into something beautiful, one piece at a time.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact-section" id="contact">
+        <div class="section-header reveal">
+            <p class="micro-label" style="color:rgba(255,255,255,0.6)">GET IN TOUCH</p>
+            <h2 class="section-heading">Keep in Touch</h2>
+            <p>New drops, studio notes, and early access—sent sparingly. We'd love to hear from you.</p>
+        </div>
+        <a href="mailto:glassinkhaven@gmail.com" class="contact-email reveal">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            glassinkhaven@gmail.com
+        </a>
+        <div class="contact-note-box reveal">If your country is not listed or you have issues placing an order, please contact us and we will assist you. We're here to help make your experience as smooth as possible.</div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4>Shop</h4>
+                <ul>
+                    <li><a onclick="filterProducts('hoodie'); scrollToShop()">Hoodies</a></li>
+                    <li><a onclick="filterProducts('tshirt'); scrollToShop()">T-Shirts</a></li>
+                    <li><a onclick="filterProducts('tote'); scrollToShop()">Tote Bags</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#about">Our Story</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Support</h4>
+                <ul>
+                    <li><a onclick="openPageModal('shipping')">Shipping & Returns</a></li>
+                    <li><a onclick="openPageModal('sizeguide')">Size Guide</a></li>
+                    <li><a onclick="openPageModal('care')">Care Instructions</a></li>
+                    <li><a onclick="openPageModal('faq')">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Connect</h4>
+                <ul>
+                    <li><a href="https://instagram.com/glassinkhaven_" target="_blank" rel="noopener">Instagram</a></li>
+                    <li><a href="https://pinterest.com/glassinkhaven" target="_blank" rel="noopener">Pinterest</a></li>
+                    <li><a href="https://facebook.com/glassinkhaven" target="_blank" rel="noopener">Facebook</a></li>
+                    <li><a href="mailto:glassinkhaven@gmail.com">Email</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom"><p>&copy; 2026 Glass Ink Haven. All rights reserved. Wear your healing.</p></div>
     </footer>
 
-    <div id="productModal" class="modal-overlay fixed inset-0">
-        <div class="absolute inset-0 bg-black/90" onclick="closeProduct()"></div>
-        <div class="relative glass-dark p-6 rounded-3xl max-w-4xl w-full max-h-[85vh] overflow-y-auto">
-            <button onclick="closeProduct()" class="absolute top-4 right-4 text-2xl hover:scale-110 transition">✕</button>
-            <div id="modalContent" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+    <!-- PRODUCT DETAIL MODAL -->
+    <div class="modal-overlay" id="productModal">
+        <div class="product-modal">
+            <button class="modal-close" onclick="closeProductModal()">&times;</button>
+            <div class="modal-images">
+                <div class="modal-main-image"><img src="" alt="" id="modalMainImage"></div>
+                <div class="modal-thumbnails" id="modalThumbnails"></div>
+            </div>
+            <div class="modal-details">
+                <h2 id="modalTitle">Product Name</h2>
+                <p class="modal-price" id="modalPrice">$0</p>
+                <p class="modal-description" id="modalDescription">Product description goes here.</p>
+                <div class="option-group">
+                    <label>Size</label>
+                    <div class="size-options" id="sizeOptions"></div>
+                </div>
+                <div class="modal-actions">
+                    <button class="modal-add-cart" id="modalAddCartBtn" onclick="addToCartFromModal()">Add to Cart</button>
+                </div>
+                <div class="product-specs">
+                    <div class="spec-item"><span class="spec-label">Fit:</span><span class="spec-value" id="modalFit">Unisex</span></div>
+                    <div class="spec-item"><span class="spec-label">Fabric:</span><span class="spec-value" id="modalFabric">Premium Quality</span></div>
+                    <div class="spec-item"><span class="spec-label">Care:</span><span class="spec-value">Machine wash cold, tumble dry low</span></div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div id="cartSidebar" class="cart-sidebar fixed top-0 right-0 h-full w-full max-w-md glass-dark flex flex-col shadow-2xl overflow-y-auto">
-        <div class="p-6 border-b border-white/10 flex justify-between items-center">
-            <h3 class="font-display text-xl font-bold">Your Selection</h3>
-            <button onclick="toggleCart()" class="text-2xl hover:scale-110 transition">✕</button>
-        </div>
-        <div id="cartItems" class="p-6 flex-1 overflow-y-auto"></div>
-        
-        <!-- ENHANCED CHECKOUT FORM WITH SPACING FIX -->
-        <div class="p-6 bg-black/50 border-t border-white/10 space-y-6 mt-6">
-            <h4 class="font-display text-lg font-semibold mb-4 text-purple-400">Customer Information</h4>
-            
-            <div class="form-group">
-                <label class="form-label">First Name *</label>
-                <input id="firstName" type="text" placeholder="Enter your first name" class="form-input">
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Last Name *</label>
-                <input id="lastName" type="text" placeholder="Enter your last name" class="form-input">
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Email Address *</label>
-                <input id="email" type="email" placeholder="your@email.com" class="form-input">
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Phone Number *</label>
-                <input id="phone" type="tel" placeholder="+1 234 567 8900" class="form-input">
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Country *</label>
-                <select id="country" class="form-input text-gray-400" onchange="updateShipping()">
-                    <option value="">Select your country</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">State / Region *</label>
-                <input id="state" type="text" placeholder="Enter state or region" class="form-input">
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">City *</label>
-                <input id="city" type="text" placeholder="Enter your city" class="form-input">
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Street Address *</label>
-                <input id="address" type="text" placeholder="Enter street address" class="form-input">
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Postal / Zip Code *</label>
-                <input id="postal" type="text" placeholder="Enter postal code" class="form-input">
-            </div>
-            
-            <div id="orderSummary" class="space-y-2 pt-4 border-t border-white/10">
-                <div class="flex justify-between text-sm"><span>Subtotal:</span><span id="subtotal">$0.00</span></div>
-                <div class="flex justify-between text-sm"><span>Shipping:</span><span id="shipping">$0.00</span></div>
-                <div id="shippingBreakdown" class="shipping-breakdown"></div>
-                <div class="flex justify-between text-lg font-bold pt-2 border-t border-white/10"><span>Total:</span><span id="total">$0.00</span></div>
-            </div>
-            
-            <button onclick="checkout()" id="checkoutBtn" class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-bold hover:scale-105 transition shadow-lg">
-                Pay Securely
-            </button>
-            <p id="checkoutError" class="text-red-400 text-sm text-center hidden"></p>
-        </div>
-    </div>
-
-    <div id="supportModal" class="modal-overlay fixed inset-0">
-        <div class="absolute inset-0 bg-black/90" onclick="closeSupport()"></div>
-        <div class="relative glass-dark p-8 rounded-3xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
-            <button onclick="closeSupport()" class="absolute top-4 right-4 text-2xl hover:scale-110 transition">✕</button>
-            <div id="supportContent"></div>
+    <!-- PAGE MODALS (Shipping, Size Guide, Care, FAQ) -->
+    <div class="modal-overlay" id="pageModal">
+        <div class="page-modal">
+            <button class="modal-close" onclick="closePageModal()">&times;</button>
+            <div id="pageModalContent"></div>
         </div>
     </div>
 
     <!-- SUCCESS MODAL -->
-    <div id="successModal" class="success-modal">
-        <div class="success-content glass rounded-2xl">
-            <div class="success-icon">
-                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
-                </svg>
-            </div>
-            <h3 class="font-display text-2xl font-bold mb-2">Payment Successful!</h3>
-            <p class="text-gray-400 mb-6">Thank you for your order. We've sent a confirmation email with your order details.</p>
-            <button onclick="closeSuccessModal()" class="px-8 py-3 bg-white text-black rounded-full font-bold hover:scale-105 transition">
-                Continue Shopping
-            </button>
+    <div class="modal-overlay" id="successModal">
+        <div class="success-modal">
+            <button class="modal-close" onclick="closeSuccessModal()">&times;</button>
+            <div class="success-icon">&#10003;</div>
+            <h2>Payment Successful!</h2>
+            <p>Thank you for your order. You will receive a confirmation email shortly. Your order is being processed and will be shipped soon.</p>
+            <button class="checkout-btn" onclick="closeSuccessModal()" style="margin-top: 10px;">Continue Shopping</button>
         </div>
     </div>
-</div>
 
-<script>
-// ==========================================
-// GLOBAL STATE
-// ==========================================
-let products = [];
-let cart = [];
-let currentProduct = null;
-let currentSelections = {};
+    <!-- CHECKOUT MODAL -->
+    <div class="modal-overlay" id="checkoutModal">
+        <div class="checkout-modal">
+            <button class="modal-close" onclick="closeCheckoutModal()">&times;</button>
+            <div class="checkout-header"><h2>Complete Your Order</h2><p>Fill in your details and we'll handle the rest.</p></div>
+            <form class="checkout-form" id="checkoutForm" onsubmit="processPayment(event)">
+                <!-- Cart Summary -->
+                <div class="shipping-info">
+                    <h4>Your Order</h4>
+                    <p id="checkoutCartSummary">Loading...</p>
+                </div>
 
-// ==========================================
-// COUNTRY LIST (International - RESTRICTED REMOVED)
-// ==========================================
-const countries = [
-    "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
-    "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belgium", "Belize", "Benin", "Bhutan",
-    "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon",
-    "Canada", "Cape Verde", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Congo (DRC)",
-    "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador",
-    "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France",
-    "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau",
-    "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland",
-    "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan",
-    "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar",
-    "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia",
-    "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal",
-    "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Macedonia", "Norway", "Oman", "Pakistan",
-    "Palau", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar",
-    "Romania", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia",
-    "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa",
-    "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan",
-    "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan",
-    "Tuvalu", "Uganda", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City",
-    "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
-];
+                <!-- Discount Code -->
+                <div class="discount-section">
+                    <label>Ambassador Code (Optional)</label>
+                    <div class="discount-input-row">
+                        <input type="text" id="discountCode" placeholder="Enter code (e.g. ALWAYS10)">
+                        <button type="button" onclick="applyDiscount()">Apply</button>
+                    </div>
+                    <p class="discount-msg" id="discountMsg"></p>
+                </div>
 
-// ==========================================
-// INITIALIZATION
-// ==========================================
-window.onload = async function () {
-    populateCountries();
-    createParticles();
-    await fetchProducts();
-    loadCart();
-};
+                <!-- Customer Details -->
+                <div class="form-group">
+                    <label>Full Name <span class="required">*</span></label>
+                    <input type="text" id="customerName" required placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label>Email Address <span class="required">*</span></label>
+                    <input type="email" id="customerEmail" required placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="customerPhone" required placeholder="+1 234 567 8900">
+                </div>
+                <div class="form-group">
+                    <label>Street Address <span class="required">*</span></label>
+                    <textarea id="customerAddress" rows="2" required placeholder="Enter your street address"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>City <span class="required">*</span></label>
+                        <input type="text" id="customerCity" required placeholder="Enter city">
+                    </div>
+                    <div class="form-group">
+                        <label>State/Province <span class="required">*</span></label>
+                        <input type="text" id="customerState" required placeholder="Enter state">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Country <span class="required">*</span></label>
+                        <select id="customerCountry" required onchange="updateCheckoutSummary()">
+                            <option value="">Select your country</option>
+                            <option value="US">United States</option>
+                            <option value="UK">United Kingdom</option>
+                            <option value="CA">Canada</option>
+                            <option value="DE">Germany</option>
+                            <option value="FR">France</option>
+                            <option value="IT">Italy</option>
+                            <option value="ES">Spain</option>
+                            <option value="NL">Netherlands</option>
+                            <option value="AU">Australia</option>
+                            <option value="NG">Nigeria</option>
+                            <option value="GH">Ghana</option>
+                            <option value="KE">Kenya</option>
+                            <option value="ZA">South Africa</option>
+                            <option value="IN">India</option>
+                            <option value="BR">Brazil</option>
+                            <option value="MX">Mexico</option>
+                            <option value="JP">Japan</option>
+                            <option value="KR">South Korea</option>
+                            <option value="CN">China</option>
+                            <option value="AE">United Arab Emirates</option>
+                            <option value="SA">Saudi Arabia</option>
+                            <option value="EG">Egypt</option>
+                            <option value="MA">Morocco</option>
+                            <option value="TR">Turkey</option>
+                            <option value="BE">Belgium</option>
+                            <option value="SE">Sweden</option>
+                            <option value="NO">Norway</option>
+                            <option value="DK">Denmark</option>
+                            <option value="FI">Finland</option>
+                            <option value="PL">Poland</option>
+                            <option value="IE">Ireland</option>
+                            <option value="CH">Switzerland</option>
+                            <option value="AT">Austria</option>
+                            <option value="PT">Portugal</option>
+                            <option value="GR">Greece</option>
+                            <option value="IL">Israel</option>
+                            <option value="PK">Pakistan</option>
+                            <option value="BD">Bangladesh</option>
+                            <option value="LK">Sri Lanka</option>
+                            <option value="NP">Nepal</option>
+                            <option value="KH">Cambodia</option>
+                            <option value="LA">Laos</option>
+                            <option value="MM">Myanmar</option>
+                            <option value="ID">Indonesia</option>
+                            <option value="TH">Thailand</option>
+                            <option value="VN">Vietnam</option>
+                            <option value="PH">Philippines</option>
+                            <option value="MY">Malaysia</option>
+                            <option value="SG">Singapore</option>
+                            <option value="NZ">New Zealand</option>
+                            <option value="RU">Russia</option>
+                            <option value="UA">Ukraine</option>
+                            <option value="RO">Romania</option>
+                            <option value="CZ">Czech Republic</option>
+                            <option value="HU">Hungary</option>
+                            <option value="SK">Slovakia</option>
+                            <option value="HR">Croatia</option>
+                            <option value="SI">Slovenia</option>
+                            <option value="RS">Serbia</option>
+                            <option value="BG">Bulgaria</option>
+                            <option value="LT">Lithuania</option>
+                            <option value="LV">Latvia</option>
+                            <option value="EE">Estonia</option>
+                            <option value="IS">Iceland</option>
+                            <option value="LU">Luxembourg</option>
+                            <option value="MT">Malta</option>
+                            <option value="CY">Cyprus</option>
+                            <option value="GE">Georgia</option>
+                            <option value="AM">Armenia</option>
+                            <option value="AZ">Azerbaijan</option>
+                            <option value="UZ">Uzbekistan</option>
+                            <option value="KG">Kyrgyzstan</option>
+                            <option value="TJ">Tajikistan</option>
+                            <option value="TM">Turkmenistan</option>
+                            <option value="AF">Afghanistan</option>
+                            <option value="IR">Iran</option>
+                            <option value="IQ">Iraq</option>
+                            <option value="SY">Syria</option>
+                            <option value="JO">Jordan</option>
+                            <option value="LB">Lebanon</option>
+                            <option value="YE">Yemen</option>
+                            <option value="OM">Oman</option>
+                            <option value="QA">Qatar</option>
+                            <option value="KW">Kuwait</option>
+                            <option value="BH">Bahrain</option>
+                            <option value="PS">Palestine</option>
+                            <option value="ET">Ethiopia</option>
+                            <option value="TZ">Tanzania</option>
+                            <option value="UG">Uganda</option>
+                            <option value="RW">Rwanda</option>
+                            <option value="BI">Burundi</option>
+                            <option value="SS">South Sudan</option>
+                            <option value="SD">Sudan</option>
+                            <option value="TD">Chad</option>
+                            <option value="NE">Niger</option>
+                            <option value="ML">Mali</option>
+                            <option value="BF">Burkina Faso</option>
+                            <option value="SN">Senegal</option>
+                            <option value="GM">Gambia</option>
+                            <option value="GW">Guinea-Bissau</option>
+                            <option value="GN">Guinea</option>
+                            <option value="SL">Sierra Leone</option>
+                            <option value="LR">Liberia</option>
+                            <option value="CI">Ivory Coast</option>
+                            <option value="TG">Togo</option>
+                            <option value="BJ">Benin</option>
+                            <option value="CM">Cameroon</option>
+                            <option value="CF">Central African Republic</option>
+                            <option value="GQ">Equatorial Guinea</option>
+                            <option value="GA">Gabon</option>
+                            <option value="CG">Congo</option>
+                            <option value="CD">DR Congo</option>
+                            <option value="AO">Angola</option>
+                            <option value="ZM">Zambia</option>
+                            <option value="MW">Malawi</option>
+                            <option value="MZ">Mozambique</option>
+                            <option value="ZW">Zimbabwe</option>
+                            <option value="BW">Botswana</option>
+                            <option value="NA">Namibia</option>
+                            <option value="LS">Lesotho</option>
+                            <option value="SZ">Eswatini</option>
+                            <option value="MG">Madagascar</option>
+                            <option value="MU">Mauritius</option>
+                            <option value="SC">Seychelles</option>
+                            <option value="KM">Comoros</option>
+                            <option value="CV">Cape Verde</option>
+                            <option value="ST">Sao Tome and Principe</option>
+                            <option value="DJ">Djibouti</option>
+                            <option value="ER">Eritrea</option>
+                            <option value="SO">Somalia</option>
+                            <option value="DZ">Algeria</option>
+                            <option value="TN">Tunisia</option>
+                            <option value="LY">Libya</option>
+                            <option value="MR">Mauritania</option>
+                            <option value="EH">Western Sahara</option>
+                            <option value="AR">Argentina</option>
+                            <option value="BO">Bolivia</option>
+                            <option value="CL">Chile</option>
+                            <option value="CO">Colombia</option>
+                            <option value="EC">Ecuador</option>
+                            <option value="GY">Guyana</option>
+                            <option value="PY">Paraguay</option>
+                            <option value="PE">Peru</option>
+                            <option value="SR">Suriname</option>
+                            <option value="UY">Uruguay</option>
+                            <option value="VE">Venezuela</option>
+                            <option value="CR">Costa Rica</option>
+                            <option value="PA">Panama</option>
+                            <option value="GT">Guatemala</option>
+                            <option value="BZ">Belize</option>
+                            <option value="SV">El Salvador</option>
+                            <option value="HN">Honduras</option>
+                            <option value="NI">Nicaragua</option>
+                            <option value="CU">Cuba</option>
+                            <option value="JM">Jamaica</option>
+                            <option value="HT">Haiti</option>
+                            <option value="DO">Dominican Republic</option>
+                            <option value="TT">Trinidad and Tobago</option>
+                            <option value="BB">Barbados</option>
+                            <option value="GD">Grenada</option>
+                            <option value="LC">Saint Lucia</option>
+                            <option value="VC">Saint Vincent</option>
+                            <option value="AG">Antigua and Barbuda</option>
+                            <option value="KN">Saint Kitts and Nevis</option>
+                            <option value="DM">Dominica</option>
+                            <option value="BS">Bahamas</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Zip/Postal Code <span class="required">*</span></label>
+                        <input type="text" id="customerZip" required placeholder="Enter zip code">
+                    </div>
+                </div>
 
-function populateCountries() {
-    const select = document.getElementById('country');
-    countries.forEach(country => {
-        const option = document.createElement('option');
-        option.value = country;
-        option.textContent = country;
-        option.className = 'text-black';
-        select.appendChild(option);
+                <!-- Order Summary -->
+                <div class="shipping-info">
+                    <h4>Order Summary</h4>
+                    <p id="checkoutSummary">Loading...</p>
+                </div>
+
+                <button type="submit" class="pay-btn" id="payBtn">Pay with Flutterwave</button>
+                <p class="contact-note">If your country is not listed, <a href="mailto:glassinkhaven@gmail.com">contact us</a> and we will assist you.</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- CART SIDEBAR -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header"><h3>Your Cart</h3><button class="cart-close" onclick="toggleCart()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg></button></div>
+        <div class="cart-items" id="cartItems">
+            <div class="cart-empty">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6h15l-1.5 9h-12z"></path><circle cx="9" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle><path d="M6 6L5 3H2"></path></svg>
+                <p>Your cart is empty.</p>
+                <p style="font-size:13px;margin-top:8px">Add some items to get started!</p>
+            </div>
+        </div>
+        <div class="cart-footer" id="cartFooter" style="display:none">
+            <div class="cart-summary">
+                <div class="summary-row"><span>Subtotal</span><span id="cartSubtotal">$0.00</span></div>
+                <div class="summary-row"><span>Shipping</span><span id="cartShipping">Calculated at checkout</span></div>
+                <div class="summary-row discount" id="discountRow" style="display:none"><span>Discount (5%)</span><span id="cartDiscount">-$0.00</span></div>
+                <div class="summary-row total"><span>Total</span><span id="cartTotal">$0.00</span></div>
+            </div>
+            <button class="checkout-btn" onclick="openCheckout()">Checkout</button>
+            <a href="#shop" class="continue-shopping" onclick="toggleCart()">Continue Shopping</a>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast">Item added to cart!</div>
+
+    <script>
+
+    // ============================================
+    // CONFIGURATION
+    // ============================================
+    const PRINTIFY_ENDPOINT = 'https://glassinkhaven1.netlify.app/.netlify/functions/printify';
+    const FLUTTERWAVE_KEY = 'FLWPUBK-e5b0b3984de5cd1a81b4f591a0bf4481-X';
+    const LOGO_URL = 'https://res.cloudinary.com/djkyc8wfa/image/upload/v1775477079/file_00000000123061f4946cfa5970bfdb99_kce5cr.png';
+
+    // Allowed categories (only these show)
+    const ALLOWED_CATEGORIES = ['hoodie', 't-shirt', 'tshirt', 'tee', 'tees', 'tote', 'tote bag', 'tote bags'];
+
+    // Shipping config
+    const CLOSE_COUNTRIES = ['US','UK','CA','DE','FR','IT','ES','NL','AU','BE','SE','NO','DK','FI','AT','CH','IE','NZ'];
+    const SHIPPING_CLOSE_BASE = 10;
+    const SHIPPING_CLOSE_ADDITIONAL = 3;
+    const SHIPPING_OTHER_BASE = 15;
+    const SHIPPING_OTHER_ADDITIONAL = 4;
+
+    // Ambassador codes
+    const ambassadorCodes = {
+        "ALWAYS10": true
+    };
+
+    // ============================================
+    // STATE
+    // ============================================
+    let allProducts = [];
+    let cart = [];
+    let currentProduct = null;
+    let selectedSize = '';
+    let appliedDiscount = null; // { code, percent }
+
+    // ============================================
+    // INITIALIZATION
+    // ============================================
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchProducts();
+        setupScrollReveal();
+        setupNavScroll();
+        setupModalCloseHandlers();
     });
-}
 
-// ENHANCED PARTICLES - MORE VISIBLE AND NUMEROUS
-function createParticles() {
-    const container = document.getElementById('particles');
-    // Increased to 150 particles for more density
-    for (let i = 0; i < 150; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 20 + 's';
-        particle.style.animationDuration = (15 + Math.random() * 10) + 's';
-        particle.style.top = Math.random() * 100 + '%';
-        container.appendChild(particle);
-    }
-}
+    // ============================================
+    // FETCH PRINTIFY PRODUCTS
+    // ============================================
+    async function fetchProducts() {
+        const grid = document.getElementById('productsGrid');
+        try {
+            const response = await fetch(PRINTIFY_ENDPOINT);
+            const data = await response.json();
+            const productsList = data.data || data.products || data;
 
-// ==========================================
-// FOOTER NAVIGATION
-// ==========================================
-function scrollToCategory(cat) {
-    document.getElementById('shop').scrollIntoView({ behavior: 'smooth' });
-    setTimeout(() => {
-        const buttons = document.querySelectorAll('.filter-btn');
-        buttons.forEach(btn => {
-            if (btn.getAttribute('onclick')?.includes(`'${cat}'`)) {
-                buttons.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                filterCategory(cat, btn);
+            if (!Array.isArray(productsList)) {
+                throw new Error('Invalid product data');
             }
-        });
-    }, 300);
-}
 
-// ==========================================
-// PRODUCT FETCHING
-// ==========================================
-async function fetchProducts() {
-    try {
-        const res = await fetch('/.netlify/functions/printify');
-        const result = await res.json();
+            // Filter and map products
+            allProducts = productsList.map(p => {
+                const rawCategory = (p.product_type || p.category || '').toLowerCase().trim();
+                const category = normalizeCategory(rawCategory);
+                const imgSrc = p.images?.[0]?.src || p.image || p.images?.[0]?.url || 'https://via.placeholder.com/400x400?text=No+Image';
+                const allImages = (p.images || []).map(img => img.src || img.url || img).filter(Boolean);
+                const priceCents = p.variants?.[0]?.price || p.price || 0;
+                const priceUSD = (priceCents / 100).toFixed(2);
+                const variants = p.variants || [];
+                const sizes = [...new Set(variants.map(v => v.size || v.title).filter(Boolean))];
 
-        console.log("PRINTIFY DATA:", result);
+                return {
+                    id: p.id || Date.now() + Math.random(),
+                    name: p.title || p.name || 'Untitled Product',
+                    description: p.description || '',
+                    price: parseFloat(priceUSD),
+                    priceCents: priceCents,
+                    category: category,
+                    rawCategory: rawCategory,
+                    image: imgSrc,
+                    images: allImages.length > 0 ? allImages : [imgSrc],
+                    sizes: sizes.length > 0 ? sizes : ['S', 'M', 'L', 'XL'],
+                    variants: variants,
+                    originalData: p
+                };
+            }).filter(p => isAllowedCategory(p.rawCategory));
 
-        // Filter to only 3 categories: T-shirts (including tees), Hoodies, Tote bags
-        let allProducts = result.data || [];
-        
-        // Filter products to only include allowed categories
-        products = allProducts.filter(p => {
-            const title = p.title.toLowerCase();
-            const desc = (p.description || '').toLowerCase();
-            const tags = (p.tags || []).join(' ').toLowerCase();
-            const searchStr = title + ' ' + desc + ' ' + tags;
-            
-            // Check if product matches allowed categories
-            // FIXED: Use word boundary checks to prevent "hoodie" matching "tee" in "hoodie"
-            const isTshirt = /\b(t-shirt|tee|tshirt)\b/.test(searchStr) || 
-                            (searchStr.includes('shirt') && !searchStr.includes('hoodie') && !searchStr.includes('hood'));
-            const isHoodie = searchStr.includes('hoodie') || searchStr.includes('hood');
-            const isBag = searchStr.includes('tote') || searchStr.includes('bag');
-            
-            return isTshirt || isHoodie || isBag;
-        });
-        
-        if (!products.length) {
-            document.getElementById('error-state').classList.remove('hidden');
-            document.getElementById('loading-state').style.display = 'none';
+            if (allProducts.length === 0) {
+                grid.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">No products found. Please check back later.</p>';
+                return;
+            }
+
+            renderProducts('all');
+
+        } catch (error) {
+            console.error('Error fetching products:', error);
+            grid.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">Unable to load products. Please refresh the page or contact support.</p>';
+        }
+    }
+
+    function normalizeCategory(cat) {
+        cat = cat.toLowerCase();
+        if (cat.includes('hoodie')) return 'hoodie';
+        if (cat.includes('t-shirt') || cat.includes('tshirt') || cat.includes('tee')) return 'tshirt';
+        if (cat.includes('tote')) return 'tote';
+        return cat;
+    }
+
+    function isAllowedCategory(cat) {
+        cat = cat.toLowerCase();
+        return ALLOWED_CATEGORIES.some(allowed => cat.includes(allowed));
+    }
+
+    // ============================================
+    // RENDER PRODUCTS
+    // ============================================
+    function renderProducts(category) {
+        const grid = document.getElementById('productsGrid');
+        const filtered = category === 'all' ? allProducts : allProducts.filter(p => p.category === category);
+
+        if (filtered.length === 0) {
+            grid.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">No products in this category.</p>';
             return;
         }
 
-        renderProducts(products);
-        document.getElementById('loading-state').style.display = 'none';
-    } catch (error) {
-        console.error("Error fetching products:", error);
-        document.getElementById('error-state').classList.remove('hidden');
-        document.getElementById('loading-state').style.display = 'none';
-    }
-}
-
-// ==========================================
-// RENDER PRODUCTS (FIXED PRICING - USE PRINTIFY retail_price)
-// ==========================================
-function renderProducts(productsToRender) {
-    const grid = document.getElementById('products-grid');
-    grid.innerHTML = '';
-
-    productsToRender.forEach((p, index) => {
-        // FIXED: Use Printify retail_price directly, no extra markup
-        // Printify returns price in cents, convert to dollars
-        const price = p.variants?.[0]?.retail_price || p.variants?.[0]?.price || 2000;
-        
-        const card = document.createElement('div');
-        card.className = 'product-card glass rounded-2xl overflow-hidden cursor-pointer group';
-        card.style.animationDelay = (index * 0.1) + 's';
-        card.onclick = () => openProduct(p.id);
-
-        const firstImage = p.images?.[0]?.src || p.images?.[0] || 'https://via.placeholder.com/400x500?text=No+Image';
-        const providerName = p.print_provider_name || p.print_provider_id || 'Premium Provider';
-
-        card.innerHTML = `
-            <div class="relative overflow-hidden aspect-[4/5]">
-                <img src="${firstImage}" alt="${p.title}" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                    <span class="text-white font-semibold">View Details →</span>
+        grid.innerHTML = filtered.map(product => `
+            <div class="product-card reveal" onclick="openProductModal('${product.id}')">
+                <div class="product-image">
+                    <img src="${product.image}" alt="${escapeHtml(product.name)}" onerror="this.src='https://via.placeholder.com/400x400?text=No+Image'">
+                </div>
+                <div class="product-info">
+                    <span class="category-tag">${product.category}</span>
+                    <h3>${escapeHtml(product.name)}</h3>
+                    <p class="price">$${product.price.toFixed(2)}</p>
+                    <button class="add-to-cart" onclick="event.stopPropagation(); quickAddToCart('${product.id}')">Add to Cart</button>
                 </div>
             </div>
-            <div class="p-4">
-                <span class="provider-badge">${providerName}</span>
-                <h3 class="font-display text-lg font-bold mb-1 line-clamp-2">${p.title}</h3>
-                <p class="text-purple-400 font-bold">$${(price / 100).toFixed(2)}</p>
-                ${p.options ? `<p class="text-xs text-gray-500 mt-1">${p.options.length} options available</p>` : ''}
-            </div>
-        `;
+        `).join('');
 
-        grid.appendChild(card);
-    });
-}
+        setTimeout(setupScrollReveal, 100);
+    }
 
-// ==========================================
-// FILTER CATEGORY (ONLY 3 CATEGORIES - FIXED)
-// ==========================================
-function filterCategory(category, btn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-
-    if (category === 'all') {
-        renderProducts(products);
-    } else {
-        const filtered = products.filter(p => {
-            const title = p.title.toLowerCase();
-            const desc = (p.description || '').toLowerCase();
-            const tags = (p.tags || []).join(' ').toLowerCase();
-            const searchStr = title + ' ' + desc + ' ' + tags;
-            
-            switch(category) {
-                // FIXED: T-shirts - use word boundaries and check for standalone "tee" or "t-shirt"
-                case 'shirt': 
-                    // Match t-shirt, tee, tshirt but NOT if it's a hoodie
-                    return (/\b(t-shirt|tee|tshirt)\b/.test(searchStr) || 
-                           (searchStr.includes('shirt') && !searchStr.includes('hoodie') && !searchStr.includes('hood')));
-                case 'hoodie': 
-                    // Hoodies - must contain hoodie or hood, and NOT be a t-shirt/tee
-                    return (searchStr.includes('hoodie') || searchStr.includes('hood')) && 
-                           !/\b(t-shirt|tee|tshirt)\b/.test(searchStr);
-                case 'bag': 
-                    return searchStr.includes('tote') || searchStr.includes('bag');
-                default: return true;
-            }
+    function filterProducts(category) {
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+            const btnCat = btn.getAttribute('onclick').match(/'([^']+)'/)[1];
+            if (btnCat === category) btn.classList.add('active');
         });
-        renderProducts(filtered);
+        renderProducts(category);
     }
-}
 
-// ==========================================
-// PRODUCT MODAL (FIXED SIZE & COLOR + PRICING)
-// ==========================================
-function openProduct(productId) {
-    const product = products.find(p => p.id === productId);
-    if (!product) return;
+    function scrollToShop() {
+        document.getElementById('shop').scrollIntoView({ behavior: 'smooth' });
+    }
 
-    currentProduct = product;
-    currentSelections = { size: null, color: null };
+    // ============================================
+    // PRODUCT MODAL
+    // ============================================
+    function openProductModal(productId) {
+        currentProduct = allProducts.find(p => String(p.id) === String(productId));
+        if (!currentProduct) return;
 
-    const modal = document.getElementById('productModal');
-    const content = document.getElementById('modalContent');
+        selectedSize = currentProduct.sizes[0] || 'M';
 
-    // Get all images
-    const images = product.images || [];
-    const imageGallery = images.length > 0 
-        ? `<div class="image-gallery">${images.map(img => {
-            const src = img.src || img;
-            return `<img src="${src}" alt="${product.title}" onclick="window.open('${src}', '_blank')" class="cursor-pointer hover:opacity-80 transition">`;
-        }).join('')}</div>`
-        : '<div class="text-gray-500 text-center py-10">No images available</div>';
+        document.getElementById('modalTitle').textContent = currentProduct.name;
+        document.getElementById('modalPrice').textContent = '$' + currentProduct.price.toFixed(2);
+        document.getElementById('modalDescription').textContent = currentProduct.description || 'Premium quality product from Glass Ink Haven.';
+        document.getElementById('modalMainImage').src = currentProduct.images[0];
+        document.getElementById('modalMainImage').alt = currentProduct.name;
 
-    // FIXED SIZE & COLOR EXTRACTION
-    const sizes = [...new Set((product.variants || []).map(v => v.title?.split(" / ")[0]))].filter(Boolean);
-    const colors = [...new Set((product.variants || []).map(v => v.title?.split(" / ")[1]))].filter(Boolean);
-
-    const sizeOptions = sizes.map(s => `<option value="${s}">${s}</option>`).join('');
-    const colorOptions = colors.map(c => `<option value="${c}">${c}</option>`).join('');
-
-    const sizeSelect = sizes.length > 0 ? `
-        <label class="text-sm block mb-2">Select Size:</label>
-        <select id="modalSize" class="w-full p-2 rounded bg-white/5 border border-white/10 mb-4 text-white" onchange="updateModalSelection('size', this.value)">
-            <option value="">Choose size...</option>
-            ${sizeOptions}
-        </select>
-    ` : '';
-
-    const colorSelect = colors.length > 0 ? `
-        <label class="text-sm block mb-2">Select Color:</label>
-        <select id="modalColor" class="w-full p-2 rounded bg-white/5 border border-white/10 text-white" onchange="updateModalSelection('color', this.value)">
-            <option value="">Choose color...</option>
-            ${colorOptions}
-        </select>
-    ` : '';
-
-    // FIXED: Use Printify retail_price directly
-    const price = product.variants?.[0]?.retail_price || product.variants?.[0]?.price || 2000;
-
-    const providerName = product.print_provider_name || product.print_provider_id || 'Premium Provider';
-
-    content.innerHTML = `
-        <div class="space-y-4">
-            ${imageGallery}
-        </div>
-        <div class="modal-product-info">
-            <span class="provider-badge">${providerName}</span>
-            <h2 class="font-display text-3xl font-bold">${product.title}</h2>
-            <p class="text-2xl text-purple-400 font-bold">$${(price / 100).toFixed(2)}</p>
-            <div class="text-gray-300 text-sm leading-relaxed max-h-40 overflow-y-auto">${product.description || 'No description available.'}</div>
-            
-            ${sizeSelect}
-            ${colorSelect}
-            
-            <div id="variantError" class="variant-required">Please select all options before adding to cart.</div>
-            
-            <div class="flex gap-4 pt-4">
-                <button onclick="addToCartFromModal()" class="flex-1 py-4 bg-white text-black rounded-lg font-bold hover:scale-105 transition">Add to Cart</button>
+        // Thumbnails
+        document.getElementById('modalThumbnails').innerHTML = currentProduct.images.map((img, i) => `
+            <div class="modal-thumb ${i === 0 ? 'active' : ''}" onclick="changeModalImage('${escapeUrl(img)}', this)">
+                <img src="${img}" alt="${escapeHtml(currentProduct.name)}" onerror="this.src='https://via.placeholder.com/80x80?text=No+Image'">
             </div>
-            
-            <div class="text-xs text-gray-500 pt-4 border-t border-white/10">
-                <p>Provider: ${providerName}</p>
-                <p>Product ID: ${product.id}</p>
-                ${product.blueprint_id ? `<p>Blueprint: ${product.blueprint_id}</p>` : ''}
-            </div>
-        </div>
-    `;
+        `).join('');
 
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
+        // Sizes
+        document.getElementById('sizeOptions').innerHTML = currentProduct.sizes.map((size, i) => `
+            <button class="size-btn ${size === selectedSize ? 'active' : ''}" onclick="selectSize('${escapeHtml(size)}', this)">${escapeHtml(size)}</button>
+        `).join('');
 
-function updateModalSelection(type, value) {
-    currentSelections[type] = value;
-    document.getElementById('variantError').classList.remove('show');
-}
-
-function closeProduct() {
-    document.getElementById('productModal').classList.remove('active');
-    document.body.style.overflow = '';
-    currentProduct = null;
-    currentSelections = {};
-}
-
-// ==========================================
-// CART SYSTEM (FIXED PRICING)
-// ==========================================
-function addToCartFromModal() {
-    if (!currentProduct) return;
-
-    // Check if variants are required and selected
-    const sizes = [...new Set((currentProduct.variants || []).map(v => v.title?.split(" / ")[0]))].filter(Boolean);
-    const colors = [...new Set((currentProduct.variants || []).map(v => v.title?.split(" / ")[1]))].filter(Boolean);
-    
-    if (sizes.length > 0 && !currentSelections.size) {
-        document.getElementById('variantError').classList.add('show');
-        return;
-    }
-    if (colors.length > 0 && !currentSelections.color) {
-        document.getElementById('variantError').classList.add('show');
-        return;
+        document.getElementById('productModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
     }
 
-    // Find matching variant
-    let selectedVariant = currentProduct.variants?.[0];
-    if (currentSelections.size || currentSelections.color) {
-        const targetTitle = [currentSelections.size, currentSelections.color].filter(Boolean).join(" / ");
-        selectedVariant = currentProduct.variants?.find(v => v.title === targetTitle) || selectedVariant;
+    function closeProductModal() {
+        document.getElementById('productModal').classList.remove('active');
+        document.body.style.overflow = '';
     }
 
-    // FIXED: Use Printify retail_price directly, no extra markup
-    const price = selectedVariant?.retail_price || selectedVariant?.price || currentProduct.variants?.[0]?.retail_price || currentProduct.variants?.[0]?.price || 2000;
-
-    const cartItem = {
-        id: currentProduct.id + '-' + (currentSelections.size || '') + '-' + (currentSelections.color || ''),
-        productId: currentProduct.id,
-        title: currentProduct.title,
-        price: price, // Using Printify price directly
-        image: currentProduct.images?.[0]?.src || currentProduct.images?.[0] || '',
-        selectedSize: currentSelections.size,
-        selectedColor: currentSelections.color,
-        printProviderId: currentProduct.print_provider_id || currentProduct.print_provider_name || 'default',
-        providerName: currentProduct.print_provider_name || 'Premium Provider',
-        quantity: 1,
-        variantId: selectedVariant?.id
-    };
-
-    const existingIndex = cart.findIndex(item => item.id === cartItem.id);
-    if (existingIndex > -1) {
-        cart[existingIndex].quantity += 1;
-    } else {
-        cart.push(cartItem);
+    function changeModalImage(src, thumb) {
+        document.getElementById('modalMainImage').src = src;
+        document.querySelectorAll('.modal-thumb').forEach(t => t.classList.remove('active'));
+        thumb.classList.add('active');
     }
 
-    saveCart();
-    updateCartUI();
-    closeProduct();
-    toggleCart();
-}
-
-function updateCartUI() {
-    const cartItems = document.getElementById('cartItems');
-    const cartCount = document.getElementById('cart-count');
-    
-    cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-    
-    if (cart.length === 0) {
-        cartItems.innerHTML = '<p class="text-gray-500 text-center py-8">Your cart is empty</p>';
-        updateTotals();
-        return;
+    function selectSize(size, btn) {
+        selectedSize = size;
+        document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
     }
 
-    // FIXED CART ITEM RENDERING WITH PROPER SPACING
-    cartItems.innerHTML = cart.map((item, index) => `
-        <div class="cart-item-card glass">
-            <div class="flex gap-4">
-                <img src="${item.image}" alt="${item.title}" class="w-20 h-20 object-cover rounded-lg flex-shrink-0">
-                <div class="cart-item-details flex-1 min-w-0">
-                    <h4 class="cart-item-title">${item.title}</h4>
-                    <p class="cart-item-provider">${item.providerName}</p>
-                    ${item.selectedSize ? `<p class="cart-item-variant">Size: ${item.selectedSize}</p>` : ''}
-                    ${item.selectedColor ? `<p class="cart-item-variant">Color: ${item.selectedColor}</p>` : ''}
-                    <p class="cart-item-price text-purple-400">$${(item.price / 100).toFixed(2)}</p>
+    // ============================================
+    // CART FUNCTIONS
+    // ============================================
+    function addToCartFromModal() {
+        if (!currentProduct) return;
+
+        const item = {
+            id: Date.now(),
+            productId: currentProduct.id,
+            name: currentProduct.name,
+            price: currentProduct.price,
+            image: currentProduct.images[0],
+            size: selectedSize,
+            quantity: 1
+        };
+
+        cart.push(item);
+        updateCartUI();
+        closeProductModal();
+        showToast('Added to cart!');
+    }
+
+    function quickAddToCart(productId) {
+        const product = allProducts.find(p => String(p.id) === String(productId));
+        if (!product) return;
+
+        const item = {
+            id: Date.now(),
+            productId: product.id,
+            name: product.name,
+            price: product.price,
+            image: product.images[0],
+            size: product.sizes[0] || 'M',
+            quantity: 1
+        };
+
+        cart.push(item);
+        updateCartUI();
+        showToast('Added to cart!');
+    }
+
+    function updateCartUI() {
+        const cartItems = document.getElementById('cartItems');
+        const cartFooter = document.getElementById('cartFooter');
+        const cartCount = document.getElementById('cartCount');
+
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCount.textContent = totalItems;
+
+        if (cart.length === 0) {
+            cartItems.innerHTML = `
+                <div class="cart-empty">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6h15l-1.5 9h-12z"></path><circle cx="9" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle><path d="M6 6L5 3H2"></path></svg>
+                    <p>Your cart is empty.</p>
+                    <p style="font-size:13px;margin-top:8px">Add some items to get started!</p>
+                </div>`;
+            cartFooter.style.display = 'none';
+        } else {
+            cartItems.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <div class="cart-item-image"><img src="${item.image}" alt="${escapeHtml(item.name)}" onerror="this.src='https://via.placeholder.com/80x80?text=No+Image'"></div>
+                    <div class="cart-item-details">
+                        <h4>${escapeHtml(item.name)}</h4>
+                        <p class="variant">Size: ${escapeHtml(item.size)} | Qty: ${item.quantity}</p>
+                        <p class="price">$${(item.price * item.quantity).toFixed(2)}</p>
+                        <div class="cart-item-actions">
+                            <button class="qty-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+                            <button class="qty-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                            <span class="remove-item" onclick="removeFromCart(${item.id})">Remove</span>
+                        </div>
+                    </div>
                 </div>
-                <button onclick="removeFromCart(${index})" class="text-red-400 hover:text-red-300 flex-shrink-0 ml-2">✕</button>
-            </div>
-            <div class="flex items-center justify-between pt-4 border-t border-white/10 mt-4">
-                <div class="flex items-center gap-3">
-                    <button onclick="updateQuantity(${index}, -1)" class="w-8 h-8 rounded-full glass flex items-center justify-center hover:bg-white/10 text-sm">-</button>
-                    <span class="w-8 text-center font-semibold">${item.quantity}</span>
-                    <button onclick="updateQuantity(${index}, 1)" class="w-8 h-8 rounded-full glass flex items-center justify-center hover:bg-white/10 text-sm">+</button>
-                </div>
-                <p class="font-bold text-lg">$${((item.price * item.quantity) / 100).toFixed(2)}</p>
-            </div>
-        </div>
-    `).join('');
-
-    updateTotals();
-}
-
-function updateQuantity(index, change) {
-    cart[index].quantity += change;
-    if (cart[index].quantity <= 0) {
-        cart.splice(index, 1);
+            `).join('');
+            cartFooter.style.display = 'block';
+            updateCartTotals();
+        }
     }
-    saveCart();
-    updateCartUI();
-}
 
-function removeFromCart(index) {
-    cart.splice(index, 1);
-    saveCart();
-    updateCartUI();
-}
+    function updateQuantity(id, change) {
+        const item = cart.find(i => i.id === id);
+        if (item) {
+            item.quantity += change;
+            if (item.quantity <= 0) {
+                cart = cart.filter(i => i.id !== id);
+            }
+            updateCartUI();
+        }
+    }
 
-function saveCart() {
-    localStorage.setItem('glassInkCart', JSON.stringify(cart));
-}
-
-function loadCart() {
-    const saved = localStorage.getItem('glassInkCart');
-    if (saved) {
-        cart = JSON.parse(saved);
+    function removeFromCart(id) {
+        cart = cart.filter(i => i.id !== id);
         updateCartUI();
     }
-}
 
-function toggleCart() {
-    document.getElementById('cartSidebar').classList.toggle('open');
-}
-
-// ==========================================
-// SHIPPING CALCULATION (PRINTIFY-STYLE)
-// ==========================================
-function calculateShipping(country, itemCount) {
-    let base = 0;
-    let extra = 0;
-
-    // Close regions (US, Canada, Europe)
-    if (["United States", "Canada", "United Kingdom"].includes(country)) {
-        base = 6;
-        extra = 3;
-    } else {
-        // Far countries (Africa, Asia, etc.)
-        base = 20;
-        extra = 10;
+    function toggleCart() {
+        document.getElementById('cartSidebar').classList.toggle('active');
     }
 
-    return base + (itemCount - 1) * extra;
-}
-
-function updateShipping() {
-    updateTotals();
-}
-
-function updateTotals() {
-    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const country = document.getElementById('country').value;
-    const itemCount = cart.reduce((sum, i) => sum + i.quantity, 0);
-    
-    let shipping = 0;
-    if (country) {
-        shipping = calculateShipping(country, itemCount) * 100; // Convert to cents
-    }
-    
-    document.getElementById('subtotal').textContent = '$' + (subtotal / 100).toFixed(2);
-    document.getElementById('shipping').textContent = '$' + (shipping / 100).toFixed(2);
-    document.getElementById('total').textContent = '$' + ((subtotal + shipping) / 100).toFixed(2);
-    
-    const breakdownEl = document.getElementById('shippingBreakdown');
-    if (country && cart.length > 0) {
-        breakdownEl.innerHTML = `<div>Shipping to ${country} (${itemCount} items)</div>`;
-    } else {
-        breakdownEl.innerHTML = '';
-    }
-}
-
-// ==========================================
-// VALIDATION
-// ==========================================
-function validateForm() {
-    const firstName = document.getElementById('firstName').value.trim();
-    const lastName = document.getElementById('lastName').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    const country = document.getElementById('country').value;
-    const state = document.getElementById('state').value.trim();
-    const city = document.getElementById('city').value.trim();
-    const address = document.getElementById('address').value.trim();
-    const postal = document.getElementById('postal').value.trim();
-    
-    const errorEl = document.getElementById('checkoutError');
-    
-    if (!firstName || !lastName || !email || !phone || !country || !state || !city || !address || !postal) {
-        errorEl.textContent = 'Please fill in all required fields.';
-        errorEl.classList.remove('hidden');
-        return null;
-    }
-    
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        errorEl.textContent = 'Please enter a valid email address.';
-        errorEl.classList.remove('hidden');
-        return null;
-    }
-    
-    if (phone.length < 8) {
-        errorEl.textContent = 'Please enter a valid phone number.';
-        errorEl.classList.remove('hidden');
-        return null;
-    }
-    
-    errorEl.classList.add('hidden');
-    
-    return {
-        firstName,
-        lastName,
-        email,
-        phone,
-        country,
-        state,
-        city,
-        address,
-        postal
-    };
-}
-
-// ==========================================
-// CHECKOUT (FLUTTERWAVE)
-// ==========================================
-function checkout() {
-    const customerData = validateForm();
-    if (!customerData) return;
-    
-    if (cart.length === 0) {
-        alert('Your cart is empty!');
-        return;
+    // ============================================
+    // SHIPPING CALCULATION
+    // ============================================
+    function calculateShipping(countryCode, itemCount) {
+        if (!countryCode || itemCount === 0) return 0;
+        const isClose = CLOSE_COUNTRIES.includes(countryCode);
+        const base = isClose ? SHIPPING_CLOSE_BASE : SHIPPING_OTHER_BASE;
+        const additional = isClose ? SHIPPING_CLOSE_ADDITIONAL : SHIPPING_OTHER_ADDITIONAL;
+        return base + ((itemCount - 1) * additional);
     }
 
-    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const country = document.getElementById('country').value;
-    const itemCount = cart.reduce((sum, i) => sum + i.quantity, 0);
-    const shipping = calculateShipping(country, itemCount) * 100;
-    const total = subtotal + shipping;
+    // ============================================
+    // CART TOTALS
+    // ============================================
+    function updateCartTotals() {
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-    const lineItems = cart.map(item => ({
-        product_id: item.productId,
-        variant_id: item.variantId,
-        quantity: item.quantity,
-        print_provider_id: item.printProviderId,
-        size: item.selectedSize,
-        color: item.selectedColor
-    }));
+        document.getElementById('cartSubtotal').textContent = '$' + subtotal.toFixed(2);
+        document.getElementById('cartShipping').textContent = 'Calculated at checkout';
 
-    toggleCart();
+        // Apply discount if any
+        let discountAmount = 0;
+        if (appliedDiscount) {
+            discountAmount = subtotal * (appliedDiscount.percent / 100);
+            document.getElementById('discountRow').style.display = 'flex';
+            document.getElementById('cartDiscount').textContent = '-$' + discountAmount.toFixed(2);
+        } else {
+            document.getElementById('discountRow').style.display = 'none';
+        }
 
-    FlutterwaveCheckout({
-        public_key: "FLWPUBK-e5b0b3984de5cd1a81b4f591a0bf4481-X",
-        tx_ref: "GHI_" + Date.now(),
-        amount: (total / 100).toFixed(2),
-        currency: "USD",
-        payment_options: "card,mobilemoney,ussd",
-        customer: {
-            email: customerData.email,
-            phone_number: customerData.phone,
-            name: customerData.firstName + " " + customerData.lastName,
-        },
-        customizations: {
-            title: "Glass Ink Haven",
-            description: "Wearable Therapy - " + cart.length + " items",
-            logo: "https://glassinkhaven.netlify.app/logo.png",
-        },
-        meta: {
-            customer_name: customerData.firstName + " " + customerData.lastName,
-            customer_email: customerData.email,
-            customer_phone: customerData.phone,
-            shipping_country: customerData.country,
-            shipping_state: customerData.state,
-            shipping_city: customerData.city,
-            shipping_address: customerData.address,
-            shipping_postal: customerData.postal,
-            line_items: JSON.stringify(lineItems),
-            shipping_cost: shipping / 100
-        },
-        callback: function (data) {
-            console.log("Payment successful:", data);
-            
-            showSuccessModal();
-            
-            cart = [];
-            saveCart();
-            updateCartUI();
-            
-            document.getElementById('firstName').value = '';
-            document.getElementById('lastName').value = '';
-            document.getElementById('email').value = '';
-            document.getElementById('phone').value = '';
-            document.getElementById('country').value = '';
-            document.getElementById('state').value = '';
-            document.getElementById('city').value = '';
-            document.getElementById('address').value = '';
-            document.getElementById('postal').value = '';
-        },
-        onclose: function() {
-            console.log("Payment modal closed");
-            if (cart.length > 0) {
-                toggleCart();
+        const total = subtotal - discountAmount;
+        document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
+
+        return { subtotal, discountAmount, total, itemCount };
+    }
+
+    // ============================================
+    // DISCOUNT CODE
+    // ============================================
+    function applyDiscount() {
+        const code = document.getElementById('discountCode').value.trim().toUpperCase();
+        const msgEl = document.getElementById('discountMsg');
+
+        if (!code) {
+            msgEl.textContent = 'Please enter a code';
+            msgEl.className = 'discount-msg error';
+            return;
+        }
+
+        if (ambassadorCodes[code]) {
+            appliedDiscount = { code: code, percent: 5 };
+            msgEl.textContent = 'Code applied! 5% discount will be applied at checkout.';
+            msgEl.className = 'discount-msg success';
+            updateCartTotals();
+            updateCheckoutSummary();
+        } else {
+            appliedDiscount = null;
+            msgEl.textContent = 'Invalid code. Please try again.';
+            msgEl.className = 'discount-msg error';
+            updateCartTotals();
+            updateCheckoutSummary();
+        }
+    }
+
+    // ============================================
+    // CHECKOUT
+    // ============================================
+    function openCheckout() {
+        if (cart.length === 0) {
+            showToast('Your cart is empty!');
+            return;
+        }
+        toggleCart();
+        document.getElementById('checkoutModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+        updateCheckoutSummary();
+    }
+
+    function closeCheckoutModal() {
+        document.getElementById('checkoutModal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    function updateCheckoutSummary() {
+        const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const country = document.getElementById('customerCountry').value;
+        const shipping = country ? calculateShipping(country, itemCount) : 0;
+
+        // Cart items summary
+        const cartSummary = cart.map(item =>
+            `${escapeHtml(item.name)} (Size: ${escapeHtml(item.size)}, Qty: ${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`
+        ).join('<br>');
+        document.getElementById('checkoutCartSummary').innerHTML = cartSummary || 'No items';
+
+        // Order summary with discount
+        let discountAmount = 0;
+        if (appliedDiscount) {
+            discountAmount = subtotal * (appliedDiscount.percent / 100);
+        }
+
+        const total = subtotal + shipping - discountAmount;
+
+        let summaryHtml = `<strong>Items:</strong> ${itemCount}<br>`;
+        summaryHtml += `<strong>Subtotal:</strong> $${subtotal.toFixed(2)}<br>`;
+        if (discountAmount > 0) {
+            summaryHtml += `<strong>Discount (5%):</strong> -$${discountAmount.toFixed(2)}<br>`;
+        }
+        summaryHtml += `<strong>Shipping:</strong> ${shipping > 0 ? '$' + shipping.toFixed(2) : 'Select country'}<br>`;
+        summaryHtml += `<strong style="font-size:16px;color:var(--text-primary)">Total: $${total.toFixed(2)}</strong>`;
+
+        document.getElementById('checkoutSummary').innerHTML = summaryHtml;
+    }
+
+    // ============================================
+    // FORM VALIDATION
+    // ============================================
+    function validateCheckoutForm() {
+        const fields = [
+            { id: 'customerName', name: 'Full Name' },
+            { id: 'customerEmail', name: 'Email Address' },
+            { id: 'customerPhone', name: 'Phone Number' },
+            { id: 'customerAddress', name: 'Street Address' },
+            { id: 'customerCity', name: 'City' },
+            { id: 'customerState', name: 'State/Province' },
+            { id: 'customerCountry', name: 'Country' },
+            { id: 'customerZip', name: 'Zip/Postal Code' }
+        ];
+
+        let isValid = true;
+
+        fields.forEach(field => {
+            const el = document.getElementById(field.id);
+            if (!el.value.trim()) {
+                el.classList.add('error');
+                isValid = false;
+            } else {
+                el.classList.remove('error');
             }
+        });
+
+        // Email validation
+        const emailEl = document.getElementById('customerEmail');
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailEl.value && !emailRegex.test(emailEl.value)) {
+            emailEl.classList.add('error');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    // Clear error on input
+    ['customerName','customerEmail','customerPhone','customerAddress','customerCity','customerState','customerCountry','customerZip'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', function() { this.classList.remove('error'); });
         }
     });
-}
 
-// ==========================================
-// SUCCESS MODAL
-// ==========================================
-function showSuccessModal() {
-    const modal = document.getElementById('successModal');
-    modal.classList.add('active');
-}
+    // ============================================
+    // FLUTTERWAVE PAYMENT
+    // ============================================
+    function processPayment(e) {
+        e.preventDefault();
 
-function closeSuccessModal() {
-    const modal = document.getElementById('successModal');
-    modal.classList.remove('active');
-}
+        if (!validateCheckoutForm()) {
+            showToast('Please fill in all required fields');
+            return;
+        }
 
-// ==========================================
-// SUPPORT (PROFESSIONAL ALERT VERSION)
-// ==========================================
-function openSupport(type) {
-    const content = {
-        shipping: `SHIPPING & DELIVERY
+        const name = document.getElementById('customerName').value.trim();
+        const email = document.getElementById('customerEmail').value.trim();
+        const phone = document.getElementById('customerPhone').value.trim();
+        const address = document.getElementById('customerAddress').value.trim();
+        const city = document.getElementById('customerCity').value.trim();
+        const state = document.getElementById('customerState').value.trim();
+        const country = document.getElementById('customerCountry').value;
+        const zip = document.getElementById('customerZip').value.trim();
 
-All Glass Ink Haven products are made-to-order through our production partners.
+        const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const shipping = calculateShipping(country, itemCount);
 
-• Processing Time:
-Orders are processed within 2–5 business days.
+        let discountAmount = 0;
+        if (appliedDiscount) {
+            discountAmount = subtotal * (appliedDiscount.percent / 100);
+        }
 
-• Shipping Time:
-Delivery times vary depending on location and logistics.
-Estimated delivery ranges between 5–30 business days.
+        const total = subtotal + shipping - discountAmount;
 
-• Tracking:
-Once your order is shipped, a tracking link will be sent to your email.
+        const itemDescription = cart.map(item => `${item.name} (Size: ${item.size}, Qty: ${item.quantity})`).join(', ');
 
-• Important:
-Shipping times may vary due to carrier delays, customs processing, or high demand periods.`,
+        // Store order data for email
+        const orderData = {
+            customerName: name,
+            email: email,
+            phone: phone,
+            address: address,
+            city: city,
+            state: state,
+            country: country,
+            zip: zip,
+            cart: cart,
+            subtotal: subtotal,
+            shipping: shipping,
+            discount: discountAmount,
+            discountCode: appliedDiscount ? appliedDiscount.code : null,
+            total: total,
+            date: new Date().toISOString()
+        };
+        window.lastOrderData = orderData;
 
-        returns: `RETURNS & REFUNDS
+        FlutterwaveCheckout({
+            public_key: FLUTTERWAVE_KEY,
+            tx_ref: 'GIH_' + Date.now(),
+            amount: total,
+            currency: 'USD',
+            payment_options: 'card,banktransfer,ussd',
+            customer: {
+                email: email,
+                phone_number: phone,
+                name: name
+            },
+            customizations: {
+                title: 'Glass Ink Haven',
+                description: itemDescription.substring(0, 100),
+                logo: LOGO_URL
+            },
+            callback: function(response) {
+                if (response.status === 'successful' || response.status === 'success') {
+                    sendOrderEmails(orderData);
+                    closeCheckoutModal();
+                    openSuccessModal();
+                    cart = [];
+                    appliedDiscount = null;
+                    updateCartUI();
+                } else {
+                    showToast('Payment was not completed. Please try again.');
+                }
+            },
+            onclose: function() {}
+        });
+    }
 
-Because all items are made-to-order:
+    // ============================================
+    // SUCCESS MODAL
+    // ============================================
+    function openSuccessModal() {
+        document.getElementById('successModal').classList.add('active');
+    }
 
-• We do NOT accept returns for:
-Wrong size selection
-Change of mind
+    function closeSuccessModal() {
+        document.getElementById('successModal').classList.remove('active');
+    }
 
-• We ONLY replace or refund if:
-Item arrives damaged
-Item is defective
-Wrong item is delivered
+    // ============================================
+    // EMAIL NOTIFICATIONS (Using mailto + Formspree)
+    // ============================================
+    function sendOrderEmails(orderData) {
+        // 1. Send admin notification via Formspree
+        const adminFormData = new FormData();
+        adminFormData.append('subject', `NEW ORDER - Glass Ink Haven - ${orderData.customerName}`);
+        adminFormData.append('to', 'orders@glassinkhaven.com');
+        adminFormData.append('_replyto', orderData.email);
+        adminFormData.append('message',
+            `NEW ORDER FROM GLASS INK HAVEN\n\n` +
+            `Customer: ${orderData.customerName}\n` +
+            `Email: ${orderData.email}\n` +
+            `Phone: ${orderData.phone}\n\n` +
+            `Shipping Address:\n` +
+            `${orderData.address}\n` +
+            `${orderData.city}, ${orderData.state}\n` +
+            `${orderData.country} ${orderData.zip}\n\n` +
+            `Order Details:\n` +
+            orderData.cart.map(item => `- ${item.name} (Size: ${item.size}, Qty: ${item.quantity}) @ $${item.price.toFixed(2)}`).join('\n') +
+            `\n\nSubtotal: $${orderData.subtotal.toFixed(2)}\n` +
+            `Shipping: $${orderData.shipping.toFixed(2)}\n` +
+            (orderData.discount > 0 ? `Discount (${orderData.discountCode}): -$${orderData.discount.toFixed(2)}\n` : '') +
+            `TOTAL: $${orderData.total.toFixed(2)}\n\n` +
+            `Date: ${new Date().toLocaleString()}`
+        );
 
-• To request help:
-Email: glassinkhaven@gmail.com
-Include:
-- Order details
-- Clear photo of the issue
+        // Send to Formspree (free service - replace with your own endpoint)
+        fetch('https://formspree.io/f/xqkrdbpo', {
+            method: 'POST',
+            body: adminFormData,
+            headers: { 'Accept': 'application/json' }
+        }).catch(() => {}); // Silently fail - user already got success
 
-We will respond within 24–72 hours.`,
+        // 2. Send customer confirmation via Formspree
+        const customerFormData = new FormData();
+        customerFormData.append('subject', 'Your Glass Ink Haven Order Confirmation');
+        customerFormData.append('to', orderData.email);
+        customerFormData.append('_replyto', 'glassinkhaven@gmail.com');
+        customerFormData.append('message',
+            `Hi ${orderData.customerName},\n\n` +
+            `Thank you for your order from Glass Ink Haven!\n\n` +
+            `Order Summary:\n` +
+            orderData.cart.map(item => `- ${item.name} (Size: ${item.size}, Qty: ${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`).join('\n') +
+            `\n\nSubtotal: $${orderData.subtotal.toFixed(2)}\n` +
+            `Shipping: $${orderData.shipping.toFixed(2)}\n` +
+            (orderData.discount > 0 ? `Discount: -$${orderData.discount.toFixed(2)}\n` : '') +
+            `Total Paid: $${orderData.total.toFixed(2)}\n\n` +
+            `Shipping To:\n` +
+            `${orderData.address}\n` +
+            `${orderData.city}, ${orderData.state}\n` +
+            `${orderData.country} ${orderData.zip}\n\n` +
+            `Your order is being processed. You will receive tracking information once your order is fulfilled.\n\n` +
+            `With love,\n` +
+            `The Glass Ink Haven Team\n` +
+            `glassinkhaven@gmail.com`
+        );
 
-        size: `SIZE GUIDE
+        fetch('https://formspree.io/f/xqkrdbpo', {
+            method: 'POST',
+            body: customerFormData,
+            headers: { 'Accept': 'application/json' }
+        }).catch(() => {});
+    }
 
-• Sizes available vary by product (S – 3XL or more)
-• Each product has its own size chart
-
-IMPORTANT:
-Please check sizing carefully before ordering.
-We recommend sizing up for a relaxed/oversized fit.
-
-If unsure, contact us before placing your order.`,
-
-        care: `CARE INSTRUCTIONS
-
-To maintain quality:
-
-• Wash inside-out
-• Use cold water
-• Do NOT bleach
-• Avoid direct ironing on print
-• Air dry recommended
-
-Proper care helps preserve print quality and fabric lifespan.`,
-
-        faq: `FREQUENTLY ASKED QUESTIONS (FAQ)
-
-Q: How long does delivery take?
-A: Orders are processed in 2–5 days. Shipping varies (5–30 business days depending on location).
-
-Q: Do you ship worldwide?
-A: Yes, we ship internationally. If your country is not listed at checkout, contact us via email.
-
-Q: Can I return my item?
-A: Only if it is damaged, defective, or incorrect.
-
-Q: Can I change my order after placing it?
-A: Orders go into production quickly, so changes are not guaranteed. Contact us immediately.
-
-Q: Will I receive tracking?
-A: Yes, tracking is sent once your order ships.
-
-Q: Why is shipping different for each country?
-A: Shipping costs depend on distance, logistics, and carrier rates.
-
-Q: Why does shipping increase with more items?
-A: Each product may ship from different facilities, so shipping is calculated per item.
-
-Q: My order is delayed, what should I do?
-A: Wait a little longer due to possible delays, then contact us if needed.
-
-Q: Do you offer refunds?
-A: Only for damaged, defective, or incorrect items.
-
-Q: How do I contact you?
-A: glassinkhaven@gmail.com`
+    // ============================================
+    // PAGE MODALS (Footer links)
+    // ============================================
+    const pageContent = {
+        shipping: `
+            <h2>Shipping & Returns</h2>
+            <h3>Our Policy</h3>
+            <p>All products are <strong>made-to-order</strong> (print-on-demand), which means items are produced only after an order is placed. This helps us reduce waste and ensure every piece is crafted with care.</p>
+            <h3>Returns & Exchanges</h3>
+            <p><strong>We do NOT accept returns or exchanges for:</strong></p>
+            <ul>
+                <li>Wrong size selected by customer</li>
+                <li>Wrong color selected</li>
+                <li>Change of mind</li>
+            </ul>
+            <h3>Damaged or Defective Items</h3>
+            <p><strong>If an item arrives damaged or there is a manufacturing error:</strong></p>
+            <ul>
+                <li>Contact us within <strong>30 days</strong> of delivery</li>
+                <li>Provide a clear photo of the issue</li>
+                <li>We will offer a <strong>FREE replacement or full refund</strong></li>
+                <li>No need to return the damaged product</li>
+            </ul>
+            <h3>Delivery Issues</h3>
+            <p>For delivery failures or lost packages:</p>
+            <ul>
+                <li>You may request a reprint (at extra cost) or partial refund</li>
+                <li>Contact us at <a href="mailto:glassinkhaven@gmail.com">glassinkhaven@gmail.com</a></li>
+            </ul>
+            <h3>Important Notes</h3>
+            <p>Minor print placement differences of up to 0.5 inches are considered normal due to the handmade nature of our products and are not considered defects.</p>
+            <p>Colors may vary slightly from what you see on screen due to different monitor settings.</p>
+        `,
+        sizeguide: `
+            <h2>Size Guide</h2>
+            <p>All our apparel is designed with a <strong>unisex fit</strong> unless otherwise specified. Please check the measurements carefully before ordering, as we do not accept size-based returns.</p>
+            <h3>Available Sizes</h3>
+            <p>Most of our products are available in sizes: <strong>S, M, L, XL</strong></p>
+            <h3>Chest Size Chart</h3>
+            <table class="size-chart">
+                <tr><th>Size</th><th>Chest (inches)</th></tr>
+                <tr><td><strong>S</strong></td><td>34-36 inches</td></tr>
+                <tr><td><strong>M</strong></td><td>38-40 inches</td></tr>
+                <tr><td><strong>L</strong></td><td>42-44 inches</td></tr>
+                <tr><td><strong>XL</strong></td><td>46-48 inches</td></tr>
+            </table>
+            <h3>How to Measure</h3>
+            <p>Measure around the fullest part of your chest, keeping the tape measure horizontal.</p>
+            <h3>Fit Notes</h3>
+            <ul>
+                <li>Our hoodies and sweatshirts have a relaxed, comfortable fit</li>
+                <li>Tees are designed to be slightly boxy for a modern look</li>
+                <li>Tank tops vary by style - fitted or relaxed as noted on product pages</li>
+                <li>Slight variations may occur depending on the specific product</li>
+            </ul>
+            <p style="background: var(--bg-primary); padding: 15px; border-radius: 10px; margin-top: 20px;"><strong>Please check size carefully before ordering, as we do not accept size-based returns.</strong></p>
+        `,
+        care: `
+            <h2>Care Instructions</h2>
+            <p>To keep your Glass Ink Haven pieces looking their best, please follow these care guidelines:</p>
+            <h3>Washing</h3>
+            <ul>
+                <li>Wash <strong>inside-out</strong> to protect the print</li>
+                <li>Use <strong>cold water</strong> (30°C or below)</li>
+                <li>Wash with similar colors</li>
+                <li>Use a gentle cycle</li>
+            </ul>
+            <h3>Drying</h3>
+            <ul>
+                <li><strong>Air dry recommended</strong> for best results</li>
+                <li>If using a dryer, use low heat</li>
+                <li>Do not over-dry</li>
+            </ul>
+            <h3>Ironing</h3>
+            <ul>
+                <li>Do <strong>NOT</strong> iron directly on printed areas</li>
+                <li>Iron inside-out on low heat if needed</li>
+            </ul>
+            <h3>What to Avoid</h3>
+            <ul>
+                <li><strong>Do not bleach</strong></li>
+                <li>Do not use fabric softeners on printed items</li>
+                <li>Do not dry clean</li>
+            </ul>
+            <p>Following these instructions will help your pieces stay soft, vibrant, and comfortable for years to come.</p>
+        `,
+        faq: `
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <h4>How long does shipping take?</h4>
+                <p>Since all products are made-to-order, please allow 3-7 business days for production. Shipping times vary by location: 5-10 business days for close countries (US, UK, Canada, EU), 10-20 business days for other international destinations.</p>
+            </div>
+            <div class="faq-item">
+                <h4>How is shipping calculated?</h4>
+                <p>Shipping is based on your location and number of items. US, UK, Canada, Germany, France, Italy, Spain, Netherlands, Australia: $10 for first item, +$3 each additional. All other countries: $15 for first item, +$4 each additional.</p>
+            </div>
+            <div class="faq-item">
+                <h4>Can I return my item?</h4>
+                <p>Due to our made-to-order model, we cannot accept returns for wrong size, wrong color, or change of mind. Please check our Size Guide carefully before ordering.</p>
+            </div>
+            <div class="faq-item">
+                <h4>What if my item is damaged?</h4>
+                <p>If your item arrives damaged or has a manufacturing defect, contact us within 30 days with a clear photo. We'll provide a free replacement or full refund - no need to return the damaged item.</p>
+            </div>
+            <div class="faq-item">
+                <h4>Do you ship worldwide?</h4>
+                <p>Yes! We ship to over 150 countries worldwide. If your country is not listed at checkout, please <a href="mailto:glassinkhaven@gmail.com">contact us</a> and we'll assist you.</p>
+            </div>
+            <div class="faq-item">
+                <h4>How can I track my order?</h4>
+                <p>Once your order ships, you'll receive an email with tracking information. You can use this to track your package's journey to you.</p>
+            </div>
+            <div class="faq-item">
+                <h4>What payment methods do you accept?</h4>
+                <p>We accept card payments, bank transfers, and USSD through our secure Flutterwave payment system.</p>
+            </div>
+            <div class="faq-item">
+                <h4>How do I contact customer support?</h4>
+                <p>Email us at <a href="mailto:glassinkhaven@gmail.com">glassinkhaven@gmail.com</a>. We typically respond within 24-48 hours.</p>
+            </div>
+        `
     };
 
-    alert(content[type]);
-}
-</script>
+    function openPageModal(page) {
+        const content = pageContent[page];
+        if (content) {
+            document.getElementById('pageModalContent').innerHTML = content;
+            document.getElementById('pageModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closePageModal() {
+        document.getElementById('pageModal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // ============================================
+    // UTILITY FUNCTIONS
+    // ============================================
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    function setupScrollReveal() {
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+        reveals.forEach(el => observer.observe(el));
+    }
+
+    function setupNavScroll() {
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        });
+    }
+
+    function setupModalCloseHandlers() {
+        document.getElementById('productModal').addEventListener('click', function(e) {
+            if (e.target === this) closeProductModal();
+        });
+        document.getElementById('checkoutModal').addEventListener('click', function(e) {
+            if (e.target === this) closeCheckoutModal();
+        });
+        document.getElementById('pageModal').addEventListener('click', function(e) {
+            if (e.target === this) closePageModal();
+        });
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) closeSuccessModal();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeProductModal();
+                closeCheckoutModal();
+                closePageModal();
+                closeSuccessModal();
+            }
+        });
+    }
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function escapeUrl(url) {
+        if (!url) return '';
+        return url.replace(/'/g, "\\'");
+    }
+    </script>
 </body>
 </html>
