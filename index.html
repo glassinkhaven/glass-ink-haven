@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Glass Ink Haven | Wear Your Healing</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -119,6 +119,23 @@
             transition: width 0.3s ease;
         }
         .nav-link:hover::after { width: 100%; }
+        
+        .mobile-cart-btn {
+            display: none;
+            position: relative;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            border: none;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+        .mobile-cart-btn:hover { transform: scale(1.05); }
+        
         .cart-btn {
             position: relative;
             width: 44px; height: 44px;
@@ -146,6 +163,13 @@
             align-items: center;
             justify-content: center;
         }
+        
+        @media (max-width: 768px) {
+            .nav-links .cart-btn { display: none; }
+            .mobile-cart-btn { display: flex; }
+            .nav-links { gap: 16px; }
+        }
+        
         .hero {
             min-height: 100vh;
             position: relative;
@@ -234,15 +258,33 @@
             gap: 20px;
         }
         .category-img {
+            position: relative;
             border-radius: var(--radius-lg);
             overflow: hidden;
             box-shadow: var(--shadow);
-            background: #ddd;
         }
-        .category-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .category-img img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: transform 0.5s ease; 
+        }
         .category-img:hover img { transform: scale(1.05); }
-        .category-img-main { grid-row: span 2; height: 400px; }
-        .category-img-small { height: 190px; }
+        .category-img-main { grid-row: span 2; height: 400px; position: relative; }
+        .category-img-small { height: 190px; position: relative; }
+        .category-img-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 14px;
+        }
         .category-text { padding: 40px; }
         .category-text h2 { margin-bottom: 20px; }
         .category-text p { color: var(--text-secondary); margin-bottom: 30px; line-height: 1.8; }
@@ -444,6 +486,25 @@
         .size-btn { width: 48px; height: 48px; border: 1px solid var(--border); background: white; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
         .size-btn:hover { border-color: var(--text-primary); }
         .size-btn.active { background: var(--text-primary); color: var(--bg-primary); border-color: var(--text-primary); }
+        
+        .color-options { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+        .color-swatch {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .color-swatch:hover { transform: scale(1.1); }
+        .color-swatch.active { border-color: var(--text-primary); box-shadow: 0 0 0 2px white, 0 0 0 4px var(--text-primary); }
+        .color-swatch-label {
+            font-size: 11px;
+            text-align: center;
+            margin-top: 5px;
+        }
+        
         .modal-actions { display: flex; gap: 16px; margin-top: 30px; }
         .modal-add-cart { flex: 1; padding: 16px 32px; background: var(--accent); color: white; border: none; border-radius: 50px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
         .modal-add-cart:hover { background: #b83232; transform: translateY(-2px); }
@@ -454,7 +515,6 @@
         .variant-error { color: var(--accent); font-size: 12px; margin-top: 8px; display: none; }
         .variant-error.show { display: block; }
 
-        /* CART SIDEBAR */
         .cart-sidebar {
             position: fixed;
             top: 0; right: -450px;
@@ -505,11 +565,10 @@
         .continue-shopping { display: block; text-align: center; margin-top: 16px; font-size: 14px; color: var(--text-secondary); text-decoration: none; transition: color 0.3s ease; cursor: pointer; }
         .continue-shopping:hover { color: var(--text-primary); }
 
-        /* CHECKOUT MODAL */
         .checkout-modal {
             background: var(--bg-primary);
             border-radius: var(--radius-lg);
-            max-width: 600px;
+            max-width: 700px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
@@ -535,6 +594,35 @@
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--text-primary); }
         .form-group input.error, .form-group select.error { border-color: var(--accent); background: rgba(209,59,59,0.05); }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        
+        .checkout-order-items {
+            margin-bottom: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .checkout-order-item {
+            display: flex;
+            gap: 16px;
+            padding: 12px;
+            background: white;
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+        }
+        .checkout-order-item-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: #eee;
+        }
+        .checkout-order-item-img img { width: 100%; height: 100%; object-fit: cover; }
+        .checkout-order-item-details { flex: 1; }
+        .checkout-order-item-details h4 { font-size: 14px; margin-bottom: 4px; }
+        .checkout-order-item-details .variant-info { font-size: 12px; color: var(--text-secondary); }
+        .checkout-order-item-details .item-price { font-size: 13px; font-weight: 600; color: var(--accent); margin-top: 4px; }
+        
         .discount-section {
             background: white;
             padding: 20px;
@@ -570,7 +658,6 @@
         .contact-note { text-align: center; margin-top: 16px; font-size: 13px; color: var(--text-secondary); }
         .contact-note a { color: var(--accent); text-decoration: none; }
 
-        /* ABOUT */
         .about-section { background: white; position: relative; overflow: hidden; }
         .about-content { max-width: 1000px; margin: 0 auto; text-align: center; }
         .about-content h2 { margin-bottom: 40px; }
@@ -583,7 +670,6 @@
         .value-item h4 { font-size: 18px; margin-bottom: 12px; }
         .value-item p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
 
-        /* CONTACT */
         .contact-section { background: var(--bg-secondary); color: var(--text-light); text-align: center; }
         .contact-section .section-header h2, .contact-section .section-header p { color: var(--text-light); }
         .contact-section .section-header p { opacity: 0.7; }
@@ -603,7 +689,6 @@
         .contact-email:hover { background: rgba(255, 255, 255, 0.2); transform: translateY(-2px); }
         .contact-note-box { max-width: 600px; margin: 0 auto; padding: 24px; background: rgba(255, 255, 255, 0.05); border-radius: var(--radius-md); font-size: 14px; line-height: 1.8; opacity: 0.8; }
 
-        /* FOOTER */
         .footer { background: var(--bg-secondary); color: var(--text-light); padding: 60px 6vw 30px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
         .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto 40px; }
         .footer-col h4 { font-size: 16px; margin-bottom: 20px; font-family: 'Inter', sans-serif; font-weight: 600; }
@@ -613,7 +698,6 @@
         .footer-col a:hover { color: var(--text-light); }
         .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 13px; color: rgba(255, 255, 255, 0.4); }
 
-        /* TOAST */
         .toast {
             position: fixed;
             bottom: 30px; left: 50%;
@@ -630,7 +714,6 @@
         }
         .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-        /* ANIMATIONS */
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideInLeft { from { opacity: 0; transform: translateX(-60px); } to { opacity: 1; transform: translateX(0); } }
         @keyframes slideInRight { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; transform: translateX(0); } }
@@ -638,7 +721,6 @@
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* LOADING SPINNER */
         .loading-spinner {
             display: flex;
             justify-content: center;
@@ -654,7 +736,6 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* RESPONSIVE */
         @media (max-width: 1024px) {
             .category-content { grid-template-columns: 1fr; }
             .category-images { order: -1; }
@@ -664,24 +745,25 @@
             .hero-img { display: none; }
         }
         @media (max-width: 768px) {
-            .nav-links { display: none; }
+            .nav-links { gap: 16px; }
+            .nav-links .nav-link:not(:last-child) { display: none; }
             .display-heading { font-size: 42px; }
             .products-grid { grid-template-columns: 1fr; }
             .cart-sidebar { width: 100%; right: -100%; }
             .form-row { grid-template-columns: 1fr; }
             .modal-actions { flex-direction: column; }
             .filter-tabs { gap: 8px; }
-            .filter-btn { padding: 10px 16px; font-size: 13px; }
+            .filter-btn { padding: 10px 16px; font-size: 12px; }
             .page-modal { padding: 30px 20px; }
             .cart-item { flex-direction: column; padding: 16px; gap: 12px; margin-bottom: 12px; }
             .cart-item-image { width: 100%; height: 150px; border-radius: var(--radius-sm); }
+            .checkout-order-item { flex-direction: column; align-items: flex-start; }
         }
     </style>
 </head>
 <body>
     <div class="grain-overlay"></div>
 
-    <!-- NAVIGATION -->
     <nav class="nav" id="nav">
         <a href="#" class="nav-logo">Glass Ink<span>Haven</span></a>
         <div class="nav-links">
@@ -697,15 +779,23 @@
                 </svg>
                 <span class="cart-count" id="cartCount">0</span>
             </button>
+            <button class="mobile-cart-btn" onclick="toggleCart()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 6h15l-1.5 9h-12z"></path>
+                    <circle cx="9" cy="20" r="1"></circle>
+                    <circle cx="18" cy="20" r="1"></circle>
+                    <path d="M6 6L5 3H2"></path>
+                </svg>
+                <span class="cart-count" id="mobileCartCount">0</span>
+            </button>
         </div>
     </nav>
 
-    <!-- HERO -->
     <section class="hero">
         <div class="hero-images">
-            <div class="hero-img hero-img-1"><img src="images/hero_main.jpg" alt="Glass Ink Haven" onerror="this.parentElement.style.background='#ccc'"></div>
-            <div class="hero-img hero-img-2"><img src="images/hero_right.jpg" alt="Fashion Editorial" onerror="this.parentElement.style.background='#ccc'"></div>
-            <div class="hero-img hero-img-3"><img src="images/hero_bottom.jpg" alt="Accessories" onerror="this.parentElement.style.background='#ccc'"></div>
+            <div class="hero-img hero-img-1"><img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&h=600&fit=crop" alt="Glass Ink Haven" onerror="this.parentElement.style.background='#ccc'"></div>
+            <div class="hero-img hero-img-2"><img src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&h=500&fit=crop" alt="Fashion Editorial" onerror="this.parentElement.style.background='#ccc'"></div>
+            <div class="hero-img hero-img-3"><img src="https://images.unsplash.com/photo-1566067591828-1ba6d1f9dbe6?w=600&h=400&fit=crop" alt="Accessories" onerror="this.parentElement.style.background='#ccc'"></div>
         </div>
         <div class="hero-content">
             <p class="micro-label hero-label">GLASS INK HAVEN — LOOKBOOK 2026</p>
@@ -715,18 +805,24 @@
         </div>
     </section>
 
-    <!-- CATEGORY SECTIONS -->
     <section class="category-section" id="hoodies">
         <div class="category-content">
             <div class="category-images">
-                <div class="category-img category-img-main"><img src="images/hoodies_1.jpg" alt="Hoodies" onerror="this.parentElement.style.background='#ccc'"></div>
-                <div class="category-img category-img-small"><img src="images/hoodies_2.jpg" alt="Hoodie Detail" onerror="this.parentElement.style.background='#ccc'"></div>
-                <div class="category-img category-img-small"><img src="images/hoodies_3.jpg" alt="Hoodie Collection" onerror="this.parentElement.style.background='#ccc'"></div>
+                <div class="category-img category-img-main">
+                    <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=900&fit=crop" alt="Hoodies">
+                    <div class="category-img-overlay">"Some days you just need to feel held."</div>
+                </div>
+                <div class="category-img category-img-small">
+                    <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=400&h=300&fit=crop" alt="Hoodie Detail">
+                </div>
+                <div class="category-img category-img-small">
+                    <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=400&h=300&fit=crop" alt="Hoodie Collection">
+                </div>
             </div>
             <div class="category-text">
                 <p class="micro-label">CATEGORY</p>
                 <h2 class="section-heading">Hoodies & Sweats</h2>
-                <p>Relaxed layers for slow mornings, long walks, and everything in between. Our hoodies are designed to wrap you in comfort while expressing your unique style.</p>
+                <p>Soft layers made for the days you're feeling everything—or nothing at all. Each piece is designed to hold you gently, like a quiet reminder that healing doesn't have to be loud.</p>
                 <div class="category-cta" onclick="filterProducts('hoodie')">Shop Hoodies</div>
             </div>
         </div>
@@ -737,13 +833,20 @@
             <div class="category-text">
                 <p class="micro-label">CATEGORY</p>
                 <h2 class="section-heading">Tees & T-Shirts</h2>
-                <p>Soft cotton, honest fits, and prints that feel like inside jokes. Our tees are crafted for everyday wear with a touch of emotional expression.</p>
+                <p>Simple pieces. Honest words. These aren't just prints—they're feelings you couldn't say out loud, turned into something you can wear every day.</p>
                 <div class="category-cta" onclick="filterProducts('tshirt')">Shop Tees</div>
             </div>
             <div class="category-images">
-                <div class="category-img category-img-main"><img src="images/tees_1.jpg" alt="Tees" onerror="this.parentElement.style.background='#ccc'"></div>
-                <div class="category-img category-img-small"><img src="images/tees_2.jpg" alt="Tee Detail" onerror="this.parentElement.style.background='#ccc'"></div>
-                <div class="category-img category-img-small"><img src="images/tees_3.jpg" alt="Tee Collection" onerror="this.parentElement.style.background='#ccc'"></div>
+                <div class="category-img category-img-main">
+                    <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=900&fit=crop" alt="Tees">
+                    <div class="category-img-overlay">"Say it without explaining."</div>
+                </div>
+                <div class="category-img category-img-small">
+                    <img src="https://images.unsplash.com/photo-1503342394128-c104d54dba01?w=400&h=300&fit=crop" alt="Tee Detail">
+                </div>
+                <div class="category-img category-img-small">
+                    <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400&h=300&fit=crop" alt="Tee Collection">
+                </div>
             </div>
         </div>
     </section>
@@ -751,20 +854,26 @@
     <section class="category-section" id="bags">
         <div class="category-content">
             <div class="category-images">
-                <div class="category-img category-img-main"><img src="images/bags_1.jpg" alt="Tote Bags" onerror="this.parentElement.style.background='#ccc'"></div>
-                <div class="category-img category-img-small"><img src="images/bags_2.jpg" alt="Tote Detail" onerror="this.parentElement.style.background='#ccc'"></div>
-                <div class="category-img category-img-small"><img src="images/bags_3.jpg" alt="Tote Collection" onerror="this.parentElement.style.background='#ccc'"></div>
+                <div class="category-img category-img-main">
+                    <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&h=900&fit=crop" alt="Tote Bags">
+                    <div class="category-img-overlay">"Carry what matters—seen and unseen."</div>
+                </div>
+                <div class="category-img category-img-small">
+                    <img src="https://images.unsplash.com/photo-1570298298043-d2e3bcc82c0c?w=400&h=300&fit=crop" alt="Tote Detail">
+                </div>
+                <div class="category-img category-img-small">
+                    <img src="https://images.unsplash.com/photo-1598977127912-f6c6be537cf6?w=400&h=300&fit=crop" alt="Tote Collection">
+                </div>
             </div>
             <div class="category-text">
                 <p class="micro-label">CATEGORY</p>
                 <h2 class="section-heading">Tote Bags</h2>
-                <p>Carry the essentials—and a little bit of personality. Our totes are designed to be your everyday companion.</p>
+                <p>For the things you carry—seen and unseen. Our totes hold your essentials while reflecting the parts of you that deserve to be expressed.</p>
                 <div class="category-cta" onclick="filterProducts('tote')">Shop Bags</div>
             </div>
         </div>
     </section>
 
-    <!-- SHOP SECTION -->
     <section class="shop-section" id="shop">
         <div class="section-header reveal">
             <p class="micro-label">SHOP ALL</p>
@@ -782,7 +891,6 @@
         </div>
     </section>
 
-    <!-- ABOUT -->
     <section class="about-section" id="about">
         <div class="about-content">
             <p class="micro-label reveal">OUR STORY</p>
@@ -805,7 +913,6 @@
         </div>
     </section>
 
-    <!-- CONTACT -->
     <section class="contact-section" id="contact">
         <div class="section-header reveal">
             <p class="micro-label" style="color:rgba(255,255,255,0.6)">GET IN TOUCH</p>
@@ -819,7 +926,6 @@
         <div class="contact-note-box reveal">If your country is not listed or you have issues placing an order, please contact us and we will assist you. We're here to help make your experience as smooth as possible.</div>
     </section>
 
-    <!-- FOOTER -->
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-col">
@@ -840,7 +946,8 @@
             <div class="footer-col">
                 <h4>Support</h4>
                 <ul>
-                    <li><a onclick="openPageModal('shipping')">Shipping & Returns</a></li>
+                    <li><a onclick="openPageModal('shipping')">Shipping & Delivery</a></li>
+                    <li><a onclick="openPageModal('returns')">Returns & Refunds</a></li>
                     <li><a onclick="openPageModal('sizeguide')">Size Guide</a></li>
                     <li><a onclick="openPageModal('care')">Care Instructions</a></li>
                     <li><a onclick="openPageModal('faq')">FAQ</a></li>
@@ -859,7 +966,6 @@
         <div class="footer-bottom"><p>&copy; 2026 Glass Ink Haven. All rights reserved. Wear your healing.</p></div>
     </footer>
 
-    <!-- PRODUCT DETAIL MODAL -->
     <div class="modal-overlay" id="productModal">
         <div class="product-modal">
             <button class="modal-close" onclick="closeProductModal()">&times;</button>
@@ -875,9 +981,13 @@
                     <label>Size</label>
                     <div class="size-options" id="sizeOptions"></div>
                 </div>
-                <div id="variantError" class="variant-error">Please select a size before adding to cart.</div>
+                <div class="option-group">
+                    <label>Color</label>
+                    <div class="color-options" id="colorOptions"></div>
+                </div>
+                <div id="variantError" class="variant-error">Please select size and color before adding to cart.</div>
                 <div class="modal-actions">
-                    <button class="modal-add-cart" id="modalAddCartBtn" onclick="addToCartFromModal()">Add to Cart</button>
+                    <button class="modal-add-cart" onclick="addToCartFromModal()">Add to Cart</button>
                 </div>
                 <div class="product-specs">
                     <div class="spec-item"><span class="spec-label">Provider:</span><span class="spec-value" id="modalProvider">Premium Quality</span></div>
@@ -887,7 +997,6 @@
         </div>
     </div>
 
-    <!-- PAGE MODALS -->
     <div class="modal-overlay" id="pageModal">
         <div class="page-modal">
             <button class="modal-close" onclick="closePageModal()">&times;</button>
@@ -895,7 +1004,6 @@
         </div>
     </div>
 
-    <!-- SUCCESS MODAL -->
     <div class="modal-overlay" id="successModal">
         <div class="success-modal">
             <button class="modal-close" onclick="closeSuccessModal()">&times;</button>
@@ -906,7 +1014,6 @@
         </div>
     </div>
 
-    <!-- CHECKOUT MODAL -->
     <div class="modal-overlay" id="checkoutModal">
         <div class="checkout-modal">
             <button class="modal-close" onclick="closeCheckoutModal()">&times;</button>
@@ -914,12 +1021,12 @@
             <form class="checkout-form" id="checkoutForm" onsubmit="processPayment(event)">
                 <div class="shipping-info">
                     <h4>Your Order</h4>
-                    <p id="checkoutCartSummary">Loading...</p>
+                    <div id="checkoutCartSummary" class="checkout-order-items"></div>
                 </div>
                 <div class="discount-section">
                     <label>Ambassador Code (Optional)</label>
                     <div class="discount-input-row">
-                        <input type="text" id="discountCode" placeholder="Enter code (e.g. ALWAYS10)">
+                        <input type="text" id="discountCode" placeholder="Enter ambassador code">
                         <button type="button" onclick="applyDiscount()">Apply</button>
                     </div>
                     <p class="discount-msg" id="discountMsg"></p>
@@ -966,13 +1073,12 @@
                     <h4>Order Summary</h4>
                     <p id="checkoutSummary">Loading...</p>
                 </div>
-                <button type="submit" class="pay-btn" id="payBtn">Pay with Flutterwave</button>
+                <button type="submit" class="pay-btn">Pay with Flutterwave</button>
                 <p class="contact-note">If your country is not listed, <a href="mailto:glassinkhaven@gmail.com">contact us</a> and we will assist you.</p>
             </form>
         </div>
     </div>
 
-    <!-- CART SIDEBAR -->
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header"><h3>Your Cart</h3><button class="cart-close" onclick="toggleCart()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg></button></div>
         <div class="cart-items" id="cartItems">
@@ -986,7 +1092,7 @@
             <div class="cart-summary">
                 <div class="summary-row"><span>Subtotal</span><span id="cartSubtotal">$0.00</span></div>
                 <div class="summary-row"><span>Shipping</span><span id="cartShipping">Calculated at checkout</span></div>
-                <div class="summary-row discount" id="discountRow" style="display:none"><span>Discount (5%)</span><span id="cartDiscount">-$0.00</span></div>
+                <div class="summary-row.discount" id="discountRow" style="display:none"><span>Discount (5%)</span><span id="cartDiscount">-$0.00</span></div>
                 <div class="summary-row total"><span>Total</span><span id="cartTotal">$0.00</span></div>
             </div>
             <button class="checkout-btn" onclick="openCheckout()">Checkout</button>
@@ -994,46 +1100,37 @@
         </div>
     </div>
 
-    <!-- TOAST -->
     <div class="toast" id="toast">Item added to cart!</div>
 
     <script>
-    // ============================================
-    // CONFIGURATION
-    // ============================================
     const PRINTIFY_ENDPOINT = '/.netlify/functions/printify';
     const FLUTTERWAVE_KEY = 'FLWPUBK-e5b0b3984de5cd1a81b4f591a0bf4481-X';
     
-    // EmailJS Configuration
     const EMAILJS_SERVICE_ID = 'service_amc9ax6';
     const EMAILJS_ADMIN_TEMPLATE_ID = 'template_f6kf8gm';
     const EMAILJS_CUSTOMER_TEMPLATE_ID = 'template_myprdn7';
     
-    // Ambassador codes for 5% discount
-    const ambassadorCodes = {
-        "ALWAYS10": true
-    };
+    const ambassadorCodes = { "ALWAYS10": true };
     const DISCOUNT_PERCENT = 5;
     let appliedDiscountCode = null;
 
-    // Shipping configuration
     const CLOSE_COUNTRIES = ['United States', 'Canada', 'United Kingdom'];
     const SHIPPING_CLOSE_BASE = 6;
     const SHIPPING_CLOSE_ADDITIONAL = 3;
     const SHIPPING_OTHER_BASE = 20;
     const SHIPPING_OTHER_ADDITIONAL = 10;
 
-    // ============================================
-    // STATE
-    // ============================================
     let allProducts = [];
     let cart = [];
     let currentProduct = null;
     let selectedSize = '';
+    let selectedColor = '';
 
-    // ============================================
-    // INITIALIZATION
-    // ============================================
+    // Complete country list (all countries Printify ships to, excluding restricted ones)
+    const allCountries = [
+        "United States", "Canada", "United Kingdom", "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Cape Verde", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "United Arab Emirates", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
+    ];
+
     document.addEventListener('DOMContentLoaded', function() {
         populateCountries();
         fetchProducts();
@@ -1041,18 +1138,12 @@
         setupNavScroll();
         setupModalCloseHandlers();
         loadCart();
+        updateCartCounts();
     });
 
     function populateCountries() {
-        const countries = [
-            "United States", "Canada", "United Kingdom", "Afghanistan", "Albania", "Algeria", "Australia", "Austria",
-            "Belgium", "Brazil", "China", "Denmark", "Egypt", "France", "Germany", "Ghana", "India", "Indonesia",
-            "Italy", "Japan", "Kenya", "Mexico", "Netherlands", "New Zealand", "Nigeria", "Norway", "Pakistan",
-            "Philippines", "Poland", "Portugal", "Russia", "Saudi Arabia", "Singapore", "South Africa", "South Korea",
-            "Spain", "Sweden", "Switzerland", "Thailand", "Turkey", "UAE", "Vietnam", "Zimbabwe"
-        ];
         const select = document.getElementById('customerCountry');
-        countries.forEach(country => {
+        allCountries.forEach(country => {
             const option = document.createElement('option');
             option.value = country;
             option.textContent = country;
@@ -1060,9 +1151,12 @@
         });
     }
 
-    // ============================================
-    // FETCH PRINTIFY PRODUCTS
-    // ============================================
+    function updateCartCounts() {
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        document.getElementById('cartCount').textContent = totalItems;
+        document.getElementById('mobileCartCount').textContent = totalItems;
+    }
+
     async function fetchProducts() {
         const grid = document.getElementById('productsGrid');
         try {
@@ -1074,15 +1168,13 @@
                 throw new Error('Invalid product data');
             }
 
-            // Filter for allowed categories (hoodie, tshirt, tote)
             allProducts = productsList.filter(p => {
                 const title = (p.title || '').toLowerCase();
                 const desc = (p.description || '').toLowerCase();
                 const tags = (p.tags || []).join(' ').toLowerCase();
                 const searchStr = title + ' ' + desc + ' ' + tags;
                 
-                const isTshirt = /\b(t-shirt|tee|tshirt|shirt)\b/.test(searchStr) && 
-                                !searchStr.includes('hoodie') && !searchStr.includes('hood');
+                const isTshirt = /\b(t-shirt|tee|tshirt|shirt)\b/.test(searchStr) && !searchStr.includes('hoodie') && !searchStr.includes('hood');
                 const isHoodie = searchStr.includes('hoodie') || searchStr.includes('hood');
                 const isBag = searchStr.includes('tote') || searchStr.includes('bag');
                 
@@ -1093,14 +1185,18 @@
                 const priceCents = p.variants?.[0]?.retail_price || p.variants?.[0]?.price || 2000;
                 const priceUSD = priceCents / 100;
                 
-                // Extract sizes from variants
                 const sizes = [...new Set((p.variants || []).map(v => {
                     const parts = (v.title || '').split(' / ');
                     return parts.find(part => /^(XS|S|M|L|XL|2XL|3XL|4XL|XXL|XXXL|\d+XL)$/i.test(part.trim())) || null;
                 }).filter(Boolean))];
                 
-                const category = p.title.toLowerCase().includes('hoodie') ? 'hoodie' :
-                                (p.title.toLowerCase().includes('tote') || p.title.toLowerCase().includes('bag')) ? 'tote' : 'tshirt';
+                const colors = [...new Set((p.variants || []).map(v => {
+                    const parts = (v.title || '').split(' / ');
+                    const colorPart = parts.find(part => !/^(XS|S|M|L|XL|2XL|3XL|4XL|XXL|XXXL|\d+XL)$/i.test(part.trim()));
+                    return colorPart ? colorPart.trim() : null;
+                }).filter(Boolean))];
+                
+                const category = p.title.toLowerCase().includes('hoodie') ? 'hoodie' : (p.title.toLowerCase().includes('tote') || p.title.toLowerCase().includes('bag')) ? 'tote' : 'tshirt';
                 
                 return {
                     id: p.id,
@@ -1112,6 +1208,7 @@
                     image: firstImage,
                     images: allImages.length > 0 ? allImages : [firstImage],
                     sizes: sizes.length > 0 ? sizes : ['S', 'M', 'L', 'XL'],
+                    colors: colors.length > 0 ? colors : ['Black', 'White', 'Gray'],
                     variants: p.variants || [],
                     providerName: p.print_provider_name || 'Premium Provider',
                     originalData: p
@@ -1131,9 +1228,6 @@
         }
     }
 
-    // ============================================
-    // RENDER PRODUCTS
-    // ============================================
     function renderProducts(category) {
         const grid = document.getElementById('productsGrid');
         const filtered = category === 'all' ? allProducts : allProducts.filter(p => p.category === category);
@@ -1174,14 +1268,12 @@
         document.getElementById('shop').scrollIntoView({ behavior: 'smooth' });
     }
 
-    // ============================================
-    // PRODUCT MODAL
-    // ============================================
     function openProductModal(productId) {
         currentProduct = allProducts.find(p => String(p.id) === String(productId));
         if (!currentProduct) return;
 
         selectedSize = currentProduct.sizes[0] || 'M';
+        selectedColor = currentProduct.colors[0] || 'Black';
 
         document.getElementById('modalTitle').textContent = currentProduct.name;
         document.getElementById('modalPrice').textContent = '$' + currentProduct.price.toFixed(2);
@@ -1190,16 +1282,30 @@
         document.getElementById('modalMainImage').src = currentProduct.images[0];
         document.getElementById('modalMainImage').alt = currentProduct.name;
 
-        // Thumbnails
         document.getElementById('modalThumbnails').innerHTML = currentProduct.images.map((img, i) => `
             <div class="modal-thumb ${i === 0 ? 'active' : ''}" onclick="changeModalImage('${escapeUrl(img)}', this)">
                 <img src="${img}" alt="${escapeHtml(currentProduct.name)}" onerror="this.src='https://via.placeholder.com/80x80?text=No+Image'">
             </div>
         `).join('');
 
-        // Sizes
         document.getElementById('sizeOptions').innerHTML = currentProduct.sizes.map((size, i) => `
             <button class="size-btn ${size === selectedSize ? 'active' : ''}" onclick="selectSize('${escapeHtml(size)}', this)">${escapeHtml(size)}</button>
+        `).join('');
+
+        const colorMap = {
+            'Black': '#1a1a1a', 'White': '#f5f5f5', 'Gray': '#888888', 'Beige': '#f5e6d3',
+            'Cream': '#fffdd0', 'Brown': '#8B6914', 'Navy': '#000080', 'Red': '#D13B3B',
+            'Blue': '#4169E1', 'Green': '#228B22', 'Pink': '#FFB6C1', 'Purple': '#800080'
+        };
+        
+        document.getElementById('colorOptions').innerHTML = currentProduct.colors.map(color => `
+            <div style="text-align:center;">
+                <div class="color-swatch ${color === selectedColor ? 'active' : ''}" 
+                     style="background: ${colorMap[color] || '#ccc'};"
+                     onclick="selectColor('${escapeHtml(color)}', this)">
+                </div>
+                <div class="color-swatch-label">${color}</div>
+            </div>
         `).join('');
 
         document.getElementById('variantError').classList.remove('show');
@@ -1225,13 +1331,18 @@
         document.getElementById('variantError').classList.remove('show');
     }
 
-    // ============================================
-    // CART FUNCTIONS
-    // ============================================
+    function selectColor(color, element) {
+        selectedColor = color;
+        document.querySelectorAll('.color-swatch').forEach(swatch => {
+            swatch.classList.remove('active');
+        });
+        element.classList.add('active');
+        document.getElementById('variantError').classList.remove('show');
+    }
+
     function addToCartFromModal() {
         if (!currentProduct) return;
-        
-        if (!selectedSize) {
+        if (!selectedSize || !selectedColor) {
             document.getElementById('variantError').classList.add('show');
             return;
         }
@@ -1244,6 +1355,7 @@
             priceCents: currentProduct.priceCents,
             image: currentProduct.images[0],
             size: selectedSize,
+            color: selectedColor,
             quantity: 1,
             providerName: currentProduct.providerName
         };
@@ -1267,6 +1379,7 @@
             priceCents: product.priceCents,
             image: product.images[0],
             size: product.sizes[0] || 'M',
+            color: product.colors[0] || 'Black',
             quantity: 1,
             providerName: product.providerName
         };
@@ -1280,18 +1393,13 @@
     function updateCartUI() {
         const cartItems = document.getElementById('cartItems');
         const cartFooter = document.getElementById('cartFooter');
-        const cartCount = document.getElementById('cartCount');
 
         const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-        cartCount.textContent = totalItems;
+        document.getElementById('cartCount').textContent = totalItems;
+        document.getElementById('mobileCartCount').textContent = totalItems;
 
         if (cart.length === 0) {
-            cartItems.innerHTML = `
-                <div class="cart-empty">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6h15l-1.5 9h-12z"></path><circle cx="9" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle><path d="M6 6L5 3H2"></path></svg>
-                    <p>Your cart is empty.</p>
-                    <p style="font-size:13px;margin-top:8px">Add some items to get started!</p>
-                </div>`;
+            cartItems.innerHTML = `<div class="cart-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6h15l-1.5 9h-12z"></path><circle cx="9" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle><path d="M6 6L5 3H2"></path></svg><p>Your cart is empty.</p><p style="font-size:13px;margin-top:8px">Add some items to get started!</p></div>`;
             cartFooter.style.display = 'none';
         } else {
             cartItems.innerHTML = cart.map((item, idx) => `
@@ -1299,7 +1407,7 @@
                     <div class="cart-item-image"><img src="${item.image}" alt="${escapeHtml(item.name)}" onerror="this.src='https://via.placeholder.com/80x80?text=No+Image'"></div>
                     <div class="cart-item-details">
                         <h4>${escapeHtml(item.name)}</h4>
-                        <p class="variant">Size: ${escapeHtml(item.size)} | Qty: ${item.quantity}</p>
+                        <p class="variant">Size: ${escapeHtml(item.size)} | Color: ${escapeHtml(item.color)} | Qty: ${item.quantity}</p>
                         <p class="price">$${(item.price * item.quantity).toFixed(2)}</p>
                         <div class="cart-item-actions">
                             <button class="qty-btn" onclick="updateQuantity(${idx}, -1)">-</button>
@@ -1345,9 +1453,6 @@
         document.getElementById('cartSidebar').classList.toggle('active');
     }
 
-    // ============================================
-    // SHIPPING CALCULATION
-    // ============================================
     function calculateShipping(country, itemCount) {
         if (!country || itemCount === 0) return 0;
         const isClose = CLOSE_COUNTRIES.includes(country);
@@ -1356,9 +1461,6 @@
         return base + ((itemCount - 1) * additional);
     }
 
-    // ============================================
-    // CART TOTALS WITH DISCOUNT
-    // ============================================
     function updateCartTotals() {
         const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -1371,11 +1473,12 @@
         document.getElementById('cartSubtotal').textContent = '$' + subtotal.toFixed(2);
         document.getElementById('cartShipping').textContent = 'Calculated at checkout';
 
+        const discountRow = document.getElementById('discountRow');
         if (discountAmount > 0) {
-            document.getElementById('discountRow').style.display = 'flex';
+            if (discountRow) discountRow.style.display = 'flex';
             document.getElementById('cartDiscount').textContent = '-$' + discountAmount.toFixed(2);
         } else {
-            document.getElementById('discountRow').style.display = 'none';
+            if (discountRow) discountRow.style.display = 'none';
         }
 
         const total = subtotal - discountAmount;
@@ -1384,9 +1487,6 @@
         return { subtotal, discountAmount, total, itemCount };
     }
 
-    // ============================================
-    // DISCOUNT CODE
-    // ============================================
     function applyDiscount() {
         const code = document.getElementById('discountCode').value.trim().toUpperCase();
         const msgEl = document.getElementById('discountMsg');
@@ -1402,20 +1502,17 @@
 
         if (ambassadorCodes[code]) {
             appliedDiscountCode = code;
-            msgEl.textContent = 'Code applied! 5% discount applied.';
+            msgEl.textContent = '✓ Code applied! 5% discount applied.';
             msgEl.className = 'discount-msg success';
         } else {
             appliedDiscountCode = null;
-            msgEl.textContent = 'Invalid code. Please try again.';
+            msgEl.textContent = '✗ Invalid code. Please try again.';
             msgEl.className = 'discount-msg error';
         }
         updateCartTotals();
         updateCheckoutSummary();
     }
 
-    // ============================================
-    // CHECKOUT
-    // ============================================
     function openCheckout() {
         if (cart.length === 0) {
             showToast('Your cart is empty!');
@@ -1438,10 +1535,20 @@
         const country = document.getElementById('customerCountry').value;
         const shipping = country ? calculateShipping(country, itemCount) : 0;
 
-        const cartSummary = cart.map(item =>
-            `${escapeHtml(item.name)} (Size: ${escapeHtml(item.size)}, Qty: ${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`
-        ).join('<br>');
-        document.getElementById('checkoutCartSummary').innerHTML = cartSummary || 'No items';
+        const orderItemsHtml = cart.map(item => `
+            <div class="checkout-order-item">
+                <div class="checkout-order-item-img">
+                    <img src="${item.image}" alt="${escapeHtml(item.name)}" onerror="this.src='https://via.placeholder.com/60x60?text=No+Image'">
+                </div>
+                <div class="checkout-order-item-details">
+                    <h4>${escapeHtml(item.name)}</h4>
+                    <div class="variant-info">Size: ${escapeHtml(item.size)} | Color: ${escapeHtml(item.color)} | Qty: ${item.quantity}</div>
+                    <div class="item-price">$${(item.price * item.quantity).toFixed(2)}</div>
+                </div>
+            </div>
+        `).join('');
+        
+        document.getElementById('checkoutCartSummary').innerHTML = orderItemsHtml || '<p>No items</p>';
 
         let discountAmount = 0;
         if (appliedDiscountCode && ambassadorCodes[appliedDiscountCode]) {
@@ -1461,24 +1568,11 @@
         document.getElementById('checkoutSummary').innerHTML = summaryHtml;
     }
 
-    // ============================================
-    // FORM VALIDATION
-    // ============================================
     function validateCheckoutForm() {
-        const fields = [
-            { id: 'customerName', name: 'Full Name' },
-            { id: 'customerEmail', name: 'Email Address' },
-            { id: 'customerPhone', name: 'Phone Number' },
-            { id: 'customerAddress', name: 'Street Address' },
-            { id: 'customerCity', name: 'City' },
-            { id: 'customerState', name: 'State/Province' },
-            { id: 'customerCountry', name: 'Country' },
-            { id: 'customerZip', name: 'Zip/Postal Code' }
-        ];
-
+        const fields = ['customerName', 'customerEmail', 'customerPhone', 'customerAddress', 'customerCity', 'customerState', 'customerCountry', 'customerZip'];
         let isValid = true;
-        fields.forEach(field => {
-            const el = document.getElementById(field.id);
+        fields.forEach(id => {
+            const el = document.getElementById(id);
             if (!el.value.trim()) {
                 el.classList.add('error');
                 isValid = false;
@@ -1497,22 +1591,14 @@
         return isValid;
     }
 
-    // ============================================
-    // SEND ORDER EMAILS VIA EMAILJS
-    // ============================================
     async function sendOrderEmails(orderData) {
-        // Build items summary for email
         const itemsSummary = orderData.cart.map(item => 
-            `- ${item.name} (Size: ${item.size || 'N/A'}, Qty: ${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`
+            `- ${item.name} (Size: ${item.size || 'N/A'}, Color: ${item.color || 'N/A'}, Qty: ${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`
         ).join('\n');
         
-        // Shipping address string
         const shippingAddress = `${orderData.address}, ${orderData.city}, ${orderData.state}, ${orderData.country} ${orderData.zip}`;
-        
-        // Generate order ID
         const orderId = 'GIH-' + Date.now().toString().slice(-8);
         
-        // Prepare email parameters for both templates
         const emailParams = {
             customer_name: orderData.customerName,
             customer_email: orderData.email,
@@ -1526,36 +1612,18 @@
             total: orderData.total.toFixed(2),
             order_date: new Date().toLocaleString(),
             order_id: orderId,
-            email: orderData.email  // For customer template
+            email: orderData.email
         };
         
         try {
-            // Send ADMIN notification to glassinkhaven@gmail.com
-            const adminResult = await emailjs.send(
-                EMAILJS_SERVICE_ID,
-                EMAILJS_ADMIN_TEMPLATE_ID,
-                emailParams
-            );
-            console.log("✅ Admin order email sent to glassinkhaven@gmail.com!", adminResult);
-            
-            // Send CUSTOMER confirmation email
-            const customerResult = await emailjs.send(
-                EMAILJS_SERVICE_ID,
-                EMAILJS_CUSTOMER_TEMPLATE_ID,
-                emailParams
-            );
-            console.log("✅ Customer confirmation email sent to", orderData.email, customerResult);
-            
+            await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_ADMIN_TEMPLATE_ID, emailParams);
+            await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CUSTOMER_TEMPLATE_ID, emailParams);
+            console.log("Emails sent successfully");
         } catch (error) {
-            console.error("❌ Email send error:", error);
-            // Still log order data so you don't lose it
-            console.log("ORDER DATA TO PROCESS MANUALLY:", orderData);
+            console.error("Email error:", error);
         }
     }
 
-    // ============================================
-    // FLUTTERWAVE PAYMENT
-    // ============================================
     function processPayment(e) {
         e.preventDefault();
 
@@ -1584,7 +1652,7 @@
 
         const total = subtotal + shipping - discountAmount;
 
-        const itemDescription = cart.map(item => `${item.name} (Size: ${item.size}, Qty: ${item.quantity})`).join(', ');
+        const itemDescription = cart.map(item => `${item.name} (Size: ${item.size}, Color: ${item.color}, Qty: ${item.quantity})`).join(', ');
 
         const orderData = {
             customerName: name,
@@ -1609,29 +1677,17 @@
             amount: total,
             currency: 'USD',
             payment_options: 'card,banktransfer,ussd',
-            customer: {
-                email: email,
-                phone_number: phone,
-                name: name
-            },
-            customizations: {
-                title: 'Glass Ink Haven',
-                description: itemDescription.substring(0, 100),
-                logo: 'https://via.placeholder.com/100x100?text=GIH'
-            },
+            customer: { email: email, phone_number: phone, name: name },
+            customizations: { title: 'Glass Ink Haven', description: itemDescription.substring(0, 100), logo: 'https://via.placeholder.com/100x100?text=GIH' },
             callback: async function(response) {
                 if (response.status === 'successful' || response.status === 'success') {
-                    // Send emails before clearing cart
                     await sendOrderEmails(orderData);
-                    
                     closeCheckoutModal();
                     openSuccessModal();
                     cart = [];
                     appliedDiscountCode = null;
                     saveCart();
                     updateCartUI();
-                    
-                    // Clear form fields
                     ['customerName','customerEmail','customerPhone','customerAddress','customerCity','customerState','customerZip','discountCode'].forEach(id => {
                         const el = document.getElementById(id);
                         if (el) el.value = '';
@@ -1646,9 +1702,6 @@
         });
     }
 
-    // ============================================
-    // SUCCESS MODAL
-    // ============================================
     function openSuccessModal() {
         document.getElementById('successModal').classList.add('active');
     }
@@ -1657,41 +1710,12 @@
         document.getElementById('successModal').classList.remove('active');
     }
 
-    // ============================================
-    // PAGE MODALS
-    // ============================================
     const pageContent = {
-        shipping: `
-            <h2>Shipping & Returns</h2>
-            <h3>Our Policy</h3>
-            <p>All products are <strong>made-to-order</strong> (print-on-demand), which means items are produced only after an order is placed.</p>
-            <h3>Returns & Exchanges</h3>
-            <p><strong>We do NOT accept returns or exchanges for:</strong> Wrong size selected, wrong color selected, change of mind.</p>
-            <h3>Damaged or Defective Items</h3>
-            <p>Contact us within <strong>30 days</strong> of delivery with a photo. We will offer a <strong>FREE replacement or full refund</strong>.</p>
-        `,
-        sizeguide: `
-            <h2>Size Guide</h2>
-            <p>All our apparel has a <strong>unisex fit</strong>. Sizes: <strong>S, M, L, XL</strong></p>
-            <table class="size-chart">
-                <tr><th>Size</th><th>Chest (inches)</th></tr>
-                <tr><td>S</td><td>34-36 inches</td></tr>
-                <tr><td>M</td><td>38-40 inches</td></tr>
-                <tr><td>L</td><td>42-44 inches</td></tr>
-                <tr><td>XL</td><td>46-48 inches</td></tr>
-            </table>
-            <p><strong>Please check size carefully before ordering.</strong></p>
-        `,
-        care: `
-            <h2>Care Instructions</h2>
-            <ul><li>Wash inside-out</li><li>Use cold water</li><li>Do NOT bleach</li><li>Air dry recommended</li></ul>
-        `,
-        faq: `
-            <h2>FAQ</h2>
-            <div class="faq-item"><h4>How long does shipping take?</h4><p>Processing: 2-5 days. Shipping: 5-30 business days depending on location.</p></div>
-            <div class="faq-item"><h4>Do you ship worldwide?</h4><p>Yes! Contact us if your country isn't listed.</p></div>
-            <div class="faq-item"><h4>What is the discount code?</h4><p>Use code ALWAYS10 for 5% off your order!</p></div>
-        `
+        shipping: `<h2>Shipping & Delivery</h2><p>Every piece you order from Glass Ink Haven is made just for you. Not mass-produced. Not sitting in a warehouse. Just… created when you choose it.</p><p><strong>Because of that:</strong></p><ul><li><strong>Processing time:</strong> 2–5 business days (this is when your piece is being made)</li><li><strong>Shipping time:</strong> Varies depending on your location (usually a few days to a couple of weeks)</li></ul><p>We ship worldwide, so wherever you are, your piece will find you.</p><p>Sometimes, delays can happen—but we promise, it's always worth the wait. Good things take time. Healing does too.</p>`,
+        returns: `<h2>Returns & Refunds</h2><p>Everything you order is made specifically for you. Because of that, we don't accept returns or exchanges for:</p><ul><li>Wrong size</li><li>Change of mind</li><li>Incorrect color selection</li></ul><p><em>(This is standard for print-on-demand stores.)</em></p><p>But we will always make things right if something isn't.</p><p><strong>If your item arrives:</strong></p><ul><li>Damaged</li><li>Misprinted</li><li>Or with a production error</li></ul><p>You can contact us within 30 days of delivery, and we'll offer:</p><ul><li>A free replacement, or</li><li>A refund</li></ul><p>No need to send the item back—just send us a clear photo.</p><p>We don't believe in leaving you with something that doesn't feel right.</p>`,
+        sizeguide: `<h2>Size Guide</h2><p>We want your piece to feel like it was made for you—because it was.</p><p>Each product has its own size guide, and we strongly recommend checking it before ordering.</p><p>Different styles may fit slightly differently. Measurements may vary by about ±1 inch (2.5 cm) due to production tolerance.</p><p>Some fits are relaxed, some are more structured.</p><p><strong>✨ Tip:</strong> Take your favorite hoodie or tee at home and compare measurements. Don't guess your size. Choose your comfort.</p><table class="size-chart"><tr><th>Size</th><th>Chest (inches)</th></tr><tr><td><strong>S</strong></td><td>34-36 inches</td></tr><tr><td><strong>M</strong></td><td>38-40 inches</td></tr><tr><td><strong>L</strong></td><td>42-44 inches</td></tr><tr><td><strong>XL</strong></td><td>46-48 inches</td></tr></table>`,
+        care: `<h2>Care Instructions</h2><p>These pieces carry meaning—so take care of them gently.</p><p><strong>For best results:</strong></p><ul><li>Wash inside out</li><li>Use cold water</li><li>Avoid harsh detergents</li><li>Do not iron directly on the print</li><li>Air dry when possible</li></ul><p>This helps preserve both the fabric and the message it carries. Because some things aren't just clothes—they're expressions.</p>`,
+        faq: `<h2>Frequently Asked Questions</h2><div class="faq-item"><h4>Why does shipping take a bit longer?</h4><p>Because your item is made just for you after you order. It's not sitting on a shelf—it's being created.</p></div><div class="faq-item"><h4>Can I return or exchange my item?</h4><p>We don't offer returns for sizing or preference changes. But if there's a mistake or damage, we'll fix it.</p></div><div class="faq-item"><h4>What if I ordered the wrong size?</h4><p>We recommend checking the size guide before ordering. Since items are custom-made, we can't exchange for sizing—but we'll always guide you better next time.</p></div><div class="faq-item"><h4>Do you ship internationally?</h4><p>Yes, we ship worldwide.</p></div><div class="faq-item"><h4>What if my item arrives damaged?</h4><p>Send us a photo within 30 days, and we'll replace or refund it—no stress.</p></div><div class="faq-item"><h4>Why GIH?</h4><p>Because sometimes you don't want to explain how you feel.</p></div>`
     };
 
     function openPageModal(page) {
@@ -1708,9 +1732,6 @@
         document.body.style.overflow = '';
     }
 
-    // ============================================
-    // UTILITY FUNCTIONS
-    // ============================================
     function showToast(message) {
         const toast = document.getElementById('toast');
         toast.textContent = message;
