@@ -70,6 +70,77 @@
             letter-spacing: 0.18em;
             color: var(--text-secondary);
         }
+        
+        /* ===== SMOOTH ANIMATIONS ===== */
+        @keyframes softGradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes gentleFade {
+            0% { opacity: 0.7; background-position: 0% 50%; }
+            50% { opacity: 1; background-position: 100% 50%; }
+            100% { opacity: 0.7; background-position: 0% 50%; }
+        }
+        
+        .animated-logo {
+            background: linear-gradient(135deg, #D13B3B, #4A6FA5, #8B5CF6, #D13B3B);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: softGradientFlow 8s ease infinite;
+        }
+        
+        .animated-tagline {
+            background: linear-gradient(135deg, #D13B3B, #8B5CF6, #D13B3B);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gentleFade 6s ease infinite;
+        }
+        
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 32px;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.4s ease;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards 0.8s;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .hero-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+            z-index: -1;
+        }
+        
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(209, 59, 59, 0.4);
+            background: linear-gradient(135deg, #D13B3B, #8B5CF6);
+        }
+        
+        .hero-cta:hover::before {
+            left: 100%;
+        }
+        
         .nav {
             position: fixed;
             top: 0; left: 0; width: 100%;
@@ -95,10 +166,11 @@
             color: var(--text-primary);
         }
         .nav-logo span {
-            background: linear-gradient(135deg, #D13B3B, #8B5CF6, #D13B3B);
-            background-size: 200% 200%;
+            background: linear-gradient(135deg, #D13B3B, #4A6FA5, #8B5CF6, #D13B3B);
+            background-size: 300% 300%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation: softGradientFlow 8s ease infinite;
         }
         .nav-links { display: flex; gap: 32px; align-items: center; }
         .nav-link {
@@ -186,7 +258,7 @@
         }
         .hero-label { margin-bottom: 24px; opacity: 0; animation: fadeInUp 0.8s ease forwards 0.2s; }
         .hero-title { margin-bottom: 24px; opacity: 0; animation: fadeInUp 0.8s ease forwards 0.4s; }
-        .hero-title span { display: block; font-style: italic; color: var(--accent); }
+        .hero-title span { display: inline-block; font-style: italic; }
         .hero-subtitle {
             font-size: clamp(16px, 2vw, 20px);
             color: var(--text-secondary);
@@ -196,25 +268,7 @@
             opacity: 0;
             animation: fadeInUp 0.8s ease forwards 0.6s;
         }
-        .hero-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            padding: 16px 32px;
-            background: var(--accent);
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease forwards 0.8s;
-        }
-        .hero-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(209, 59, 59, 0.3);
-        }
+        
         .hero-images {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -799,24 +853,25 @@
         </div>
         <div class="hero-content">
             <p class="micro-label hero-label">GLASS INK HAVEN — LOOKBOOK 2026</p>
-            <h1 class="display-heading hero-title">Wear Your<span>Healing</span></h1>
+            <h1 class="display-heading hero-title">Wear Your<span class="animated-tagline">Healing</span></h1>
             <p class="hero-subtitle">A collection of everyday pieces designed to hold meaning—soft fabrics, honest fits, and details that feel like memories. Express your emotions through fashion.</p>
             <a href="#shop" class="hero-cta">Explore the Collection<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"></path></svg></a>
         </div>
     </section>
 
+    <!-- HOODIE CATEGORY - FIXED: hoodie-only images, no sneakers -->
     <section class="category-section" id="hoodies">
         <div class="category-content">
             <div class="category-images">
                 <div class="category-img category-img-main">
-                    <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=900&fit=crop" alt="Hoodies">
+                    <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=900&fit=crop" alt="Emotional healing hoodie design">
                     <div class="category-img-overlay">"Some days you just need to feel held."</div>
                 </div>
                 <div class="category-img category-img-small">
-                    <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=400&h=300&fit=crop" alt="Hoodie Detail">
+                    <img src="https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=400&h=300&fit=crop" alt="Cream hoodie with typography">
                 </div>
                 <div class="category-img category-img-small">
-                    <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=400&h=300&fit=crop" alt="Hoodie Collection">
+                    <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=400&h=300&fit=crop" alt="Beige hoodie emotional design">
                 </div>
             </div>
             <div class="category-text">
@@ -828,6 +883,7 @@
         </div>
     </section>
 
+    <!-- TEES CATEGORY -->
     <section class="category-section" id="tees">
         <div class="category-content">
             <div class="category-text">
@@ -838,31 +894,32 @@
             </div>
             <div class="category-images">
                 <div class="category-img category-img-main">
-                    <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=900&fit=crop" alt="Tees">
+                    <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=900&fit=crop" alt="Tees with emotional text">
                     <div class="category-img-overlay">"Say it without explaining."</div>
                 </div>
                 <div class="category-img category-img-small">
-                    <img src="https://images.unsplash.com/photo-1503342394128-c104d54dba01?w=400&h=300&fit=crop" alt="Tee Detail">
+                    <img src="https://images.unsplash.com/photo-1503342394128-c104d54dba01?w=400&h=300&fit=crop" alt="Tee detail">
                 </div>
                 <div class="category-img category-img-small">
-                    <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400&h=300&fit=crop" alt="Tee Collection">
+                    <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400&h=300&fit=crop" alt="Tee collection">
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- TOTE BAG CATEGORY - FIXED: proper tote images that load -->
     <section class="category-section" id="bags">
         <div class="category-content">
             <div class="category-images">
                 <div class="category-img category-img-main">
-                    <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&h=900&fit=crop" alt="Tote Bags">
+                    <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&h=900&fit=crop" alt="Canvas tote bag healing message">
                     <div class="category-img-overlay">"Carry what matters—seen and unseen."</div>
                 </div>
                 <div class="category-img category-img-small">
-                    <img src="https://images.unsplash.com/photo-1570298298043-d2e3bcc82c0c?w=400&h=300&fit=crop" alt="Tote Detail">
+                    <img src="https://images.unsplash.com/photo-1570298298043-d2e3bcc82c0c?w=400&h=300&fit=crop" alt="Minimal tote bag design">
                 </div>
                 <div class="category-img category-img-small">
-                    <img src="https://images.unsplash.com/photo-1598977127912-f6c6be537cf6?w=400&h=300&fit=crop" alt="Tote Collection">
+                    <img src="https://images.unsplash.com/photo-1598977127912-f6c6be537cf6?w=400&h=300&fit=crop" alt="Beige tote emotional text">
                 </div>
             </div>
             <div class="category-text">
@@ -1092,7 +1149,7 @@
             <div class="cart-summary">
                 <div class="summary-row"><span>Subtotal</span><span id="cartSubtotal">$0.00</span></div>
                 <div class="summary-row"><span>Shipping</span><span id="cartShipping">Calculated at checkout</span></div>
-                <div class="summary-row.discount" id="discountRow" style="display:none"><span>Discount (5%)</span><span id="cartDiscount">-$0.00</span></div>
+                <div class="summary-row discount" id="discountRow" style="display:none"><span>Discount (5%)</span><span id="cartDiscount">-$0.00</span></div>
                 <div class="summary-row total"><span>Total</span><span id="cartTotal">$0.00</span></div>
             </div>
             <button class="checkout-btn" onclick="openCheckout()">Checkout</button>
@@ -1125,8 +1182,8 @@
     let currentProduct = null;
     let selectedSize = '';
     let selectedColor = '';
+    let currentColorImages = {};
 
-    // Complete country list (all countries Printify ships to, excluding restricted ones)
     const allCountries = [
         "United States", "Canada", "United Kingdom", "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Cape Verde", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "United Arab Emirates", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
     ];
@@ -1190,11 +1247,20 @@
                     return parts.find(part => /^(XS|S|M|L|XL|2XL|3XL|4XL|XXL|XXXL|\d+XL)$/i.test(part.trim())) || null;
                 }).filter(Boolean))];
                 
-                const colors = [...new Set((p.variants || []).map(v => {
+                // Extract REAL color data from Printify variants
+                const colorMap = {};
+                const uniqueColors = [];
+                (p.variants || []).forEach(v => {
                     const parts = (v.title || '').split(' / ');
                     const colorPart = parts.find(part => !/^(XS|S|M|L|XL|2XL|3XL|4XL|XXL|XXXL|\d+XL)$/i.test(part.trim()));
-                    return colorPart ? colorPart.trim() : null;
-                }).filter(Boolean))];
+                    if (colorPart && colorPart.trim()) {
+                        const colorName = colorPart.trim();
+                        if (!uniqueColors.includes(colorName)) {
+                            uniqueColors.push(colorName);
+                        }
+                        colorMap[colorName] = colorMap[colorName] || v.images?.[0]?.src || v.image || firstImage;
+                    }
+                });
                 
                 const category = p.title.toLowerCase().includes('hoodie') ? 'hoodie' : (p.title.toLowerCase().includes('tote') || p.title.toLowerCase().includes('bag')) ? 'tote' : 'tshirt';
                 
@@ -1208,7 +1274,8 @@
                     image: firstImage,
                     images: allImages.length > 0 ? allImages : [firstImage],
                     sizes: sizes.length > 0 ? sizes : ['S', 'M', 'L', 'XL'],
-                    colors: colors.length > 0 ? colors : ['Black', 'White', 'Gray'],
+                    colors: uniqueColors.length > 0 ? uniqueColors : ['Black', 'White', 'Gray'],
+                    colorImages: colorMap,
                     variants: p.variants || [],
                     providerName: p.print_provider_name || 'Premium Provider',
                     originalData: p
@@ -1279,7 +1346,10 @@
         document.getElementById('modalPrice').textContent = '$' + currentProduct.price.toFixed(2);
         document.getElementById('modalDescription').textContent = currentProduct.description;
         document.getElementById('modalProvider').textContent = currentProduct.providerName;
-        document.getElementById('modalMainImage').src = currentProduct.images[0];
+        
+        // Set initial image based on selected color
+        const colorImage = currentProduct.colorImages?.[selectedColor];
+        document.getElementById('modalMainImage').src = colorImage || currentProduct.images[0];
         document.getElementById('modalMainImage').alt = currentProduct.name;
 
         document.getElementById('modalThumbnails').innerHTML = currentProduct.images.map((img, i) => `
@@ -1295,14 +1365,16 @@
         const colorMap = {
             'Black': '#1a1a1a', 'White': '#f5f5f5', 'Gray': '#888888', 'Beige': '#f5e6d3',
             'Cream': '#fffdd0', 'Brown': '#8B6914', 'Navy': '#000080', 'Red': '#D13B3B',
-            'Blue': '#4169E1', 'Green': '#228B22', 'Pink': '#FFB6C1', 'Purple': '#800080'
+            'Blue': '#4169E1', 'Green': '#228B22', 'Pink': '#FFB6C1', 'Purple': '#800080',
+            'Indigo': '#4B0082', 'Yellow': '#FFD700', 'Orange': '#FF8C00'
         };
         
         document.getElementById('colorOptions').innerHTML = currentProduct.colors.map(color => `
             <div style="text-align:center;">
                 <div class="color-swatch ${color === selectedColor ? 'active' : ''}" 
                      style="background: ${colorMap[color] || '#ccc'};"
-                     onclick="selectColor('${escapeHtml(color)}', this)">
+                     data-color="${escapeHtml(color)}"
+                     onclick="selectColorWithImage('${escapeHtml(color)}', this)">
                 </div>
                 <div class="color-swatch-label">${color}</div>
             </div>
@@ -1311,6 +1383,22 @@
         document.getElementById('variantError').classList.remove('show');
         document.getElementById('productModal').classList.add('active');
         document.body.style.overflow = 'hidden';
+    }
+
+    function selectColorWithImage(color, element) {
+        selectedColor = color;
+        document.querySelectorAll('.color-swatch').forEach(swatch => {
+            swatch.classList.remove('active');
+        });
+        element.classList.add('active');
+        
+        // Update product image to match selected color variant
+        const colorImage = currentProduct.colorImages?.[color];
+        if (colorImage) {
+            document.getElementById('modalMainImage').src = colorImage;
+        }
+        
+        document.getElementById('variantError').classList.remove('show');
     }
 
     function closeProductModal() {
@@ -1331,15 +1419,6 @@
         document.getElementById('variantError').classList.remove('show');
     }
 
-    function selectColor(color, element) {
-        selectedColor = color;
-        document.querySelectorAll('.color-swatch').forEach(swatch => {
-            swatch.classList.remove('active');
-        });
-        element.classList.add('active');
-        document.getElementById('variantError').classList.remove('show');
-    }
-
     function addToCartFromModal() {
         if (!currentProduct) return;
         if (!selectedSize || !selectedColor) {
@@ -1353,7 +1432,7 @@
             name: currentProduct.name,
             price: currentProduct.price,
             priceCents: currentProduct.priceCents,
-            image: currentProduct.images[0],
+            image: currentProduct.colorImages?.[selectedColor] || currentProduct.images[0],
             size: selectedSize,
             color: selectedColor,
             quantity: 1,
