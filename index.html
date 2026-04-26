@@ -71,7 +71,6 @@
             color: var(--text-secondary);
         }
         
-        /* Smooth Animations */
         @keyframes softGradientFlow {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -584,7 +583,7 @@
         .cart-summary { margin-bottom: 20px; }
         .summary-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; }
         .summary-row.total { font-size: 20px; font-weight: 700; padding-top: 12px; border-top: 2px solid var(--border); color: var(--text-primary); }
-        .summary-row.discount { color: var(--accent); }
+        .summary-row.discount { color: #4CAF50; } /* GREEN color for discount */
         .checkout-btn { width: 100%; padding: 18px; background: var(--accent); color: white; border: none; border-radius: 50px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
         .checkout-btn:hover { background: #b83232; transform: translateY(-1px); }
         .continue-shopping { display: block; text-align: center; margin-top: 16px; font-size: 14px; color: var(--text-secondary); text-decoration: none; transition: color 0.3s ease; cursor: pointer; }
@@ -672,7 +671,7 @@
         }
         .discount-input-row button:hover { background: var(--accent); }
         .discount-msg { margin-top: 10px; font-size: 13px; font-weight: 500; }
-        .discount-msg.success { color: #4CAF50; }
+        .discount-msg.success { color: #4CAF50; } /* GREEN color for success message */
         .discount-msg.error { color: var(--accent); }
         .shipping-info { background: white; padding: 20px; border-radius: var(--radius-md); margin-bottom: 24px; border: 1px solid var(--border); }
         .shipping-info h4 { font-size: 16px; margin-bottom: 12px; }
@@ -1082,7 +1081,7 @@
             <div class="cart-summary">
                 <div class="summary-row"><span>Subtotal</span><span id="cartSubtotal">$0.00</span></div>
                 <div class="summary-row"><span>Shipping</span><span id="cartShipping">Calculated at checkout</span></div>
-                <div class="summary-row discount" id="discountRow" style="display:none"><span>Discount (5%)</span><span id="cartDiscount">-$0.00</span></div>
+                <div class="summary-row discount" id="discountRow" style="display:none"><span>Discount (5%)</span><span id="cartDiscount" style="color:#4CAF50">-$0.00</span></div>
                 <div class="summary-row total"><span>Total</span><span id="cartTotal">$0.00</span></div>
             </div>
             <button class="checkout-btn" onclick="openCheckout()">Checkout</button>
@@ -1100,7 +1099,11 @@
     const EMAILJS_ADMIN_TEMPLATE_ID = 'template_f6kf8gm';
     const EMAILJS_CUSTOMER_TEMPLATE_ID = 'template_myprdn7';
     
-    const ambassadorCodes = { "ALWAYS10": true };
+    // TWO ACTIVE DISCOUNT CODES - both give 5% off
+    const ambassadorCodes = { 
+        "ALWAYS10": true,
+        "GLASSWHISPERS": true
+    };
     const DISCOUNT_PERCENT = 5;
     let appliedDiscountCode = null;
 
@@ -1502,9 +1505,11 @@
         document.getElementById('cartShipping').textContent = 'Calculated at checkout';
 
         const discountRow = document.getElementById('discountRow');
+        const discountSpan = document.getElementById('cartDiscount');
         if (discountAmount > 0) {
             if (discountRow) discountRow.style.display = 'flex';
-            document.getElementById('cartDiscount').textContent = '-$' + discountAmount.toFixed(2);
+            discountSpan.textContent = '-$' + discountAmount.toFixed(2);
+            discountSpan.style.color = '#4CAF50'; // GREEN color for discount amount
         } else {
             if (discountRow) discountRow.style.display = 'none';
         }
@@ -1531,7 +1536,7 @@
         if (ambassadorCodes[code]) {
             appliedDiscountCode = code;
             msgEl.textContent = '✓ Code applied! 5% discount applied.';
-            msgEl.className = 'discount-msg success';
+            msgEl.className = 'discount-msg success'; // GREEN color
         } else {
             appliedDiscountCode = null;
             msgEl.textContent = '✗ Invalid code. Please try again.';
@@ -1588,7 +1593,7 @@
         let summaryHtml = `<strong>Items:</strong> ${itemCount}<br>`;
         summaryHtml += `<strong>Subtotal:</strong> $${subtotal.toFixed(2)}<br>`;
         if (discountAmount > 0) {
-            summaryHtml += `<strong>Discount (5%):</strong> -$${discountAmount.toFixed(2)}<br>`;
+            summaryHtml += `<strong style="color:#4CAF50;">Discount (5%):</strong> <span style="color:#4CAF50;">-$${discountAmount.toFixed(2)}</span><br>`;
         }
         summaryHtml += `<strong>Shipping:</strong> ${shipping > 0 ? '$' + shipping.toFixed(2) : 'Select country'}<br>`;
         summaryHtml += `<strong style="font-size:16px;">Total: $${total.toFixed(2)}</strong>`;
@@ -1741,7 +1746,11 @@
     const pageContent = {
         shipping: `<h2>Shipping & Delivery</h2><p>Every piece you order from Glass Ink Haven is made just for you. Not mass-produced. Not sitting in a warehouse. Just… created when you choose it.</p><p><strong>Because of that:</strong></p><ul><li><strong>Processing time:</strong> 2–5 business days (this is when your piece is being made)</li><li><strong>Shipping time:</strong> Varies depending on your location (usually a few days to a couple of weeks)</li></ul><p>We ship worldwide, so wherever you are, your piece will find you.</p><p>Sometimes, delays can happen—but we promise, it's always worth the wait. Good things take time. Healing does too.</p>`,
         returns: `<h2>Returns & Refunds</h2><p>Everything you order is made specifically for you. Because of that, we don't accept returns or exchanges for:</p><ul><li>Wrong size</li><li>Change of mind</li><li>Incorrect color selection</li></ul><p><em>(This is standard for print-on-demand stores.)</em></p><p>But we will always make things right if something isn't.</p><p><strong>If your item arrives:</strong></p><ul><li>Damaged</li><li>Misprinted</li><li>Or with a production error</li></ul><p>You can contact us within 30 days of delivery, and we'll offer:</p><ul><li>A free replacement, or</li><li>A refund</li></ul><p>No need to send the item back—just send us a clear photo.</p><p>We don't believe in leaving you with something that doesn't feel right.</p>`,
-        sizeguide: `<h2>Size Guide</h2><p>We want your piece to feel like it was made for you—because it was.</p><p>Each product has its own size guide, and we strongly recommend checking it before ordering.</p><p>Different styles may fit slightly differently. Measurements may vary by about ±1 inch (2.5 cm) due to production tolerance.</p><p>Some fits are relaxed, some are more structured.</p><p><strong>✨ Tip:</strong> Take your favorite hoodie or tee at home and compare measurements. Don't guess your size. Choose your comfort.</p><table class="size-chart"><tr><th>Size</th><th>Chest (inches)</th></tr><tr><td><strong>S</strong></td><td>34-36 inches</td></tr><tr><td><strong>M</strong></td><td>38-40 inches</td></tr><tr><td><strong>L</strong></td><td>42-44 inches</td></tr><tr><td><strong>XL</strong></td><td>46-48 inches</td></tr></table>`,
+        sizeguide: `<h2>Size Guide</h2><p>We want your piece to feel like it was made for you—because it was.</p><p>Each product has its own size guide, and we strongly recommend checking it before ordering.</p><p>Different styles may fit slightly differently. Measurements may vary by about ±1 inch (2.5 cm) due to production tolerance.</p><p>Some fits are relaxed, some are more structured.</p><p><strong>✨ Tip:</strong> Take your favorite hoodie or tee at home and compare measurements. Don't guess your size. Choose your comfort.</p><table class="size-chart"><tr><th>Size</th><th>Chest (inches)</th><tr><tr><td><strong>S</strong></td><td>34-36 inches</td></tr>
+                <tr><td><strong>M</strong></td><td>38-40 inches</td></tr>
+                <tr><td><strong>L</strong></td><td>42-44 inches</td></tr>
+                <tr><td><strong>XL</strong></td><td>46-48 inches</td></tr>
+            </table>`,
         care: `<h2>Care Instructions</h2><p>These pieces carry meaning—so take care of them gently.</p><p><strong>For best results:</strong></p><ul><li>Wash inside out</li><li>Use cold water</li><li>Avoid harsh detergents</li><li>Do not iron directly on the print</li><li>Air dry when possible</li></ul><p>This helps preserve both the fabric and the message it carries. Because some things aren't just clothes—they're expressions.</p>`,
         faq: `<h2>Frequently Asked Questions</h2><div class="faq-item"><h4>Why does shipping take a bit longer?</h4><p>Because your item is made just for you after you order. It's not sitting on a shelf—it's being created.</p></div><div class="faq-item"><h4>Can I return or exchange my item?</h4><p>We don't offer returns for sizing or preference changes. But if there's a mistake or damage, we'll fix it.</p></div><div class="faq-item"><h4>What if I ordered the wrong size?</h4><p>We recommend checking the size guide before ordering. Since items are custom-made, we can't exchange for sizing—but we'll always guide you better next time.</p></div><div class="faq-item"><h4>Do you ship internationally?</h4><p>Yes, we ship worldwide.</p></div><div class="faq-item"><h4>What if my item arrives damaged?</h4><p>Send us a photo within 30 days, and we'll replace or refund it—no stress.</p></div><div class="faq-item"><h4>Why GIH?</h4><p>Because sometimes you don't want to explain how you feel.</p></div>`
     };
